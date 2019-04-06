@@ -6,8 +6,8 @@
 // const ROOT_URL = 'http://10.105.113.212:11001';//赛老板本地ip
 
 let BASE_CONFIG = {
-   ONLY_CONNECT_STATUS_TOAST:true,
-   DEVELOPERMODEFLAG:true,//开发者模式本地完全不和安卓交互
+   ONLY_CONNECT_STATUS_TOAST:false,
+   DEVELOPERMODEFLAG:false,//开发者模式本地完全不和安卓交互
    LOGFLAG:false,
    TESTFLAG : false,//测试开关
    TESTDEEPTH:0,//深度

@@ -47,7 +47,7 @@ Array.prototype.in_array = function (element) {
                         typeName:'DIAMETER',
                         chooseKey:0,//默认选中
                         comList:[
-                            {id:0,key:'25mm',value:'2.5mm'},{id:1,key:'32mm',value:'3.2mm'},{id:2,key:'40mm',value:'4.0mm'},{id:2,key:'50mm',value:'5.0mm'}
+                            {id:0,key:'25mm',value:'2.5mm'},{id:1,key:'32mm',value:'3.2mm'},{id:2,key:'40mm',value:'4.0mm'},{id:3,key:'50mm',value:'5.0mm'}
                         ],
                          //单位切换inch
                          inchComList:[
@@ -419,12 +419,14 @@ Array.prototype.in_array = function (element) {
                       break;
                     case weldDirctive.tigMan:
                         rstInfo.nowTypeList=weldParam.tigmanList;
+                        console.log(rstInfo.nowTypeList)
                         rstInfo.weldType='TIGMAN';
                         rstInfo.weldTypeNum=_this.GLOBAL_CONFIG.callWeldTypeData.tigman.newIndex;//这个和首页里的配对
                        //确认指令
                        console.log(arrayList.length+'aa')
                        if((arrayList[1]=='228'||arrayList[1]=='212'||arrayList[1]=='196') &&arrayList.length==16){
                            var  rstBean = tigmanSpecilBuildHeader(arrayList[2],arrayList[3]);
+                           console.log(rstBean);
                            rstInfo.nowTypeList.forEach(element => {
                                 switch (element.typeName) {
                                     case 'MODE':
@@ -750,7 +752,7 @@ Array.prototype.in_array = function (element) {
                         bean.ifhf =secdArr[5]
                     //3|pulse
                         bean.ifpulse =secdArr[4]
-                        bean.ifpulseValue =bean.ifpulse==1?'PULSE':'NOPULSE';
+                        bean.ifpulseValue =bean.ifpulse==1?'NOPULSE':'PULSE';
                     //4|空
                         bean.empty20 =secdArr[3]
                     //5|空
@@ -759,8 +761,9 @@ Array.prototype.in_array = function (element) {
                         bean.empty22 =secdArr[1]
                     //7|空
                         bean.empty23 =secdArr[0]
+                        
                         bean.nowChooseModel=bean.modeValue+'_'+bean.ifpulseValue+'_DC';
-                              
+                        console.log(bean.nowChooseModel)      
                      /***2222222 end***/
                  return bean;
             }
@@ -1091,6 +1094,12 @@ Array.prototype.in_array = function (element) {
             } 
             //字符串首字母大写
             Vue.prototype.changeStrShowName = function(str) {
+                // if(str.indexOf('-')>0){
+                //     var tempStr =str.split('-');
+                //     console.log(tempStr[0]);
+                //     return tempStr[0];
+                // }
+                // alert(str.indexOf('-'))
                 if(str=='HF'){//针对HF这种端的特殊处理
                     return str;
                 }
@@ -1099,8 +1108,11 @@ Array.prototype.in_array = function (element) {
                 array[i] = array[i][0].toUpperCase() + array[i].substring(1, array[i].length);
                 }
                 var string = array.join(" ");
-            
                 return string;
+            }
+            //tigman 改为tig man加个空格
+            Vue.prototype.changeStrEmptyName = function(str) {
+                return str.substring(0,3) +' '+ str.substring(3,8);
             }
         }
     }

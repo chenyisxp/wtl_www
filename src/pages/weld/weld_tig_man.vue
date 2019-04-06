@@ -3,12 +3,14 @@
     <div class="mmp" ref="mmpId" id="idid">
       <div class="header">
         <Icon type="ios-arrow-back" @click="go('/newIndex')"/>
-        {{typeName}}
+        {{changeStrEmptyName(typeName)}}
         <span class="setupyi">SET UP</span>
       </div>
       <div class="containList" v-for="(item,index) in nowTypeList" :key="index">
         <div class="common">
-          <div class="typename" :class="item.typeName">{{changeStrShowName(item.typeName)}}</div>
+          <div class="typename" v-if="UnitFlag==1" :class="item.typeName" @click="openModal(item.typeName,item.inchComList,item.chooseKey)">{{changeStrShowName(item.typeName)}}</div>
+          <div class="typename" v-if="UnitFlag!=1" :class="item.typeName" @click="openModal(item.typeName,item.comList,item.chooseKey)">{{changeStrShowName(item.typeName)}}</div>
+          <!-- <div class="typename" :class="item.typeName">{{changeStrShowName(item.typeName)}}</div> -->
           <div class="btn">
             <div
               class="btRight"
@@ -17,7 +19,7 @@
               type="primary"
               v-if="item.chooseKey==bean.id"
               :class="item.chooseKey==bean.id?'':'unchoose'"
-              @click="openModal(item.typeName,item.comList,item.chooseKey,bean.value)"
+              @click="openModal(item.typeName,item.comList,item.chooseKey)"
             >
               <span style="padding-right:11px">{{bean.value}}</span>
               <span style="padding-right:10px;">
@@ -68,9 +70,13 @@
             <img src="../../assets/images/voltage.png">
           </div> -->
           <div class="u-right">
-            <div class="bt del" @click="delFuc2()"></div>
-            <div class="value"><span class="con" :class="unit2=='S'?'s':unit2=='A'?'A':unit2=='Hz'?'HZ':unit2=='percent'?'percent':''">{{nowPosionX2}}</span></div>
-            <div class="bt add" @click="addFuc2()"></div>
+            
+            <div class="value">
+              <div class="bt del" @click="delFuc2()"></div>
+              <div class="cct"><span class="con" :class="unit2=='S'?'s':unit2=='A'?'A':unit2=='Hz'?'HZ':unit2=='percent'?'percent':''">{{nowPosionX2}}</span></div>
+              <div class="bt add" @click="addFuc2()"></div>
+            </div>
+            
           </div>
         </div>
         <div class="slider" ref="mySlider2">
@@ -82,13 +88,14 @@
             <div class="right"></div>
           </div>
         </div>
-        <div class="rdown">{{min2}}~{{max2}}{{unit2}}</div>
+        <div class="rdown">{{min2}}~{{max2}}{{unit2=='percent'?'%':unit2}}</div>
       </div>
     </div>
     <div class="footers" :class="btFooterFlag?'unEnough':''">
       <!-- <div class="inducance">INDUCANCE</div> -->
       <div class="new-footer-btns">
         <div class="btn n-1"  @click="go('/saveManage')">
+          <div class="shuxian"></div>
           <span>Save</span>
         </div>
         <div class="btn n-2" @click="go('/welding')">
@@ -311,17 +318,29 @@ export default {
       nowDCORACFLAG:'',//当前是ac还是dc控制第二个canvas是否需要出现
       nowChooseKeysMap:{},
       nowChooseKeysNameMap:{
-        pre_gas:'PRE-GAS',
-        start_cur_end:'START-CURRENT',
-        pulse_duty:'PULSE-DUTY',
-        pulse_fre:'PULSE-FRE',
-        base_cur:'BASE-CURRENT',
-        slop_down:'SLOP-DOWN',
-        slop_up:'SLOP-UP',
-        crater_cur:'CRATER-CURRENT',
-        post_gas:'POST-GAS',
-        ac_balance:'AC-BALANCE',
-        ac_fre:'AC-FRE'
+        // pre_gas:'PRE-GAS',
+        // start_cur_end:'START-CURRENT',
+        // pulse_duty:'PULSE-DUTY',
+        // pulse_fre:'PULSE-FRE',
+        // base_cur:'BASE-CURRENT',
+        // slop_down:'SLOP-DOWN',
+        // slop_up:'SLOP-UP',
+        // crater_cur:'CRATER-CURRENT',
+        // post_gas:'POST-GAS',
+        // ac_balance:'AC-BALANCE',
+        // ac_fre:'AC-FRE'
+        pre_gas:'Pre Gas',
+        start_cur_end:'Start Current',
+        pulse_duty:'Pulse Duty',
+        pulse_fre:'Pulse Fre',
+        base_cur:'Base Current',
+        slop_down:'Slop Down',
+        slop_up:'Slop Up',
+        crater_cur:'Crater Current',
+        post_gas:'Post Gas',
+        ac_balance:'Ac Balance',
+        ac_fre:'Ac Fre'
+
       },//显示的名字
       pfc_num:'',
       ac_dc_num:'',
@@ -360,18 +379,26 @@ export default {
         //非脉冲时 PEAK-CURRENT
         //脉冲时 WELDING-CURRENT
         if(this.nowModelTypeName=='4T_PULSE_DC' || this.nowModelTypeName=='2T_PULSE_DC'){
-          return 'PEAK-CURRENT';
+          return 'Peak Current';
         }
-        return 'WELDING-CURRENT';
+        return 'Welding Current';
       }else{
-        return this.nowChooseKeysNameMap[nowChooseLineKey];
+        // this.buildStrData(this.nowChooseKeysNameMap[nowChooseLineKey]);
+        let tempKey =this.nowChooseKeysNameMap[nowChooseLineKey];        
+        return tempKey;
       }
        
+    },
+    buildStrData(name){
+      //显示调整  PEAK-CURRENT --》 Peak Current
+      var nameArr = name.split('-');
+      console.log(nameArr[0]);
+      return 'nnnn';
     },
     modalChangeChecked(key) {
       this.nowChoose = key;
     },
-    openModal(typename, comList, chooseKey, chooseValue) {
+    openModal(typename, comList, chooseKey) {
       let self = this;
       //00、 判断是不是焊接中，焊接中不能编辑部分参数
       if(self.$store.state.weldingStatus==1){
@@ -445,14 +472,19 @@ export default {
       this.callSendDataToBleUtil('weld_tig_man',sendData,crc);
     },
     addFuc2() {
-     
+      console.log(this.nowPosionX2);
       if (this.nowPosionX2 == this.max2) {
         return;
       } else {
-        this.nowPosionX2 =
-          Math.round((parseFloat(this.nowPosionX2 )+ this.paramIncreaseDistance2) * 10) /
+        //特殊逻辑处理 pulse fre小于10有小数点 增长速度是0.1 大于10 按1增长
+        if(this.nowPosionX2>9.9 && this.nowChooseLineKey=='pulse_fre'){
+          this.nowPosionX2 =Math.round(this.nowPosionX2 )+ 1;
+        }else{
+          this.nowPosionX2 =
+            Math.round((parseFloat(this.nowPosionX2 )+ this.paramIncreaseDistance2) * 10) /
           10;
-         
+        }
+        
         let sliderBtn = this.$refs.sbtn2;
         let dangerRange = this.$refs.dangerRange2;    
         let mySlider = this.$refs.mySlider2;
@@ -475,15 +507,24 @@ export default {
           }
         }, 1000);
       }
+      console.log(this.nowPosionX2)
     },
     delFuc2() {
        
       if (this.nowPosionX2 == this.min2) {
         return;
       } else {
-        this.nowPosionX2 =
-          Math.round((this.nowPosionX2 - this.paramIncreaseDistance2) * 10) /
+        //特殊逻辑处理 pulse fre小于10有小数点 增长速度是0.1 大于10 按1增长
+        if(this.nowPosionX2>10 && this.nowChooseLineKey=='pulse_fre'){
+          this.nowPosionX2 =Math.round(this.nowPosionX2 )- 1;
+        }else{
+          this.nowPosionX2 =
+            Math.round((parseFloat(this.nowPosionX2 )-this.paramIncreaseDistance2) * 10) /
           10;
+        }
+        // this.nowPosionX2 =
+        //   Math.round((this.nowPosionX2 - this.paramIncreaseDistance2) * 10) /
+        //   10;
         let sliderBtn = this.$refs.sbtn2;
         let dangerRange = this.$refs.dangerRange2;    
         let mySlider = this.$refs.mySlider2;
@@ -584,13 +625,13 @@ export default {
           this.nowDCORACFLAG=0;
         }
         if(this.nowChooseKeysMap.get('MODE')==1){//4T
-          if(this.nowChooseKeysMap.get('Pluse')==1){//脉冲  
+          if(this.nowChooseKeysMap.get('Pluse')==0){//脉冲  
             this.nowModelTypeName ='4T_PULSE_DC';
           }else{
             this.nowModelTypeName ='4T_NOPULSE_DC';
           }
         }else{//2T
-          if(this.nowChooseKeysMap.get('Pluse')==1){//脉冲
+          if(this.nowChooseKeysMap.get('Pluse')==0){//脉冲
             this.nowModelTypeName ='2T_PULSE_DC';
           }else{
             this.nowModelTypeName ='2T_NOPULSE_DC';
@@ -654,7 +695,12 @@ export default {
           myWidth = 0;
         }
        if(this.paramIncreaseDistance2==0.1){
-          this.nowPosionX2 = Math.round((Math.round(this.block2 * (Math.round(myWidth) / 100) * 10) / 10+this.min2)*10)/10; //四舍五入保留一位小数
+          //特殊处理小于10 速度为0.1 大于10 速度为1
+          if(this.nowPosionX2>10 && this.nowPosionX2<=this.max2 && this.nowChooseLineKey=='pulse_fre'){
+             this.nowPosionX2 =Math.round(Math.round(this.block2 * (Math.round(myWidth) / 100) * 10) / 10+1); //四舍五入保留一位小数
+          }else{
+            this.nowPosionX2 = Math.round((Math.round(this.block2 * (Math.round(myWidth) / 100) * 10) / 10+this.min2)*10)/10; //四舍五入保留一位小数
+          }
        }else{
           this.nowPosionX2 = (Math.round(this.block2 * (Math.round(myWidth) / 100))+this.min2); //四舍五入保留一位小数
        }
@@ -1501,6 +1547,7 @@ export default {
       this.max2 = tempInfo.max;
       this.min2 = tempInfo.min;
       this.unit2 = tempInfo.unit;
+      console.log(tempInfo)
       this.block2 = tempInfo.max - tempInfo.min;
       this.nowPosionX2 = tempInfo.nowValue;
       //按钮加减幅度 动态计算 
@@ -1508,6 +1555,7 @@ export default {
       // this.paramIncreaseDistance2 = 1;//按钮加减幅度
     },
     drawCharMainContrl(type) {
+      console.log(type)
       if (type == "2T_NOPULSE_DC") {
         this.build_2T_NOPULSE_DCMapData();
       } else if (type == "4T_NOPULSE_DC") {
@@ -1597,7 +1645,7 @@ export default {
         min: 10,
         max: 200,
         nowValue: 130,
-        unit: "S",
+        unit: "A",
         multi:1,
         increseRang:1,
         block:190 //区间应该独立否则会影响到其他的max-min
@@ -1606,7 +1654,8 @@ export default {
         min: 5,
         max: 100,
         nowValue: 50,
-        unit: "%",
+        // unit: "%",
+        unit:"percent",//unit比较特殊
         multi:1,
         increseRang:1,
         block:95 //区间应该独立否则会影响到其他的max-min
@@ -1856,7 +1905,14 @@ export default {
      nowPosionX2(val, oldVal){//普通的watch监听
           var now = val+'';
           if(now.indexOf('.')<0 && this.paramIncreaseDistance2!=1){
-            this.nowPosionX2+='.0';
+            if(this.nowChooseLineKey=='pulse_fre'){
+               if(val<10.1){
+                 this.nowPosionX2+='.0';
+               }
+            }else{
+              this.nowPosionX2+='.0';
+            }
+           
           }
       }
   },
@@ -2007,7 +2063,7 @@ export default {
   .midLine1 {
     opacity: 0.5;
     width: 100%;
-    height: 5px;
+    height: 2px;
     margin-top: 20px;
     //  background: linear-gradient(to left, #173d4a , #fdfcff,#173d4a);
     background: linear-gradient(
@@ -2050,33 +2106,35 @@ export default {
         .bt {
           float: left;
           width: 35px;
-          height: 35px;
+          height: 70px;
           font-size: 16px;
           background: #163749;
           color: #fff;
-          position: absolute;
-          top: 50%;
-          transform: translate(0, -50%);
+          // position: absolute;
+          // top: 50%;
+          // transform: translate(0, -50%);
         }
         .del {
-          left: 60px;
-             background: url(../../assets/images/tm_choose_add.jpg) no-repeat;
+             background: url(../../assets/images/jia.png) no-repeat;
             background-size: 35px;
-            background-position: bottom center;
+            background-position: center center;
         }
         .value {
         //   float: left;
-          width: 100%;
+          width:230px;
           text-align: center;
           height: 100%;
           color: #fff;
           font-size: 48px;
+          margin: 0 auto;
         //   position: absolute;
         //   top: 37%;
         //   transform: translate(0, -50%);
         //   left: 30px;
+          .cct{width: 160px;height: 70px;float: left;text-align: center;}
             .con{
                  position: relative;
+                 
             }
             .con.s::after{
                    content: 'S';
@@ -2126,9 +2184,9 @@ export default {
         }
         .add {
             right: 60px;
-            background: url(../../assets/images/tm_choose_del.jpg) no-repeat;
+            background: url(../../assets/images/jian.png) no-repeat;
             background-size: 35px;
-            background-position: bottom center;
+            background-position: center center;
         }
       }
     }
@@ -2187,7 +2245,7 @@ export default {
       line-height: 30px;
       text-align: center;
       font-weight: bold;
-      color: #96d3e8;
+      color: #00c6ff;
     }
     /****折线begin****/
     .canvas-main-contain {
@@ -2257,42 +2315,53 @@ export default {
       #fff
     ); /* For Safari 5.1 to 6.0 */
     .btn {
-      width: 40%;
+      width: 50%;
       height: 40px;
       float: left;
       text-align: center;
-      color: #b3c0c6;
+      color: #fff;
       // color: #000;
       font-size: 18px;
       line-height: 40px;
-      border-right: 2px solid;
-      background: linear-gradient(to top, #354141 0%, #000 100%);
-      background: -moz-linear-gradient(to top, #354141 0%, #000 100%);
-      background: -webkit-gradient(
-        linear,
-        to left to top,
-        to left to bottom,
-        color-stop(0%, #354141),
-        color-stop(100%, #000)
-      );
-      background: -webkit-linear-gradient(to top, #354141 0%, #000 100%);
-      background: -o-linear-gradient(to top, #354141 0%, #000 100%);
-      background: -ms-linear-gradient(to top, #354141 0%, #000 100%);
+      // border-right: 2px solid;
+      background: #000;
+      // background: linear-gradient(to top, #354141 0%, #000 100%);
+      // background: -moz-linear-gradient(to top, #354141 0%, #000 100%);
+      // background: -webkit-gradient(
+      //   linear,
+      //   to left to top,
+      //   to left to bottom,
+      //   color-stop(0%, #354141),
+      //   color-stop(100%, #000)
+      // );
+      // background: -webkit-linear-gradient(to top, #354141 0%, #000 100%);
+      // background: -o-linear-gradient(to top, #354141 0%, #000 100%);
+      // background: -ms-linear-gradient(to top, #354141 0%, #000 100%);
     }
     .n-1 {
+      position: relative;
+      .shuxian{
+            width: 2px;
+            height: 40px;
+            position: absolute;
+            right: 0;
+            background:url(../../assets/images/shuxian.png) no-repeat;    
+            background-size: 2px;
+            background-position:right center;
+        }
       span {
         background: url(../../assets/images/memory.png) no-repeat;
-        background-size: 30px;
+        background-size: 26px;
         background-position: left center;
         padding-left: 33px;
       }
     }
     .n-2 {
-      width: 60%;
+      // width: 60%;
       span {
-        color: #7ac8d4;
+        color: #fff;
         font-weight: bold;
-        opacity: 0.8;
+        
       }
     }
     .btn:last-of-type {
@@ -2357,23 +2426,24 @@ export default {
       }
       .btlist {
         margin: 0 20px;
-        margin-bottom: 40px;
+        margin-bottom: 10px;
+        font-size: 16px;
         li {
           width: 33.33%;
-          height: 35px;
+          height: 60px;
           float: left;
           margin-bottom: 20px;
           .con {
-            background: #1c1c1c;
+            background: #3f4043;
             height: 100%;
             border-radius: 20px;
             text-align: center;
-            height: 35px;
-            line-height: 35px;
+            height: 60px;
+            line-height: 60px;
             color: #fff;
           }
           .choose {
-            background: #177a93;
+            background: #214360;
           }
         }
         li:nth-child(1) {

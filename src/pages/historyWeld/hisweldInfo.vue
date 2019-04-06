@@ -8,7 +8,7 @@
     <div class="itlist">
       <div class="li" v-for="(item,index) in nowTypeList" :class="item.typeName=='GAS'&& MIG_MATERIAL !=0?'eleUnShow':''">
         <div class="left">
-            {{item.typeName}}
+            {{item.typeName|spliceString}}
         </div>
         <div class="right">
             <span v-for="(temp,newIdx) in item.comList" v-if="UnitFlag==0 && item.chooseKey==temp.id">
@@ -22,7 +22,7 @@
       </div>
         <div class="li" v-for="(item,index) in suppllytments">
         <div class="left">
-            {{item.typeName}}
+            {{item.typeName |spliceString}}
         </div>
         <div class="right">
             <span>

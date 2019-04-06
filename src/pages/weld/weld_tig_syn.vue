@@ -1,17 +1,19 @@
 <template>
   <div class="weldMMA" :class="ifFixedFlag?'weldFixed':''" ref="allPage">
         <div class="mmp" ref="mmpId" id="idid">
-                 <div class="header"><Icon type="ios-arrow-back" @click="go('/newIndex')"/>{{typeName}}<span class="setupyi">SET UP</span></div>
+                 <div class="header"><Icon type="ios-arrow-back" @click="go('/newIndex')"/>{{changeStrEmptyName(typeName)}}<span class="setupyi">SET UP</span></div>
                
                 <div class="containList" v-for="(item,index) in nowTypeList" :key="index" >
                     <div class="common" >
-                        <div class="typename" :class="item.typeName">{{changeStrShowName(item.typeName)}}</div>
+                        <!-- <div class="typename" :class="item.typeName">{{changeStrShowName(item.typeName)}}</div> -->
+                        <div class="typename" v-if="UnitFlag==1" :class="item.typeName" @click="openModal(item.typeName,item.inchComList,item.chooseKey)">{{changeStrShowName(item.typeName)}}</div>
+                        <div class="typename" v-if="UnitFlag!=1" :class="item.typeName" @click="openModal(item.typeName,item.comList,item.chooseKey)">{{changeStrShowName(item.typeName)}}</div>
                         <div class="btn" v-if="UnitFlag==0">    
                             <!-- 只是加了个判断区分处理 thinkness数据  根据id判断选中-->
-                               <div  class="btRight"  v-for="(bean,index1) in item.comList" :key="index1" type="primary"
+                            <div  class="btRight"  v-for="(bean,index1) in item.comList" :key="index1" type="primary"
                             v-if="item.chooseKey==bean.id"
                             :class="item.chooseKey==bean.id?'':'unchoose'"
-                            @click="openModal(item.typeName,item.comList,item.chooseKey,bean.value)"
+                            @click="openModal(item.typeName,item.comList,item.chooseKey)"
                             >
                                 <span style="padding-right:11px">{{bean.value}}</span>
                                 <span style="padding-right:10px;" v-if="item.typeName!='POLATRITY'"><img src="../../assets/images/edit.png" ></span>
@@ -22,7 +24,7 @@
                               <div  class="btRight"  v-for="(bean,index1) in item.inchComList" :key="index1" type="primary"
                             v-if="item.chooseKey==bean.id"
                             :class="item.chooseKey==bean.id?'':'unchoose'"
-                            @click="openModal(item.typeName,item.inchComList,item.chooseKey,bean.value)"
+                            @click="openModal(item.typeName,item.inchComList,item.chooseKey)"
                             >
                                 <span style="padding-right:11px">{{bean.value}}</span>
                                 <span style="padding-right:10px;" v-if="item.typeName!='POLATRITY'"><img src="../../assets/images/edit.png" ></span>
@@ -63,6 +65,7 @@
    <div class="footers" :class="btFooterFlag?'unEnough':''">
                         <div class="new-footer-btns">
                             <div class="btn n-1"  @click="go('/saveManage')">
+                                <div class="shuxian"></div>
                                 <span>Save</span>
                             </div>
                             <div class="btn n-2" @click="go('/welding')">
@@ -462,7 +465,7 @@ export default {
       modalChangeChecked(key){
           this.nowChoose =key;
       },
-    openModal(typename,comList,chooseKey,chooseValue){
+    openModal(typename,comList,chooseKey){
         let self =this;
         //00、 判断是不是焊接中，焊接中不能编辑部分参数
         if(self.$store.state.weldingStatus==1){
@@ -787,9 +790,11 @@ export default {
         this.max = list.TIGSYN_MAX_CUR;//要根据单位区分
         this.nowPosionX=list.SYN_WELD_CUR;
         this.oldPosionX =this.nowPosionX;
-             //weld_cur赋值----电流 --没有危险区域
-            this.diffMin = list.TIGSYN_MIN_CUR
-            this.diffMax = list.TIGSYN_MAX_CUR
+             //weld_cur赋值----电流
+            this.diffMin = this.clacDangerRang(this.min,list.SYN_RECOMMEND_CUR,'min');
+            this.diffMax = this.clacDangerRang(this.max,list.SYN_RECOMMEND_CUR,'max');
+            // this.diffMin = 80;
+            // this.diffMax = 100;
             this.block =this.max-this.min;
     //初始化 电流控制器
     this.initElecticCurrent();
@@ -830,6 +835,21 @@ export default {
     handleTouchstart(e){
         this.clacThinknessByTouch(e.changedTouches[0].pageY);
         // alert(e.targetTouches[0].clientY);
+    },
+    clacDangerRang(limitValue,recommedValue,type){
+        if(type=='min'){
+            if((recommedValue-9)<limitValue){
+                return limitValue;
+            }else{
+                return recommedValue-9;
+            }
+        }else{
+            if((recommedValue+9)>limitValue){
+                return limitValue;
+            }else{
+                return recommedValue+9;
+            }
+        }
     }
 
   },
@@ -1027,7 +1047,7 @@ export default {
   .midLine1{
         opacity: 0.5;
         width: 100%;
-        height: 5px;;
+        height: 2px;;
         margin-top: 20px;
         //  background: linear-gradient(to left, #173d4a , #fdfcff,#173d4a);
           background: linear-gradient( 
@@ -1062,46 +1082,44 @@ export default {
                 }
             }   
             .u-right{
-                width: 40%;
+                width: 60%;
                 float: left;
                 text-align: center;
                 height: 100%;
-                position: relative;
+                // position: relative;
                 .bt{
                     float: left;
                    width: 35px;
-                   height: 35px;
+                   height: 50px;
                    font-size: 16px;
                    background: #163749;
                    color: #fff;
-                   position: absolute;
-                   top: 50%;
-                   transform: translate(0,-50%)
+                //    position: absolute;
+                //    top: 50%;
+                //    transform: translate(0,-50%)
                 }
                .del{
-                 left: 10px;
-                  background: url(../../assets/images/tm_choose_add.jpg) no-repeat;
+                  background: url(../../assets/images/jia.png) no-repeat;
                     background-size: 35px;
-                    background-position: bottom center;
+                    background-position: left center;
                } 
                .value{
                    float: left;
-                   width: 130px;
+                   width: 120px;
                    height: 50px;
                    color: #fff;
                    font-size: 48px;
-                   position: absolute;
-                   top: 37%;
-                   transform: translate(0,-50%);
-                   left: 30px;
+                //    position: absolute;
+                //    top: 37%;
+                //    transform: translate(0,-50%);
+                //    left: 30px;
                }.dangerColor{
                    color: red;
                }
                .add{
-                    left:160px;
-                    background: url(../../assets/images/tm_choose_del.jpg) no-repeat;
+                    background: url(../../assets/images/jian.png) no-repeat;
                     background-size: 35px;
-                    background-position: bottom center;
+                    background-position: left center;
                }
                
             }  
@@ -1162,7 +1180,7 @@ export default {
          line-height: 30px;
          text-align: center;
          font-weight: bold;
-         color: #96d3e8;
+         color: #00c6ff;
      }
   }
   .inducance{
@@ -1180,35 +1198,46 @@ export default {
         margin-top: 0;
         width: 100%;
         height: 40px;
-        background: #333; /* For browsers that do not support gradients */
-        background: -webkit-linear-gradient(#fff, #333, #fff); /* For Safari 5.1 to 6.0 */
+        background: #000; /* For browsers that do not support gradients */
+        // background: -webkit-linear-gradient(#fff, #333, #fff); /* For Safari 5.1 to 6.0 */
       .btn{
-          width: 40%;
+          width: 50%;
           height: 40px;
           float: left;
           text-align: center;
-          color: #b3c0c6;
+          color: #fff;
           // color: #000;
           font-size: 18px;
           line-height: 40px;
-          border-right: 2px solid;
-           background:linear-gradient(to top, #354141 0%, #000 100%) ;
-          background: -moz-linear-gradient(to top, #354141 0%, #000 100%) ;
-          background: -webkit-gradient(linear, to left to top, to left to bottom, color-stop(0%,#354141), color-stop(100%,#000))  ;
-          background: -webkit-linear-gradient(to top, #354141 0%,#000 100%) ;
-          background: -o-linear-gradient(to top, #354141 0%,#000 100%) ;
-          background: -ms-linear-gradient(to top, #354141 0%,#000 100%) ;
+        //   border-right: 2px solid;
+        //    background:linear-gradient(to top, #354141 0%, #000 100%) ;
+        //   background: -moz-linear-gradient(to top, #354141 0%, #000 100%) ;
+        //   background: -webkit-gradient(linear, to left to top, to left to bottom, color-stop(0%,#354141), color-stop(100%,#000))  ;
+        //   background: -webkit-linear-gradient(to top, #354141 0%,#000 100%) ;
+        //   background: -o-linear-gradient(to top, #354141 0%,#000 100%) ;
+        //   background: -ms-linear-gradient(to top, #354141 0%,#000 100%) ;
       }.n-1{
+        position: relative;
+        .shuxian{
+            width: 2px;
+            height: 40px;
+            position: absolute;
+            right: 0;
+            background:url(../../assets/images/shuxian.png) no-repeat;    
+            background-size: 2px;
+            background-position:right center;
+        }
         span{
           background:url(../../assets/images/memory.png) no-repeat;    
-          background-size: 30px;
+          background-size: 26px;
           background-position:left center;
           padding-left: 33px;
         }
+
       }.n-2{
-          width: 60%;
+        //   width: 60%;
         span{
-            color: #7ac8d4;
+            color: #fff;
             font-weight: bold;
             opacity: .8;
         }
@@ -1269,22 +1298,23 @@ export default {
       }
       .btlist{
           margin: 0 20px;
-          margin-bottom: 40px;
+          margin-bottom: 10px;
+          font-size: 16px;
           li{
               width: 33.33%;
-              height: 35px;
+              height: 60px;
               float: left;
               margin-bottom: 20px;
              .con{
-                 background: #1c1c1c;
+                 background: #3f4043;
                  height: 100%;
                  border-radius: 20px;
                  text-align: center;
-                 height: 35px;
-                 line-height: 35px;
+                 height: 60px;
+                 line-height: 60px;
                  color:#fff;
              }.choose{
-                 background: #177a93;
+                 background: #214360;
              }
             
           }

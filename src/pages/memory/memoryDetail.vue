@@ -10,14 +10,14 @@
             <div class="modText">
                 <div class="mup">
                     <div class="u-r">Note</div>
-                    <!-- <div class="u-l">
+                    <div class="u-l">
                         <div class="u-l-text" @click="openEditModal">modify</div>
-                    </div> -->
+                    </div>
                 </div>
-                <!-- <div class="mdown">
+                <div class="mdown">
                     <p>{{remarksText}}
                     </p>
-                </div> -->
+                </div>
             </div>
             <div class="mainPanel">
                 <div class="m-l1"></div>
@@ -45,7 +45,7 @@
                 </div>
                 <ul class="params">
                     <li v-for="(item,index) in nowTypeList"  :class="item.typeName=='GAS'&& MIG_MATERIAL !=0?'eleUnShow':''">
-                        <div class="p-l-l">{{item.typeName}}</div>
+                        <div class="p-l-l">{{changeStrShowName(item.typeName)}}</div>
                         <div class="p-l-r">
                              <span v-for="(temp,newIdx) in item.comList" v-if="UnitFlag==0 && item.chooseKey==temp.id">
                             {{temp.value}}
@@ -107,6 +107,21 @@ export default {
             {name:'DIAMETER',value:'0.6mm'},
             {name:'THICKNESS',value:'0.6mm'}
         ],
+        paramKeysNameMap:{
+            pre_gas:'Pre Gas',
+            start_cur_end:'Start Current',
+            pulse_duty:'Pulse Duty',
+            pulse_fre:'Pulse Fre',
+            base_cur:'Base Current',
+            slop_down:'Slop Down',
+            slop_up:'Slop Up',
+            crater_cur:'Crater Current',
+            post_gas:'Post Gas',
+            ac_balance:'Ac Balance',
+            ac_fre:'Ac Fre',
+            weld_current:'Weld current'
+
+        },//显示的名字
         suppllytments:[],//额外字段
         name:'',//当前模式姓名
         type:'',//类型
@@ -284,24 +299,29 @@ export default {
     },
     buildTigManData(list){
             if ( this.nowModelTypeName == "2T_NOPULSE_DC") {
-                        var t0 ={typeName:'PRE-GAS',value:list.PRE_GAS_VAL/10+'s'};      
-                        var t6 ={typeName:'SLOP-UP',value:list.STOP_UP_VAL/10+'s'};
-                        var t11 ={typeName:'WELD-CURRENT',value:list.WELD_CUR_VAL+'A'};
-                        var t5 ={typeName:'SLOP-DOWN',value:list.SLOP_DOWN_VAL/10+'s'};
-                        var t8 ={typeName:'POST-GAS',value:list.POST_GAS_VAL/10+'s'};
+                        // var t0 ={typeName:'PRE-GAS',value:list.PRE_GAS_VAL/10+'s'};      
+                        // var t6 ={typeName:'SLOP-UP',value:list.STOP_UP_VAL/10+'s'};
+                        // var t11 ={typeName:'WELD-CURRENT',value:list.WELD_CUR_VAL+'A'};
+                        // var t5 ={typeName:'SLOP-DOWN',value:list.SLOP_DOWN_VAL/10+'s'};
+                        // var t8 ={typeName:'POST-GAS',value:list.POST_GAS_VAL/10+'s'};
+                        var t0 ={typeName:this.paramKeysNameMap.pre_gas,value:list.PRE_GAS_VAL/10+'s'};      
+                        var t6 ={typeName:this.paramKeysNameMap.slop_up,value:list.STOP_UP_VAL/10+'s'};
+                        var t11 ={typeName:this.paramKeysNameMap.weld_current,value:list.WELD_CUR_VAL+'A'};
+                        var t5 ={typeName:this.paramKeysNameMap.slop_down,value:list.SLOP_DOWN_VAL/10+'s'};
+                        var t8 ={typeName:this.paramKeysNameMap.post_gas,value:list.POST_GAS_VAL/10+'s'};
                         this.suppllytments.push(t0);
                         this.suppllytments.push(t6);
                         this.suppllytments.push(t11);
                         this.suppllytments.push(t5);
                         this.suppllytments.push(t8);
                } else if ( this.nowModelTypeName == "4T_NOPULSE_DC") {
-                        var t0 ={typeName:'PRE-GAS',value:list.PRE_GAS_VAL/10+'s'};      
-                        var t6 ={typeName:'SLOP-UP',value:list.STOP_UP_VAL/10+'s'};
-                        var t11 ={typeName:'WELD-CURRENT',value:list.WELD_CUR_VAL+'A'};
-                        var t5 ={typeName:'SLOP-DOWN',value:list.SLOP_DOWN_VAL/10+'s'};
-                        var t8 ={typeName:'POST-GAS',value:list.POST_GAS_VAL/10+'s'};
-                        var t1 ={typeName:'START-CURRENT',value:list.START_CUR_VAL+'A'};
-                        var t7 ={typeName:'CRATER-CURRENT',value:list.CRATER_CUR_VAL+'A'};
+                        var t0 ={typeName:this.paramKeysNameMap.post_gas,value:list.PRE_GAS_VAL/10+'s'};      
+                        var t6 ={typeName:this.paramKeysNameMap.slop_up,value:list.STOP_UP_VAL/10+'s'};
+                        var t11 ={typeName:this.paramKeysNameMap.weld_current,value:list.WELD_CUR_VAL+'A'};
+                        var t5 ={typeName:this.paramKeysNameMap.slop_down,value:list.SLOP_DOWN_VAL/10+'s'};
+                        var t8 ={typeName:this.paramKeysNameMap.post_gas,value:list.POST_GAS_VAL/10+'s'};
+                        var t1 ={typeName:this.paramKeysNameMap.start_cur_end,value:list.START_CUR_VAL+'A'};
+                        var t7 ={typeName:this.paramKeysNameMap.crater_cur,value:list.CRATER_CUR_VAL+'A'};
 
                         this.suppllytments.push(t0);
                         this.suppllytments.push(t6);
@@ -311,14 +331,14 @@ export default {
                         this.suppllytments.push(t1);
                         this.suppllytments.push(t7);
                 }else if ( this.nowModelTypeName == "2T_PULSE_DC") {
-                        var t0 ={typeName:'PRE-GAS',value:list.PRE_GAS_VAL/10+'s'};      
-                        var t6 ={typeName:'SLOP-UP',value:list.STOP_UP_VAL/10+'s'};
-                        var t11 ={typeName:'WELD-CURRENT',value:list.WELD_CUR_VAL+'A'};
-                        var t5 ={typeName:'SLOP-DOWN',value:list.SLOP_DOWN_VAL/10+'s'};
-                        var t8 ={typeName:'POST-GAS',value:list.POST_GAS_VAL/10+'s'};
-                        var t2 ={typeName:'PULSE-DUTY',value:list.DUTY_VAL/10+'%'};
-                        var t4 ={typeName:'BASE-CURRENT',value:list.BASE_CUR_VAL+'A'};
-                        var t3 ={typeName:'PULSE-FRE',value:list.PULSE_FRE_VAL/10+'Hz'};
+                        var t0 ={typeName:this.paramKeysNameMap.pre_gas,value:list.PRE_GAS_VAL/10+'s'};      
+                        var t6 ={typeName:this.paramKeysNameMap.slop_up,value:list.STOP_UP_VAL/10+'s'};
+                        var t11 ={typeName:this.paramKeysNameMap.weld_current,value:list.WELD_CUR_VAL+'A'};
+                        var t5 ={typeName:this.paramKeysNameMap.slop_down,value:list.SLOP_DOWN_VAL/10+'s'};
+                        var t8 ={typeName:this.paramKeysNameMap.post_gas,value:list.POST_GAS_VAL/10+'s'};
+                        var t2 ={typeName:this.paramKeysNameMap.pulse_duty,value:list.DUTY_VAL/10+'%'};
+                        var t4 ={typeName:this.paramKeysNameMap.base_cur,value:list.BASE_CUR_VAL+'A'};
+                        var t3 ={typeName:this.paramKeysNameMap.pulse_fre,value:list.PULSE_FRE_VAL/10+'Hz'};
 
                         this.suppllytments.push(t0);
                         this.suppllytments.push(t6);
@@ -329,16 +349,16 @@ export default {
                         this.suppllytments.push(t4);
                         this.suppllytments.push(t3);
                 }else if( this.nowModelTypeName=='4T_PULSE_DC'){
-                        var t0 ={typeName:'PRE-GAS',value:list.PRE_GAS_VAL/10+'s'};      
-                        var t6 ={typeName:'SLOP-UP',value:list.STOP_UP_VAL/10+'s'};
-                        var t11 ={typeName:'WELD-CURRENT',value:list.WELD_CUR_VAL+'A'};
-                        var t5 ={typeName:'SLOP-DOWN',value:list.SLOP_DOWN_VAL/10+'s'};
-                        var t8 ={typeName:'POST-GAS',value:list.POST_GAS_VAL/10+'s'};
-                        var t1 ={typeName:'START-CURRENT',value:list.START_CUR_VAL+'A'};
-                        var t7 ={typeName:'CRATER-CURRENT',value:list.CRATER_CUR_VAL+'A'};
-                        var t2 ={typeName:'PULSE-DUTY',value:list.DUTY_VAL/10+'%'};
-                        var t4 ={typeName:'BASE-CURRENT',value:list.BASE_CUR_VAL+'A'};
-                        var t3 ={typeName:'PULSE-FRE',value:list.PULSE_FRE_VAL/10+'Hz'};
+                        var t0 ={typeName:this.paramKeysNameMap.pre_gas,value:list.PRE_GAS_VAL/10+'s'};      
+                        var t6 ={typeName:this.paramKeysNameMap.slop_up,value:list.STOP_UP_VAL/10+'s'};
+                        var t11 ={typeName:this.paramKeysNameMap.weld_current,value:list.WELD_CUR_VAL+'A'};
+                        var t5 ={typeName:this.paramKeysNameMap.slop_down,value:list.SLOP_DOWN_VAL/10+'s'};
+                        var t8 ={typeName:this.paramKeysNameMap.post_gas,value:list.POST_GAS_VAL/10+'s'};
+                        var t1 ={typeName:this.paramKeysNameMap.start_cur_end,value:list.START_CUR_VAL+'A'};
+                        var t7 ={typeName:this.paramKeysNameMap.crater_cur,value:list.CRATER_CUR_VAL+'A'};
+                        var t2 ={typeName:this.paramKeysNameMap.pulse_duty,value:list.DUTY_VAL/10+'%'};
+                        var t4 ={typeName:this.paramKeysNameMap.base_cur,value:list.BASE_CUR_VAL+'A'};
+                        var t3 ={typeName:this.paramKeysNameMap.pre_gas.pulse_fre,value:list.PULSE_FRE_VAL/10+'Hz'};
 
 
                         this.suppllytments.push(t0);
@@ -354,8 +374,8 @@ export default {
                 }
                 
                 if(this.nowDCORACFLAG==1){
-                    var t9 ={typeName:'AC-BALANCE',value:list.AC_DUTY_VAL+'%'};//交流占空比
-                    var t10 ={typeName:'AC-FRE',value:list.AC_FRE_VAL+'Hz'};
+                    var t9 ={typeName:this.paramKeysNameMap.ac_balance,value:list.AC_DUTY_VAL+'%'};//交流占空比
+                    var t10 ={typeName:this.paramKeysNameMap.ac_fre,value:list.AC_FRE_VAL+'Hz'};
                     this.suppllytments.push(t9);
                     this.suppllytments.push(t10);
                 }
@@ -505,7 +525,7 @@ export default {
             }
             .m-show{
                 padding: 0 20px;
-                height: 50px;
+                min-height: 50px;
                 font-size: 46px;
                 // color: #83cadf;
                 color: #fff;
@@ -1003,5 +1023,13 @@ export default {
           100% {bottom:-70%;}
     }
   }
+}
+@media screen and (max-width: 400px) {
+//    .memoryDetail .mmp .mainPanel .m-show{
+//        display: inline-block;
+//    }
+   .memoryDetail .mmp .mainPanel .m-show {font-size: 35px;}
+   .memoryDetail .mmp .mainPanel .m-show .m-s-l{background-size: 38px;padding-left: 45px;}
+   .memoryDetail .mmp .mainPanel .m-show .m-s-r{background-size: 38px;padding-left: 45px;}
 }
 </style>

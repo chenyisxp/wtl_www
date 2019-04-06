@@ -31,15 +31,17 @@
         </div>
         <div class="btn-list">
             <div class="list-contain">
-                <div class="btn" v-for="(item,index) in arrChooseBtn" :key="item" :class="item==reClacClass()?'nowChoose':''"></div>
+                <div class="btn" v-for="(item,index) in arrChooseBtn" :key="index" :class="[item==reClacClass()?'nowChoose':'','btn_'+index]"></div>
             </div>
         </div>
     </div>
     <div class="footer-btns">
         <div class="btn n-1" @click="go('/memoryManage')">
+            <div class="shuxian"></div>
             <span>Memory</span>
         </div>
         <div class="btn n-2"  @click="go('/hisWeldList')">
+            <div class="shuxian"></div>
             <span>History</span>
         </div>
         <div class="btn n-3"  @click="go('/setmanage')">
@@ -120,8 +122,12 @@ export default {
   methods: {
     //新的选择器 man和syn 合并
     newChangeFuc(idx,type){
+      //不是c位的图不能选中
+      // if(this.reClacExit(idx)!=this.nowMainIndex){
+      //   return;
+      // }
       this.changeFuc(idx,type);
-      console.log(idx);
+      console.log(this.nowMainIndex);
     },
     changeBleName(type){
       if(type==0){
@@ -434,6 +440,17 @@ export default {
             return 4;
           }
         },
+         reClacExit(val){
+          if(val==0 || val==1){
+            return 0;
+          }
+          if(val==2 || val==3){
+            return 2;
+          }
+          if(val==4){
+            return 4;
+          }
+        },
         go(url){
           
             if(url=='/blueToothManage'){
@@ -595,7 +612,7 @@ export default {
             if( this.screenWidth<this.screenHeight){
             this.conHeight = this.screenHeight-95-100+'px';
             this.imgHeight = this.screenHeight-95-100;
-            this.imgWidth = this.imgHeight*0.6 +'px';//宽高比列5：3
+            this.imgWidth = this.imgHeight*0.7 +'px';//宽高比列5：3
             this.imgHeight+='px';//去除头部底部高度 上下距离
             }else{
             this.conHeight = this.screenWidth-95-100+'px';
@@ -825,6 +842,7 @@ export default {
       }
   }
   .typechoose{
+            overflow: hidden;
             width: 100%;
             height: auto;
             position: absolute;
@@ -885,7 +903,7 @@ export default {
             }
             .c-img.cla_0{
               top: 40px;
-              left: 0;
+              left: -150px;
               z-index: 2;
               zoom: .8;
               transition-duration:.05s;
@@ -905,7 +923,7 @@ export default {
             .c-img.cla_2{
               top: 40px;
               z-index: 1;
-              right: 0;
+              right: -150px;
               zoom: .8;
               transition-duration:.05s;
               // linear匀速 ease-in加速 ease-out减速 ease-in-out先加速再减速*/
@@ -939,16 +957,27 @@ export default {
             margin-top: 20px;
             .list-contain{
               margin: 0 auto;
-              width: 60px;
+              width: 50px;
+              height: 20px;
+              position: relative;
                 .btn{
                 float: left;
                 width: 10px;
                 height: 10px;
                 border-radius: 10px;
                 background: #888;
-                margin-right: 3px;
+                position: absolute;
               }.nowChoose{
                 background: #fff;    
+              }
+              .btn.btn_0{
+                left: 0; 
+              }
+              .btn.btn_1{
+                left:20px; 
+              }
+              .btn.btn_2{
+                right: 0px; 
               }
             }
             
@@ -968,36 +997,67 @@ export default {
           height: 40px;
           float: left;
           text-align: center;
-          color: #b3c0c6;
+          color: #fff;
           // color: #000;
-          font-size: 18px;
+          font-size: 16px;
           line-height: 40px;
-          border-right: 2px solid;
-          background: -moz-linear-gradient(top, #354141 0%, #000 100%) ;
-          background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#354141), color-stop(100%,#000))  ;
-          background: -webkit-linear-gradient(top, #354141 0%,#000 100%) ;
-          background: -o-linear-gradient(top, #354141 0%,#000 100%) ;
-          background: -ms-linear-gradient(top, #354141 0%,#000 100%) ;
+          // border-right: 2px solid;
+          background: #000;
+          // background: -moz-linear-gradient(top, #354141 0%, #000 100%) ;
+          // background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#354141), color-stop(100%,#000))  ;
+          // background: -webkit-linear-gradient(top, #354141 0%,#000 100%) ;
+          // background: -o-linear-gradient(top, #354141 0%,#000 100%) ;
+          // background: -ms-linear-gradient(top, #354141 0%,#000 100%) ;
       }.n-1{
-        span{
-          background:url(../assets/images/memory.png) no-repeat;    
-          background-size: 30px;
-          background-position:left center;
-          padding-left: 33px;
-        }
+          position: relative;
+          .shuxian{
+            width: 2px;
+            height: 40px;
+            position: absolute;
+            right: 0;
+            background:url(../assets/images/shuxian.png) no-repeat;    
+            background-size: 2px;
+            background-position:right center;
+          }
+          span{
+            height: 40px;
+            display: inline-block;
+            background:url(../assets/images/memory.png) no-repeat;    
+            background-size: 25px;
+            background-position:top center;
+            padding-top: 7px;
+            margin: 3px 0;
+          }
       }.n-2{
+         position: relative;
+          .shuxian{
+            width: 2px;
+            height: 40px;
+            position: absolute;
+            right: 0;
+            background:url(../assets/images/shuxian.png) no-repeat;    
+            background-size: 2px;
+            background-position:right center;
+          }
         span{
-          background:url(../assets/images/histroy.png) no-repeat;    
-          background-size: 30px;
-          background-position:left center;
-          padding-left: 33px;
+          height: 40px;
+          display: inline-block;
+          background:url(../assets/images/history.png) no-repeat;    
+          background-size: 20px;
+          background-position:top center;
+          padding-top: 7px;
+          margin: 3px 0;
         }
       }.n-3{
         span{
+          height: 40px;
+          display: inline-block;
           background:url(../assets/images/setting.png) no-repeat;    
-          background-size: 30px;
-          background-position:left center;
-          padding-left: 33px;
+          background-size: 20px;
+          background-position:top center;
+          
+          padding-top: 7px;
+          margin: 3px 0;
         }
       }
       .btn:last-of-type{

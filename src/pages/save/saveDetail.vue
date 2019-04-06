@@ -45,7 +45,7 @@
                 </div>
                 <ul class="params">
                     <li v-for="(item,index) in nowTypeList"  :class="item.typeName=='GAS'&& MIG_MATERIAL !=0?'eleUnShow':''">
-                        <div class="p-l-l">{{item.typeName}}</div>
+                        <div class="p-l-l">{{changeStrShowName(item.typeName)}}</div>
                         <div class="p-l-r">
                              <span v-for="(temp,newIdx) in item.comList" v-if="UnitFlag==0 && item.chooseKey==temp.id">
                             {{temp.value}}
