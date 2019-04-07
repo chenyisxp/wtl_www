@@ -114,7 +114,8 @@
                                 <span>Save</span>
                             </div>
                             <div class="btn n-2" @click="go('/welding')">
-                                <span>Get Ready</span>
+                                <span v-if="isReadyFlag!=1">Get Ready</span>
+                                <span v-if="isReadyFlag==1">Already</span>
                         </div>
                         
                         </div>
@@ -220,6 +221,7 @@ export default {
   },
   data () {
     return {
+        isReadyFlag:0,//是否焊接准备完毕
         minTRange:'',
         maxTRange:'',
         winHeight:'',
@@ -973,6 +975,7 @@ export default {
             this.actualNum = '0.6mm'
             this.UnitFlag=0;
         }
+        this.isReadyFlag =list.initBean.isReadyFlag;//是否焊接准备完毕
          //电感量
         this.inducanceValue = list.INDUCTANCE;
         if(list.RECOMMEND_INDUCTANCE<=this.inducanceValue){
@@ -1055,6 +1058,7 @@ export default {
             //  this.actualNum = '0.6mm'
              this.UnitFlag=0;
         }
+        this.isReadyFlag =list.initBean.isReadyFlag;//是否焊接准备完毕
         //  alert('list.weldTypeNum'+list.weldTypeNum);
         this.nowModalTypeId =list.weldTypeNum;//后退回去时用
         //单位文本赋值
@@ -1369,7 +1373,7 @@ export default {
                 }
                .del{
                  left: -32px;
-                  background: url(../../assets/images/jia.png) no-repeat;
+                  background: url(../../assets/images/jian.png) no-repeat;
                     background-size: 35px;
                     background-position: center center;
                } 
@@ -1388,7 +1392,7 @@ export default {
                }
                .add{
                    left:160px;
-                    background: url(../../assets/images/jian.png) no-repeat;
+                    background: url(../../assets/images/jia.png) no-repeat;
                     background-size: 35px;
                     background-position: center center;
                }

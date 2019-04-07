@@ -243,13 +243,14 @@ export default {
     // this.buildData('newIndex',this.GLOBAL_CONFIG.callWeldTypeData.migsyn.crcCode,'dae1 00 00 00 00 02 00 003C 003D 00b4 00c8 02 09 5952'.replace(/\s+/g,"").replace(/(.{2})/g,'$1 ').replace(/(^\s*)|(\s*$)/g, ""));
     var newString="";
     if(this.GLOBAL_CONFIG.TESTFLAG ||this.GLOBAL_CONFIG.DEVELOPERMODEFLAG ){
-      newString ="test_m_1||||test_m_2||||test_m_3||||test_m_41||||test_m_5||||test_m_6||||test_m_7||||test_m_8||||test_m_9";
+      // newString ="test_m_1||||test_m_2||||test_m_3||||test_m_41||||test_m_5||||test_m_6||||test_m_7||||test_m_8||||test_m_9";
+      newString="";
     }else{
       newString =  window.android.callMemoryRemarks();
     }
     var remarksList =(newString+'').split('||||');
     for(var i=0;i<9;i++){
-      this.mList[i].remarksTtile=remarksList[i];
+      this.mList[i].remarksTtile=remarksList[i] || '';
     }
   },
   created() {
@@ -325,6 +326,7 @@ export default {
         }
         position: relative;
         .m-b{
+          height: 40px;;
           padding-right:20px;
           padding-left: 45px;
           white-space:nowrap; text-overflow:ellipsis; -o-text-overflow:ellipsis; overflow:hidden;

@@ -279,7 +279,8 @@ Array.prototype.in_array = function (element) {
             }
              //设值
              function  setWeldDataByType(arrayList,type,pageFrom,_this){ 
-                 console.log(pageFrom+'|||||');
+                 console.log(pageFrom+'|||||'+type);
+                 console.log(arrayList)
                  
                var rstInfo={};
                switch (type) {
@@ -583,6 +584,7 @@ Array.prototype.in_array = function (element) {
             }
             //抽取的公共部分
             function buidDataByPagefrom(pageFrom,dirctiveType,data,_this){
+                console.log(data)
                 var rstInfo ={};
                 //请求mig syn模式数据
                 if(compareString(dirctiveType,weldDirctive.migSyn)){
@@ -739,7 +741,8 @@ Array.prototype.in_array = function (element) {
                  //5|空
                      bean.empty1 =buildArr[2]
                  //6|空
-                     bean.empty2 =buildArr[1]
+                    //  bean.empty2 =buildArr[1]
+                    bean.isReadyFlag =buildArr[1] || 0;
                  //7|空
                      bean.empty3 =buildArr[0]
                     /***2222222 begin***/
@@ -803,7 +806,7 @@ Array.prototype.in_array = function (element) {
             }
             //转成16进制转2进制 之后不足的位数补零
             function num16To2Arr(num,type){
-
+                console.log(num)
                 // return (Array(len).join('0') + parseInt(num,16).toString(2)).slice(-len);
                 //直接返回切割后的数组
                 // var buildArr = (Array(len).join('0') + parseInt(num,16).toString(2)).slice(-len).replace(/(.{1})/g,'$1 ').replace(/(^\s*)|(\s*$)/g, "").split(' ');
@@ -832,8 +835,9 @@ Array.prototype.in_array = function (element) {
                     bean.flowStatus =buildArr[3]
                 //5|空
                     bean.empty1 =buildArr[2]
-                //6|空
-                    bean.empty2 =buildArr[1]
+                //6|空 1代表 准备焊接了
+                    // bean.empty2 =buildArr[1]
+                    bean.isReadyFlag =buildArr[1];
                 //7|mode  AD/DC
                     if(type=='MMA'){
                         bean.acdc =buildArr[0]

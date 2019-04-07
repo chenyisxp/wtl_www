@@ -14,10 +14,10 @@
                         <div class="u-l-text" @click="openEditModal">modify</div>
                     </div>
                 </div>
-                <!-- <div class="mdown">
+                <div class="mdown">
                     <p>{{remarksText}}
                     </p>
-                </div> -->
+                </div>
             </div>
             <div class="mainPanel">
                 <div class="m-l1"></div>
@@ -68,7 +68,9 @@
                  <div class="m-l3"></div>
             </div>
         </div>
-        <div class="appBtn" @click="goEditPage">OVERRIDE</div>
+        <!-- <div class="appBtn" @click="goEditPage">OVERRIDE</div> -->
+        <div class="appBtn" @click="handleConfirmGo">OVERRIDE</div>
+         <!-- <el-button type="text" @click="handleConfirmGo">点击打开 Message Box</el-button> -->
         <div class="hideWid" v-if="hideFlag" id="hiid">
             <div class="up" v-if="upshowFlag" @click="closeModal"></div>
             <div class="down" v-if="downshowFlag" :class="closeClass?'transdown':''">
@@ -86,7 +88,7 @@
 </template>
 
 <script>
-import { Toast ,Indicator } from 'mint-ui'
+import { MessageBox,Toast ,Indicator } from 'mint-ui'
 import Loading from "@/components/base/Loading";
 export default {
   name: "",
@@ -126,6 +128,25 @@ export default {
   },
 
   methods: {
+    handleConfirmGo(){
+        MessageBox.confirm('',{
+            title:'Attention',
+            message:'Whether to cover？',
+            confirmButtonText:'YES',
+            cancelButtonText:'NO'
+        }).then(action => {
+            console.log(23);
+            if (action == 'confirm') {
+                console.log('点击确认'); 
+                this.goEditPage();
+            }
+        }).catch(error =>{
+            if(error == 'cancel'){
+                console.log('点击取消');
+                this.goWeldPage(this.nowModalTypeId);
+            }
+        })
+    },
     getKeyMap(id){
         switch (id) {
             case '0':
@@ -176,22 +197,24 @@ export default {
     },
     //应该是去之前的焊接页
     goWeldPage(newIndexId){
+        console.log(newIndexId);
+        newIndexId =parseInt(newIndexId || 0);
         let self =this;
         // alert(newIndexId)
         switch (newIndexId) {
-            case self.GLOBAL_CONFIG.callWeldTypeData.migsyn.newIndex+''://migsyn
+            case self.GLOBAL_CONFIG.callWeldTypeData.migsyn.newIndex://migsyn
                 self.$router.push({ path: '/weld_common', query:{type:'MIGSYN',pageBackTo:'/saveManage'} });
                 break;
-            case self.GLOBAL_CONFIG.callWeldTypeData.migman.newIndex+''://migman
+            case self.GLOBAL_CONFIG.callWeldTypeData.migman.newIndex://migman
                 self.$router.push({ path: '/weld_common', query:{type:'MIGMAN',pageBackTo:'/saveManage'} });
                 break;
-            case self.GLOBAL_CONFIG.callWeldTypeData.tigsyn.newIndex+''://tigsyn
+            case self.GLOBAL_CONFIG.callWeldTypeData.tigsyn.newIndex://tigsyn
                 self.$router.push({ path: '/weld_tig_syn', query:{type:'TIGMAN',pageBackTo:'/saveManage'} });
                 break;
-            case self.GLOBAL_CONFIG.callWeldTypeData.tigman.newIndex+''://tigman
+            case self.GLOBAL_CONFIG.callWeldTypeData.tigman.newIndex://tigman
                 self.$router.push({ path: '/weld_tig_man', query:{type:'TIGMAN',pageBackTo:'/saveManage'} });
                 break;
-            case self.GLOBAL_CONFIG.callWeldTypeData.mma.newIndex+''://mma
+            case self.GLOBAL_CONFIG.callWeldTypeData.mma.newIndex://mma
                 self.$router.push({ path: '/weld_mma', query:{type:'MMA',pageBackTo:'/saveManage'} });
                 break;
             default:

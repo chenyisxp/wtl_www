@@ -86,7 +86,8 @@ export default {
     goIndex(){
       let currentRout = this.$route.name
       this.goHome(currentRout)
-    },  buildWeldingData(data){
+    }, 
+     buildWeldingData(data){
       //  alert(data);
         data=data.replace(/\s+/g,"").toUpperCase();
         //校验数据格式是否正确 发送信号给安卓 DAB1 0000 0000 E721

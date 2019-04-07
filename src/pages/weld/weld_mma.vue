@@ -90,7 +90,8 @@
                                 <span>Save</span>
                             </div>
                             <div class="btn n-2" @click="go('/welding')">
-                                <span>Get Ready</span>
+                                <span v-if="isReadyFlag!=1">Get Ready</span>
+                                <span v-if="isReadyFlag==1">Already</span>
                         </div>
                         
                         </div>
@@ -195,6 +196,7 @@ export default {
   },
   data () {
     return {
+        isReadyFlag:0,//是否焊接准备完毕
         minTRange:'',
         maxTRange:'',
         winHeight:'',
@@ -881,66 +883,67 @@ export default {
        }
       },
     initFuc(){
-         var list  ={};
-    if(this.pageBackTo=='/memoryManage'){//来自momery页
-        list  =this.$store.state.memoryInfo;
-    }else{
-        list  =this.$store.state.rstInfo;
-    }
-    if(list.initBean.unit==1){
-            this.UnitFlag=1;
-            this.rulerNumAtr =this.rulerInchNumAtr;
-            this.actualNum = '24GA'
-    }else{
-        this.actualNum = '0.6mm'
-        this.UnitFlag=0;
-    }
-    this.nowModalTypeId =list.weldTypeNum;//后退回去时用
-    this.nowTypeList =list.nowTypeList;
-    this.min = 0;//最小推力
-    this.max = 10;//最大推力
-    this.nowPosionX=list.ARC_FORCE_VAL;
-    this.oldPosionX =this.nowPosionX;
-    this.diffMin =0;
-    this.diffMax =10;//都是推荐值 调整10-->9 -->10
-    this.block =this.max-this.min;
-    //电流初始化  推荐值正负10即可
-    this.min2=list.MMA_MIN_CUR;
-    this.max2 =list.MMA_MAX_CUR;
-    this.nowPosionX2 =list.MMA_CURRENT_VAL;
-    this.oldNowPosionX2 =this.nowPosionX2;
-    //电流初始化  推荐值正负20即可
-    this.diffMin2 =Math.round((parseInt(list.MMA_RECOMMEND_CURRENT)-20));
-    this.diffMax2 =Math.round((parseInt(list.MMA_RECOMMEND_CURRENT)+20));
-    if(this.diffMax2>this.max2){
-        this.diffMax2=this.max2;
-    }else if(this.diffMin2< this.min2){
-        this.diffMin2= this.min2;
-    }
-    this.block2 =this.max2-this.min2;
-            
-    //初始化 电流控制器
-    this.initElecticCurrent();
-    //初始化 电压控制器
-    this.initVotalage();
-    //初始化滑动选择器 不在这里初始化
-    // this.sliderParentInit();
-    let vag =Math.round((this.commonContainHeight/130)*100)/100;
-    this.rulerNumAtr.forEach(element => {
-        element.height= Math.round((vag * element.height)*10)/10;
-    });
-    this.minTRange = this.rulerNumAtr[0].num;
-    this.maxTRange = this.rulerNumAtr[this.rulerNumAtr.length-1].num;
-    // this.initWeldingAutoRouter();
-    },
-    //手动选择 刻度值
-    handleTouchstart(e){
-        this.clacThinknessByTouch(e.changedTouches[0].pageY);
-        // alert(e.targetTouches[0].clientY);
-    },
-    stringUtilUp(value){
-        return '222';
-    }
+        var list  ={};
+        if(this.pageBackTo=='/memoryManage'){//来自momery页
+            list  =this.$store.state.memoryInfo;
+        }else{
+            list  =this.$store.state.rstInfo;
+        }
+        if(list.initBean.unit==1){
+                this.UnitFlag=1;
+                this.rulerNumAtr =this.rulerInchNumAtr;
+                this.actualNum = '24GA'
+        }else{
+            this.actualNum = '0.6mm'
+            this.UnitFlag=0;
+        }
+        this.isReadyFlag =list.initBean.isReadyFlag;//是否焊接准备完毕
+        this.nowModalTypeId =list.weldTypeNum;//后退回去时用
+        this.nowTypeList =list.nowTypeList;
+        this.min = 0;//最小推力
+        this.max = 10;//最大推力
+        this.nowPosionX=list.ARC_FORCE_VAL;
+        this.oldPosionX =this.nowPosionX;
+        this.diffMin =0;
+        this.diffMax =10;//都是推荐值 调整10-->9 -->10
+        this.block =this.max-this.min;
+        //电流初始化  推荐值正负10即可
+        this.min2=list.MMA_MIN_CUR;
+        this.max2 =list.MMA_MAX_CUR;
+        this.nowPosionX2 =list.MMA_CURRENT_VAL;
+        this.oldNowPosionX2 =this.nowPosionX2;
+        //电流初始化  推荐值正负20即可
+        this.diffMin2 =Math.round((parseInt(list.MMA_RECOMMEND_CURRENT)-20));
+        this.diffMax2 =Math.round((parseInt(list.MMA_RECOMMEND_CURRENT)+20));
+        if(this.diffMax2>this.max2){
+            this.diffMax2=this.max2;
+        }else if(this.diffMin2< this.min2){
+            this.diffMin2= this.min2;
+        }
+        this.block2 =this.max2-this.min2;
+           
+        //初始化 电流控制器
+        this.initElecticCurrent();
+        //初始化 电压控制器
+        this.initVotalage();
+        //初始化滑动选择器 不在这里初始化
+        // this.sliderParentInit();
+        let vag =Math.round((this.commonContainHeight/130)*100)/100;
+        this.rulerNumAtr.forEach(element => {
+            element.height= Math.round((vag * element.height)*10)/10;
+        });
+        this.minTRange = this.rulerNumAtr[0].num;
+        this.maxTRange = this.rulerNumAtr[this.rulerNumAtr.length-1].num;
+        // this.initWeldingAutoRouter();
+        },
+        //手动选择 刻度值
+        handleTouchstart(e){
+            this.clacThinknessByTouch(e.changedTouches[0].pageY);
+            // alert(e.targetTouches[0].clientY);
+        },
+        stringUtilUp(value){
+            return '222';
+        }
   },
   mounted: function () {
        
@@ -1201,7 +1204,7 @@ export default {
                 }
                .del{
                  left: 10px;
-                  background: url(../../assets/images/jia.png) no-repeat;
+                  background: url(../../assets/images/jian.png) no-repeat;
                     background-size: 35px;
                     background-position: center center;
                } 
@@ -1220,7 +1223,7 @@ export default {
                }
                .add{
                    left:160px;
-                    background: url(../../assets/images/jian.png) no-repeat;
+                    background: url(../../assets/images/jia.png) no-repeat;
                     background-size: 35px;
                     background-position: center center;
                }

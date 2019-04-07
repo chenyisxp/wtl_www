@@ -97,15 +97,20 @@ const router = new Router({
 			name: 'setmanage',
 			meta:{index:21},
 			component: resolve => require(['@/pages/setting/setmanage.vue'],resolve)
+		},{ 
+			path: '/modelList',
+			name: 'modelList',
+			meta:{index:22},
+			component: resolve => require(['@/pages/experiential/modelList.vue'],resolve)
 		},
 		{
 			path: '*',
-			component: NewIndex
+			// component: NewIndex
 			// component:resolve => require(['@/pages/test07.vue'],resolve)//测试接收数据处理结果
 			// component:resolve => require(['@/pages/setting/setmanage.vue'],resolve)
 			// component:resolve => require(['@/pages/memory/memoryManage.vue'],resolve)
 			// component:resolve => require(['@/pages/blueToothManage.vue'],resolve)
-			// component:resolve => require(['@/pages/weld/welding.vue'],resolve)
+			component:resolve => require(['@/pages/weld/welding.vue'],resolve)
 			// component:resolve => require(['@/pages/weld/weld_tig_man.vue'],resolve)
 		}
 	]

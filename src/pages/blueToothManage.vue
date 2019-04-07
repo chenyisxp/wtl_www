@@ -1,7 +1,9 @@
 <template>
   <div class="blueToothManage">
       
-       <div class="blockHig"></div>
+       <div class="blockHig">
+           <span class="rBtn" v-if="reBackFlag">ReBack</span>
+       </div>
        <div class="t-contain">
             <div v-show="!scaningFlag" class="scan">
                 <img src="../assets/images/ble_scan.png"  @click="scan"> 
@@ -74,7 +76,8 @@
         <p>Whether to Enter the Experiencer Model.</p>
     </Modal>
     <!-- 测试入口 -->
-    <div class="testWay" @click="goExperiential">go to experiential.<Icon type="ios-arrow-dropright-circle" /></div>
+    <div class="testWay welding" @click="goWeldingExperiential">go to welding experiential.<Icon type="ios-arrow-dropright-circle" /></div>
+    <div class="testWay" @click="goExperiential">go to normal experiential.<Icon type="ios-arrow-dropright-circle" /></div>
   </div>
 </template>
 
@@ -88,6 +91,7 @@ export default {
   },
   data () {
     return {
+        reBackFlag:false,//返回按钮显示 时机 点击连接 没有连接上就要返回了
         blueToothFlag:false,//蓝牙开关是否打开
         modal6: false,
         loading: true,
@@ -114,6 +118,12 @@ export default {
   },
   methods: {
       //体验模式
+      goWeldingExperiential(){
+        this.GLOBAL_CONFIG.TESTFLAG=true;
+        this.isLoading =false;
+        this.$store.state.getConnectStatus='connected';
+        this.$router.push({path:'/modelList',query:{}});
+      },
       goExperiential(){
         let self =this;
         self.$store.state.routerOprete=1;
@@ -188,6 +198,7 @@ export default {
                             duration: 2000
                     });
                     self.isLoading=false;
+                    self.reBackFlag =true;//开启返回首页按钮显示
                 }else if(self.$store.state.getConnectStatus =='connected'){
                     self.isLoading =false;
                     window.android.updateBleRemarkByAddress(self.$store.state.nowConnectAddress.replace(/:/g, "").replace(/\"/g, ""),self.$store.state.nowConnectMachine,self.$store.state.nowConnectAddress,0);
@@ -384,7 +395,6 @@ export default {
   },
   mounted: function () {
         let self=this;
-        
         self.isLoading=false;
         // self.modal6 = false;//关闭
         //00、获取最后连接的蓝牙
@@ -429,7 +439,7 @@ export default {
   },
   created () {
   },
-  destroy(){
+  destroyed(){
       let self =this;
       clearInterval(self.timeInterval1);
       clearInterval(self.timeInterval2);
@@ -467,6 +477,18 @@ export default {
     min-height: 100vh;
     .blockHig{
         height: 40px;;
+        position: relative;
+        .rBtn{
+            position: absolute;
+            color: #fff;
+            border: 1px solid #fff;
+            display: inline-block;
+            right: 10px;
+            top:10px;
+            border-radius: 10px;
+            padding: 5px 10px;
+            
+        }
     }
     .scanBtn{
         background: red;
@@ -627,6 +649,8 @@ export default {
         text-align: center;
         color: #5592bd;
         font-size: 20px;
+    }.welding{
+        bottom: 70px;
     }
 
 }

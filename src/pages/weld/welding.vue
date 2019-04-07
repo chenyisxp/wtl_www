@@ -30,9 +30,9 @@
                 <div class="u-left" v-if="bleParamKey1=='SPEED'"><img  src="../../assets/images/speed.png"></div>
                 <div class="u-left" v-if="bleParamKey1=='WELDCUR' ||bleParamKey1=='weld_cur'"><img  src="../../assets/images/weld_icon_current.png"></div>
                 <div class="u-right">
-                    <div class="bt del" @click="delFuc()">-</div>
+                    <div class="bt del" @click="delFuc()"></div>
                     <div class="value"  :class="nowPosionX<diffMin || nowPosionX>diffMax?'dangerColor':''">{{nowPosionX}}</div>
-                    <div class="bt add" @click="addFuc()">+</div>
+                    <div class="bt add" @click="addFuc()"></div>
                 </div>
             </div>
             <div class="slider" ref="mySlider">
@@ -56,9 +56,9 @@
                
 
                 <div class="u-right">
-                    <div class="bt del" @click="delFuc2()">-</div>
+                    <div class="bt del" @click="delFuc2()"></div>
                     <div class="value" :class="nowPosionX2<diffMin2 || nowPosionX2>diffMax2?'dangerColor':''">{{nowPosionX2}}</div>
-                    <div class="bt add" @click="addFuc2()">+</div>
+                    <div class="bt add" @click="addFuc2()"></div>
                 </div>
             </div>
             <div class="slider" ref="mySlider2">
@@ -145,7 +145,8 @@ export default {
         tigman_max_cur:'',
         max_ac_fre:'',
         weldingCur:'',
-        weldingVoltage:''
+        weldingVoltage:'',
+        experialTimer:{}
 
     }
       
@@ -665,11 +666,25 @@ export default {
           default:
             break;
        }
-      }
+      },
+      initExperialModel(){
+          //初始化 如果是体验模式则开启
+        if(this.GLOBAL_CONFIG.TESTFLAG){
+            this.experialTimer =setInterval(() => {
+                this.weldingCur =this.random(1,50);
+                this.weldingVoltage =this.random(1,50);
+            }, 1000);
+        }
+      },
+        random(lower, upper) {
+            return Math.floor(Math.random() * (upper - lower)) + lower;
+        }
+
   
   },
   mounted: function() {
       this.initFuc();
+      this.initExperialModel();
   },
   created() {
    
@@ -746,6 +761,10 @@ export default {
                 this.nowPosionX+='.0';
             }
         }
+  },
+  destroyed(){
+      clearInterval(this.experialTimer);
+      console.log('welding destroyed')
   }
 };
 </script>
@@ -899,24 +918,29 @@ export default {
                 }
             }   
             .u-right{
-                width: 40%;
+                width: 60%;
                 float: left;
                 text-align: center;
                 height: 100%;
-                position: relative;
+                // position: relative;
                 .bt{
+                    height: 50px;;
                     float: left;
-                   width: 20px;
-                   height: 20px;
+                   width: 35px;
+                   height: 50px;
                    font-size: 16px;
-                   background: #163749;
+                //    background: #163749;
                    color: #fff;
-                   position: absolute;
-                   top: 50%;
-                   transform: translate(0,-50%)
+                //    position: absolute;
+                //    top: 50%;
+                //    transform: translate(0,-50%)
                 }
                .del{
+                   height: 50px;
                  left: -5px;
+                  background: url(../../assets/images/jian.png) no-repeat;
+                    background-size: 35px;
+                    background-position: center center;
                } 
                .value{
                    float: left;
@@ -924,14 +948,18 @@ export default {
                    height: 50px;
                    color: #fff;
                    font-size: 48px;
-                   position: absolute;
-                   top: 37%;
-                   transform: translate(0,-50%);
-                   left: 15px;
+                //    position: absolute;
+                //    top: 37%;
+                //    transform: translate(0,-50%);
+                //    left: 15px;
                }.dangerColor{
                    color: red;
                }
                .add{
+                    height: 50px;
+                    background: url(../../assets/images/jia.png) no-repeat;
+                    background-size: 35px;
+                    background-position: center center;
                    left:145px;
                }
                

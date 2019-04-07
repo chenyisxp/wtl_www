@@ -69,7 +69,8 @@
                                 <span>Save</span>
                             </div>
                             <div class="btn n-2" @click="go('/welding')">
-                                <span>Get Ready</span>
+                                <span v-if="isReadyFlag!=1">Get Ready</span>
+                                <span v-if="isReadyFlag==1">Already</span>
                         </div>
                         
                         </div>
@@ -167,6 +168,7 @@ export default {
   },
   data () {
     return {
+        isReadyFlag:0,//是否焊接准备完毕
         minTRange:'',
         maxTRange:'',
         winHeight:'',
@@ -780,6 +782,7 @@ export default {
             });
              this.UnitFlag=0;
         }
+        this.isReadyFlag =list.initBean.isReadyFlag;//是否焊接准备完毕
         this.minTRange = this.rulerNumAtr[0].num;
         this.maxTRange = this.rulerNumAtr[this.rulerNumAtr.length-1].num;
         //单位文本赋值
@@ -1099,7 +1102,7 @@ export default {
                 //    transform: translate(0,-50%)
                 }
                .del{
-                  background: url(../../assets/images/jia.png) no-repeat;
+                  background: url(../../assets/images/jian.png) no-repeat;
                     background-size: 35px;
                     background-position: left center;
                } 
@@ -1117,7 +1120,7 @@ export default {
                    color: red;
                }
                .add{
-                    background: url(../../assets/images/jian.png) no-repeat;
+                    background: url(../../assets/images/jia.png) no-repeat;
                     background-size: 35px;
                     background-position: left center;
                }

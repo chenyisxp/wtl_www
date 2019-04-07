@@ -99,7 +99,8 @@
           <span>Save</span>
         </div>
         <div class="btn n-2" @click="go('/welding')">
-          <span>Get Ready</span>
+            <span v-if="isReadyFlag!=1">Get Ready</span>
+            <span v-if="isReadyFlag==1">Already</span>
         </div>
       </div>
     </div>
@@ -154,6 +155,7 @@ export default {
   },
   data() {
     return {
+      isReadyFlag:0,//是否焊接准备完毕
       haveInitTimes:0,//滑动组件初始化 次数 太多次会重复监听
       autoTimeoutFlag:{},//自动跳转定时器
       isLoading:false,
@@ -1799,6 +1801,7 @@ export default {
     this.pfc_num =list.initBean.pfc==1?list.initBean.unit:0;
     this.ac_dc_num=list.initBean.polatrity==1?list.initBean.polatrity:0;
     this.hf_lift_num=list.initBean.ifhf==1?list.initBean.ifhf:0;
+    this.isReadyFlag =list.initBean.isReadyFlag;//是否焊接准备完毕
     this.clacTigManCur();
     this.clacTigMax_AC_FRE(list.BASE_CUR_VAL,list.WELD_CUR_VAL);
     this.initKeysValueMap();
@@ -2115,7 +2118,7 @@ export default {
           // transform: translate(0, -50%);
         }
         .del {
-             background: url(../../assets/images/jia.png) no-repeat;
+             background: url(../../assets/images/jian.png) no-repeat;
             background-size: 35px;
             background-position: center center;
         }
@@ -2184,7 +2187,7 @@ export default {
         }
         .add {
             right: 60px;
-            background: url(../../assets/images/jian.png) no-repeat;
+            background: url(../../assets/images/jia.png) no-repeat;
             background-size: 35px;
             background-position: center center;
         }
