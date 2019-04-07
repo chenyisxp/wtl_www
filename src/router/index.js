@@ -105,17 +105,17 @@ const router = new Router({
 		},
 		{
 			path: '*',
-			// component: NewIndex
+			component: NewIndex
 			// component:resolve => require(['@/pages/test07.vue'],resolve)//测试接收数据处理结果
 			// component:resolve => require(['@/pages/setting/setmanage.vue'],resolve)
 			// component:resolve => require(['@/pages/memory/memoryManage.vue'],resolve)
 			// component:resolve => require(['@/pages/blueToothManage.vue'],resolve)
-			component:resolve => require(['@/pages/weld/welding.vue'],resolve)
+			// component:resolve => require(['@/pages/weld/welding.vue'],resolve)
 			// component:resolve => require(['@/pages/weld/weld_tig_man.vue'],resolve)
 		}
 	]
 })
-const normalPath = ['/develeperManage','/blueToothManage','/testPage','/setmanage','/newIndex']; //不需要蓝牙的页面
+const normalPath = ['/develeperManage','/blueToothManage','/testPage','/setmanage','/newIndex','/modelList']; //不需要蓝牙的页面
 const normalPathStr = normalPath.join('') && (normalPath.join('')).toLocaleLowerCase();
 const parentRouter =['/newIndex','/saveManage','/hisWeldList','/memoryManage'];
 const parentRouterSrt =parentRouter.join('') && (parentRouter.join('')).toLocaleLowerCase();

@@ -2126,7 +2126,8 @@ export default {
         //   float: left;
           width:230px;
           text-align: center;
-          height: 100%;
+          height: 70px;
+          line-height: 70px;
           color: #fff;
           font-size: 48px;
           margin: 0 auto;

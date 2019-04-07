@@ -184,10 +184,10 @@ Array.prototype.in_array = function (element) {
                         typeName:'GAS',
                         chooseKey:'CO2',//默认选中
                         comList:[
-                            {id:0,key:'CO2',value:'CO2'},{id:1,key:'MIX',value:'MIX'}
+                            {id:0,key:'CO2',value:'CO2'},{id:1,key:'MIX',value:'MIX'},{id:2,key:'Ar',value:'Ar'}
                         ],
                         inchComList:[
-                            {id:0,key:'CO2',value:'CO2'},{id:1,key:'MIX',value:'MIX'}
+                            {id:0,key:'CO2',value:'CO2'},{id:1,key:'MIX',value:'MIX'},{id:2,key:'Ar',value:'Ar'}
                         ]
                     },{
                         typeName:'DIAMETER',

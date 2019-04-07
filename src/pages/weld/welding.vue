@@ -936,6 +936,7 @@ export default {
                 //    transform: translate(0,-50%)
                 }
                .del{
+                   
                    height: 50px;
                  left: -5px;
                   background: url(../../assets/images/jian.png) no-repeat;
@@ -943,8 +944,9 @@ export default {
                     background-position: center center;
                } 
                .value{
+                   line-height: 50px;
                    float: left;
-                   width: 130px;
+                   width: 120px;
                    height: 50px;
                    color: #fff;
                    font-size: 48px;
@@ -1025,5 +1027,8 @@ export default {
      }
   }
   }
+}
+@media screen and (max-width: 400px) {
+  .weldingManage .main .electricCurrent .up .u-right .value{font-size: 36px;width: 100px;}
 }
 </style>

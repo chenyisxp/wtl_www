@@ -2,20 +2,13 @@
   <div class="weldMMA" :class="ifFixedFlag?'weldFixed':''" ref="allPage">
         <div class="mmp" ref="mmpId" id="idid">
                  <div class="header"><Icon type="ios-arrow-back" @click="go('/newIndex')"/>{{changeStrEmptyName(typeName)}}<span class="setupyi">SET UP</span></div>
-                 <!-- 业务需要 mig_material 值 ==0 显示gas选项否则隐藏 -->
-                <div class="containList" v-for="(item,index) in nowTypeList" :key="index" :class="item.typeName=='GAS'&& MIG_MATERIAL !=0?'eleUnShow':''">
+                 <!-- 业务需要 mig_material 值 ==0 显示gas选项否则隐藏 只有FCAW-S 没有气体--> 
+                <div class="containList" v-for="(item,index) in nowTypeList" :key="index" :class="item.typeName=='GAS'&& MIG_MATERIAL ==3?'eleUnShow':''">
+                <!-- <div class="containList" v-for="(item,index) in nowTypeList" :key="index"> -->
                     <div class="common" >
                         <div class="typename" v-if="UnitFlag==1" :class="item.typeName" @click="openModal(item.typeName,item.inchComList,item.chooseKey)">{{changeStrShowName(item.typeName)}}</div>
                         <div class="typename" v-if="UnitFlag!=1" :class="item.typeName" @click="openModal(item.typeName,item.comList,item.chooseKey)">{{changeStrShowName(item.typeName)}}</div>
                         <div class="btn" v-if="UnitFlag==0">
-                            <!-- <div  class="btRight"  v-for="(bean,index1) in item.comList" :key="index1" type="primary"
-                            v-if="item.chooseKey==bean.id  && item.typeName!='THICKNESS'"
-                            :class="item.chooseKey==bean.id?'':'unchoose'"
-                            @click="openModal(item.typeName,item.comList,item.chooseKey,bean.value)"
-                            >
-                                <span style="padding-right:11px">{{bean.value}}</span>
-                                <span style="padding-right:10px;"><img src="../../assets/images/edit.png" ></span>
-                            </div> -->
                             <!-- 只是加了个判断区分处理 thinkness数据  根据id判断选中-->
                                <div  class="btRight"  v-for="(bean,index1) in item.comList" :key="index1" type="primary"
                             v-if="item.chooseKey==bean.id"
@@ -27,14 +20,6 @@
                             </div>
                         </div>
                         <div class="btn" v-if="UnitFlag==1">
-                            <!-- <div  class="btRight"  v-for="(bean,index1) in item.inchComList" :key="index1" type="primary"
-                            v-if="item.chooseKey==bean.id && item.typeName!='THICKNESS'"
-                            :class="item.chooseKey==bean.id?'':'unchoose'"
-                            @click="openModal(item.typeName,item.inchComList,item.chooseKey,bean.value)"
-                            >
-                                <span style="padding-right:11px">{{bean.value}}</span>
-                                <span style="padding-right:10px;"><img src="../../assets/images/edit.png" ></span>
-                            </div> -->
                             <!-- 只是加了个判断区分处理 thinkness数据  根据id判断选中-->
                               <div  class="btRight"  v-for="(bean,index1) in item.inchComList" :key="index1" type="primary"
                             v-if="item.chooseKey==bean.id"
@@ -740,12 +725,14 @@ export default {
         
     },
     changeChecked(type,value,index){
+        console.log(type);
         this.nowTypeList.forEach(element => {
             if(element.typeName==type){
                 if(type=='MATERIAL'){
                     this.MIG_MATERIAL =value;
                 }
                 element.chooseKey=value;
+               
                 //计算 查找 发送请求给ble告知 修改了
                 var dirctCode = this.getDirective(this.typeName,type);
                 
@@ -754,12 +741,115 @@ export default {
                 var num =this.jinzhiChangeFuc(value);
                var crc =this.crcModelBusClacQuery(dirctCode+num, true);
                var sendData =this.GLOBAL_CONFIG.DirectStart+dirctCode+num+crc;
-               this.callSendDataToBleUtil('weld_common',sendData,crc);
+                if(!this.GLOBAL_CONFIG.TESTFLAG){
+                    this.callSendDataToBleUtil('weld_common',sendData,crc);
+                }
                 // if(!this.GLOBAL_CONFIG.TESTFLAG){
                 //     window.android.callSendDataToBle('weld_common',sendData,crc);
                 // }
             }
         });
+       this.specialGasRule(type,this.MIG_MATERIAL);
+    },
+    specialGasRule(type,chooseTempKey){
+         //特殊处理 不同材料对应气体显示不同
+        if(type=='MATERIAL'){
+            // Fe的时候是CO2和MIX
+            // Ss   MIX
+            // Al    Ar
+            // FCAW-S    没有气体  
+            // FCAW-G    MIX
+            if(chooseTempKey==0){//铁 co2和mix
+            console.log(this.nowTypeList+'|||'+chooseTempKey+'=='+this.MIG_MATERIAL);
+                 this.nowTypeList.forEach(element => {
+                    if(element.typeName=='GAS'){
+                        console.log(element.chooseKey)
+                       if(element.chooseKey==0 || element.chooseKey==1){
+                            element.comList=[
+                                {id:0,key:'CO2',value:'CO2'},{id:1,key:'MIX',value:'MIX'}
+                            ];
+                            element.inchComList=[
+                                {id:0,key:'CO2',value:'CO2'},{id:1,key:'MIX',value:'MIX'}
+                            ]
+                       }else{
+                            element.chooseKey=0//默认选中
+                            element.comList=[
+                                {id:0,key:'CO2',value:'CO2'},{id:1,key:'MIX',value:'MIX'}
+                            ];
+                            element.inchComList=[
+                                {id:0,key:'CO2',value:'CO2'},{id:1,key:'MIX',value:'MIX'}
+                            ]
+                       }
+                    }
+                });
+            }else if(chooseTempKey==1){//Ss mix
+            console.log('ss')
+                  this.nowTypeList.forEach(element => {
+                      console.log(element.typeName);
+                    if(element.typeName=='GAS'){
+                        console.log(element.chooseKey)
+                       if(element.chooseKey==1){
+                            element.comList=[
+                               {id:1,key:'MIX',value:'MIX'}
+                            ];
+                            element.inchComList=[
+                               {id:1,key:'MIX',value:'MIX'}
+                            ]
+                       }else{
+                            element.chooseKey=1//默认选中
+                            element.comList=[
+                                {id:1,key:'MIX',value:'MIX'}
+                            ];
+                            element.inchComList=[
+                              {id:1,key:'MIX',value:'MIX'}
+                            ]
+                       }
+                    }
+                });
+            }else if(chooseTempKey==2){//Ss|fcaw-g = mix
+                  this.nowTypeList.forEach(element => {
+                    if(element.typeName=='GAS'){
+                       if(element.chooseKey==2){
+                            element.comList=[
+                               {id:2,key:'Ar',value:'Ar'}
+                            ],
+                            element.inchComList=[
+                               {id:2,key:'Ar',value:'Ar'}
+                            ]
+                       }else{
+                            element.chooseKey=2//默认选中
+                            element.comList=[
+                                 {id:2,key:'Ar',value:'Ar'}
+                            ],
+                            element.inchComList=[
+                               {id:2,key:'Ar',value:'Ar'}
+                            ]
+                       }
+                    }
+                });
+            }else if(chooseTempKey==4){//Ss|fcaw-g = mix
+                  this.nowTypeList.forEach(element => {
+                    if(element.typeName=='GAS'){
+                       if(element.chooseKey==1){
+                            element.comList=[
+                               {id:1,key:'MIX',value:'MIX'}
+                            ],
+                            element.inchComList=[
+                               {id:1,key:'MIX',value:'MIX'}
+                            ]
+                       }else{
+                            element.chooseKey=1//默认选中
+                            element.comList=[
+                                 {id:1,key:'MIX',value:'MIX'}
+                            ],
+                            element.inchComList=[
+                               {id:1,key:'MIX',value:'MIX'}
+                            ]
+                       }
+                    }
+                });
+            }
+        }
     },
     //厚度专用
      changeThinckChecked(type,value,index){
@@ -1064,6 +1154,14 @@ export default {
         //单位文本赋值
         this.MIG_MATERIAL =list.MIG_MATERIAL;
         this.nowTypeList =list.nowTypeList;
+        //特殊处理过滤gas 显示
+        this.nowTypeList.forEach(element => {
+            console.log(element)
+            if(element.typeName=='MATERIAL'){
+               this.specialGasRule('MATERIAL',element.chooseKey);
+            }
+        });
+       
         //最小speed_display----送丝速度
         this.min = list.MIN_SPEED_DISPLAY;
         this.max = list.MAX_SPEED_DISPLAY;//要根据单位区分
@@ -1381,6 +1479,7 @@ export default {
                    float: left;
                    width: 120px;
                    height: 50px;
+                   line-height: 50px;
                    color: #fff;
                    font-size: 48px;
                 //    position: absolute;

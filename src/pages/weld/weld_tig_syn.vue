@@ -1110,6 +1110,7 @@ export default {
                    float: left;
                    width: 120px;
                    height: 50px;
+                   line-height: 50px;
                    color: #fff;
                    font-size: 48px;
                 //    position: absolute;

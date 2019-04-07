@@ -97,6 +97,44 @@ let BASE_CONFIG = {
             memory:'EF'
         }
 
+   },
+   //根据版本号指定不同 最大最小区间值
+   initLimitVersion_100:{
+       migsyn:{
+           min_speed_display:15,
+           min_inch_speed_display:60,
+           pfc0_max_speed_display:100,
+           pfc1_max_speed_display:164,
+           pfc0_inch_max_speed_display:400,
+           pfc1_inch_max_speed_display:656,
+           min_v_welding:100,
+           pfc0_max_v_welding:230,
+           pfc1_max_v_welding:260,
+       },
+       migman:{
+            min_speed_display:15,
+            pfc0_max_speed_display:100,
+            pfc1_max_speed_display:164,
+            min_inch_speed_display:60,
+            pfc0_inch_max_speed_display:400,
+            pfc1_inch_max_speed_display:656,
+            min_v_welding:100,
+            pfc0_max_v_welding:230,
+            pfc1_max_v_welding:260,
+        },
+        tigsyn:{
+            min_cur:10,
+            max_pfc0_cur:140,
+            max_pfc1_cur:200,
+        },
+        tigman:{
+
+        },
+        mma:{
+            min_cur:10,
+            pfc0_max_cur:110,
+            pfc1_max_cur:200
+        }
    }
 
 };
