@@ -115,12 +115,12 @@
                 </Card> -->
                 <div class="title">
                     <div class="le">
-                        <img v-if="nowtypename=='MATERIAL'" src="../../assets/images/weld_icon_new_meterial.png"> 
+                        <img v-if="nowtypename=='MATERIAL'" src="../../assets/images/blue_weld_icon_new_meterial.png"> 
                         <img v-if="nowtypename=='DIAMETER'" src="../../assets/images/weld_icon_new_diameter.png"> 
                         <img v-if="nowtypename=='POLATRITY'" src="../../assets/images/weld_icon_polatrity.png"> 
-                        <img v-if="nowtypename=='MODE'" src="../../assets/images/weld_icon_new_mode.png"> 
+                        <img v-if="nowtypename=='MODE'" src="../../assets/images/blue_weld_icon_new_mode.png"> 
                         
-                        <img v-if="nowtypename=='GAS'" src="../../assets/images/weld_icon_new_gas.png"> 
+                        <img v-if="nowtypename=='GAS'" src="../../assets/images/blue_weld_icon_new_gas.png"> 
                     </div>
                     <div class="ri">{{changeStrShowName(nowtypename)}}</div>
                 </div>
@@ -139,7 +139,7 @@
             <div class="down thinkness"  v-if="downshowFlag && nowtypename=='THICKNESS'" ref="dth" :class="closeClass?'transdown':''">
                     <div class="d-t-name">
                         <div class="t-icon">
-                            <img src="../../assets/images/weld_icon_new_thinkness.png">
+                            <img src="../../assets/images/blue_weld_icon_new_thinkness.png">
                         </div>
                         <div class="t-name">
                             Thinkness

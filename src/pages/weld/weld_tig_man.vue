@@ -120,9 +120,9 @@
           <div class="le">
             <!-- <img src="../../assets/images/histroy.png"> -->
              <img v-if="nowtypename=='POLATRITY'" src="../../assets/images/weld_icon_new_acdc.png"> 
-             <img v-if="nowtypename=='MODE'" src="../../assets/images/weld_icon_new_mode.png"> 
-             <img v-if="nowtypename=='Pluse'" src="../../assets/images/weld_icon_new_pluse.png"> 
-              <img v-if="nowtypename=='HF'" src="../../assets/images/weld_icon_new_hf.png"> 
+             <img v-if="nowtypename=='MODE'" src="../../assets/images/blue_weld_icon_new_mode.png"> 
+             <img v-if="nowtypename=='Pluse'" src="../../assets/images/blue_weld_icon_new_pluse.png"> 
+              <img v-if="nowtypename=='HF'" src="../../assets/images/blue_weld_icon_new_hf.png"> 
           </div>
           <div class="ri">{{changeStrShowName(nowtypename)}}</div>
         </div>

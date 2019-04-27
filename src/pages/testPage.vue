@@ -1,6 +1,6 @@
 <template>
   <div class="registerMain">
-      <div class="global-bg-line"></div>
+      <!-- <div class="global-bg-line"></div>
       <div class="register">
         <h3>测试页</h3>
           <div class="bindOperation" v-on:click="testAndroidset()">测试SharedPreferences存储方法</div>
@@ -12,7 +12,12 @@
        </div>
        <div class="msgmsg">
          {{returnmsg}}
-       </div>
+       </div> -->
+       <!-- <video preload='auto' id='my-video'  src='../assets/video/app_video.mp4'  webkit-playsinline='true' playsinline='true' x-webkit-airplay='true' x5-video-player-type='h5' x5-video-player-fullscreen='true' x5-video-ignore-metadata='true'  width='100%' height='100%'><p> 不支持video</p> </video> -->
+   <video :class="{'hid':hidFlag}" preload='auto' muted=“muted”  webkit-playsinline='true' playsinline='true' x-webkit-airplay='true' x5-video-player-type='h5' x5-video-player-fullscreen='true' x5-video-ignore-metadata='true'    autoplay="autoplay"  width='100%' height='100%'>
+      <source src="../assets/video/app_video.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
   </div>
 </template>
 
@@ -38,7 +43,8 @@ export default {
       show:true,
       shareId:this.$route.query.shareId, //是否来自分享链接点击注册
       pageFrom:this.$route.query.pageFrom,//来自那里，准备跳往那里
-      returnmsg:'未取值'
+      returnmsg:'未取值',
+      hidFlag:true,
      } 
   },
 
@@ -87,6 +93,9 @@ export default {
   },
   mounted: function () {
     this.wtlLog('hahha','testpage');
+    setTimeout(() => {
+      this.hidFlag=false;
+    }, 210);
   },
   created () {
    
@@ -99,6 +108,9 @@ export default {
 
 <style scoped>
 .registerMain{width: 100%;}
+.hid{
+  opacity: 0;
+}
 .register h3{text-align: left;font-size: 12px;line-height:2.3125rem;color: #33333}
 .register input{background: #eeeeee;width: 100%;border: 0px;padding: 0;height: 44px;margin-bottom: 10px;text-indent: 20px;border-radius: 5px;line-height:44px;}
 .register label{position: absolute;top: 9px;right: 0px;background: #fff;border: 1px solid #5576dc;border-radius: 4px;margin-right: 10px;color: #fefefe;font-size: 14px;line-height: 27px;width: 115px;text-align: center;}

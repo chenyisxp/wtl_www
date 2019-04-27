@@ -23,15 +23,17 @@
           <div class="connnect">Wiring diagram</div>
           <div class="tabs">
                <div class="m-li">
-                 <div  class="tab"   @click="chooseIMG(1)" :class="chooseModel==1?'choosedImg':''">MMA</div>
+                  <div  class="tab"   @click="chooseIMG(1)" :class="chooseModel==1?'choosedImg':''">MMA</div>
                   <div class="tab"   @click="chooseIMG(2)" :class="chooseModel==2?'choosedImg':''">TIG</div>
-                   <div class="tab"  @click="chooseIMG(3)" :class="chooseModel==3?'choosedImg':''">MIG</div>
+                  <div class="tab"  @click="chooseIMG(3)" :class="chooseModel==3?'choosedImg':''">MIG</div>
+                  <div class="tab"  @click="chooseIMG(4)" :class="chooseModel==4?'choosedImg':''">TAP</div>
                </div>
           </div>
           <div class="connect-linesImg" @click="goDevleper">
             <img v-if="chooseModel==1" src="../../assets/images/weld_setting_1.jpeg">
             <img v-if="chooseModel==2" src="../../assets/images/weld_setting_2.jpeg">
             <img v-if="chooseModel==3" src="../../assets/images/weld_setting_3.jpeg">
+            <img v-if="chooseModel==4" src="../../assets/images/weld_setting_4.jpg">
           </div>
           <div class="resetBtn">Restore  settings</div>
       </div>
@@ -192,7 +194,7 @@ export default {
           .tab{
             text-align: center;
             height: 40px;
-            width: 33.33%;
+            width: 25%;
             float: left;
             border-right: 2px solid; 
           　-webkit-border-image: -webkit-linear-gradient(#16404c , #b7d4dc , #16404c)1 10 1; /* 控制边框颜色渐变 */

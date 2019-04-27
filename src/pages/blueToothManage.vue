@@ -85,7 +85,7 @@
             @on-ok="comeraConnectTo"
             @on-cancel="asyncCancell"
             >
-            <p>Whether to connect to {{cameraRstIp}}</p>
+            <p>Whether to connect to {{cameraRstName}}</p>
         </Modal>
     <!-- 测试入口 -->
     <div class="testWay welding" @click="goWeldingExperiential">go to welding experiential.<Icon type="ios-arrow-dropright-circle" /></div>
@@ -126,15 +126,25 @@ export default {
         newFilterList:[],
         orderList1:[],
         orderList2:[],
-        importantkey:'MAGIC',//关键字key
+        importantkey:'WELD',//关键字key
         moreFlag:false
 
      } 
   },
   methods: {
       comeraConnectTo(){
+           if(this.GLOBAL_CONFIG.TESTFLAG){
+                Toast({
+                    message: '模拟连接',
+                    position: 'middle',
+                    iconClass: 'icon icon-success',
+                    duration: 1500
+                });
+              return;
+            }
           this.comeraRstFlag =false;
-          //TODO 调用到蓝牙连接
+          //TODO 调用到蓝牙连接 类似点击历史连接
+          this.setBleConnect(this.cameraRstIp,this.cameraRstName)
       },
       //体验模式
       goWeldingExperiential(){
@@ -463,9 +473,19 @@ export default {
         let self =this;
         window['broastCameraScanRst'] = (data) => {
             // TODO 按规则 切割成 name和ip
-            self.cameraRstIp=data || '';
-            self.comeraRstFlag=true;
-            self.cameraRstName ="sacan new name.";
+            //测试模式时
+            if(self.GLOBAL_CONFIG.TESTFLAG){
+                self.cameraRstName=data;
+                return;
+            }
+            // var data ="78,78,878,78,78||WELD";
+            if(data.indexOf('||')>-1){
+                let tempArr = data.split('||');
+                self.cameraRstIp=tempArr[0].replace(/,/g,":");
+                self.comeraRstFlag=true;
+                self.cameraRstName =data.split('||')[1];
+            }
+           
         }
   },
   destroyed(){

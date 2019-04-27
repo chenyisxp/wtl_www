@@ -107,9 +107,9 @@
                 <div class="title">
                     <div class="le">
                        <img v-if="nowtypename=='POLATRITY'" src="../../assets/images/weld_icon_new_acdc.png"> 
-                        <img v-if="nowtypename=='ELECTRODE'" src="../../assets/images/weld_icon_new_elecode.png"> 
-                        <img v-if="nowtypename=='DIAMETER'" src="../../assets/images/weld_icon_new_diameter.png"> 
-                        <img v-if="nowtypename=='THICKNESS'" src="../../assets/images/weld_icon_new_thinkness.png"> 
+                        <img v-if="nowtypename=='ELECTRODE'" src="../../assets/images/blue_weld_icon_new_elecode.png"> 
+                        <img v-if="nowtypename=='DIAMETER'" src="../../assets/images/blue_weld_icon_new_diameter.png"> 
+                        <img v-if="nowtypename=='THICKNESS'" src="../../assets/images/blue_weld_icon_new_thinkness.png"> 
                     </div>
                     <div class="ri">{{changeStrShowName(nowtypename)}}</div>
                 </div>
@@ -128,7 +128,7 @@
             <div class="down thinkness"  v-if="downshowFlag && nowtypename=='THICKNESS'" ref="dth" :class="closeClass?'transdown':''">
                     <div class="d-t-name">
                         <div class="t-icon">
-                            <img src="../../assets/images/weld_icon_new_thinkness.png">
+                            <img src="../../assets/images/blue_weld_icon_new_thinkness.png">
                         </div>
                         <div class="t-name">
                             Thickness
