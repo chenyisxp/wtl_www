@@ -2,6 +2,7 @@
   <div class="blueToothManage">
       
        <div class="blockHig">
+           <span class="scanning" @click="handleCameraScan"></span>
            <span class="rBtn" v-if="reBackFlag">ReBack</span>
        </div>
        <div class="t-contain">
@@ -65,16 +66,27 @@
       <div v-if="orderList1.length==0 && orderList2.length==0 && lastConnectList.length==0 && showOrder==0" class="empty">The list is empty.</div>
        <Loading :is-loading="isLoading"></Loading>
        <Modal
-        v-model="modal6"
-        title="ATTENTION"
-        ok-text='YES'
-        cancel-text='NO'
-        :loading="loading"
-        @on-ok="asyncOK"
-        @on-cancel="asyncCancell"
-        >
-        <p>Whether to Enter the Experiencer Model.</p>
-    </Modal>
+            v-model="modal6"
+            title="ATTENTION"
+            ok-text='YES'
+            cancel-text='NO'
+            :loading="loading"
+            @on-ok="asyncOK"
+            @on-cancel="asyncCancell"
+            >
+            <p>Whether to Enter the Experiencer Model.</p>
+        </Modal>
+        <Modal
+            v-model="comeraRstFlag"
+            title="ATTENTION"
+            ok-text='YES'
+            cancel-text='NO'
+            :loading="loading"
+            @on-ok="comeraConnectTo"
+            @on-cancel="asyncCancell"
+            >
+            <p>Whether to connect to {{cameraRstIp}}</p>
+        </Modal>
     <!-- 测试入口 -->
     <div class="testWay welding" @click="goWeldingExperiential">go to welding experiential.<Icon type="ios-arrow-dropright-circle" /></div>
     <div class="testWay" @click="goExperiential">go to normal experiential.<Icon type="ios-arrow-dropright-circle" /></div>
@@ -91,9 +103,12 @@ export default {
   },
   data () {
     return {
+        cameraRstName:'',
+        cameraRstIp:'',
         reBackFlag:false,//返回按钮显示 时机 点击连接 没有连接上就要返回了
         blueToothFlag:false,//蓝牙开关是否打开
         modal6: false,
+        comeraRstFlag:false,
         loading: true,
         addressGo:'',
         isWaitingToGo:false,//等待跳转
@@ -117,6 +132,10 @@ export default {
      } 
   },
   methods: {
+      comeraConnectTo(){
+          this.comeraRstFlag =false;
+          //TODO 调用到蓝牙连接
+      },
       //体验模式
       goWeldingExperiential(){
         this.GLOBAL_CONFIG.TESTFLAG=true;
@@ -391,6 +410,9 @@ export default {
     },
     goBack(){
       return;
+    },
+    handleCameraScan(){
+        window.android.openCameraScan();
     }
   },
   mounted: function () {
@@ -438,6 +460,13 @@ export default {
       } 
   },
   created () {
+        let self =this;
+        window['broastCameraScanRst'] = (data) => {
+            // TODO 按规则 切割成 name和ip
+            self.cameraRstIp=data || '';
+            self.comeraRstFlag=true;
+            self.cameraRstName ="sacan new name.";
+        }
   },
   destroyed(){
       let self =this;
@@ -478,6 +507,15 @@ export default {
     .blockHig{
         height: 40px;;
         position: relative;
+        .scanning{
+            height: 40px;
+            width: 40px;
+            display: inline-block;
+            color: #fff;
+            background:url(../assets/images/cameraScanIcon.png) no-repeat;    
+            background-size: 25px;
+            background-position:center center;
+        }
         .rBtn{
             position: absolute;
             color: #fff;
