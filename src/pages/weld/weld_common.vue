@@ -303,7 +303,7 @@ export default {
             [7,{num:'3.4mm',height:34,id:7}],
             [8,{num:'4.8mm',height:48,id:8}],
             [9,{num:'6.4mm',height:64,id:9}],
-            [10,{num:'8.8mm',height:88,id:10}],
+            [10,{num:'8.0mm',height:88,id:10}],
             [11,{num:'9.5mm',height:95,id:11}],
             [12,{num:'11mm',height:110,id:12}],
             [13,{num:'12.7mm',height:127,id:13}]
@@ -499,7 +499,7 @@ export default {
                 midLine.style.height = self.rulerNumAtr[i].height+'px';
                 cubeBox1.style.height =self.rulerNumAtr[i].height+'px';
                 self.actualNum =self.rulerNumAtr[i].num;
-                self.nowTouchIndex =i;
+                self.nowTouchIndex =self.rulerNumAtr[i].id;
                 break;
             }
             

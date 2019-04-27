@@ -281,16 +281,16 @@ export default {
         chooseKey:[],//共通选中集合
         rulerNumAtr:  [
             {num:'0.6mm',height:6,id:0},
-            {num:'0.7mm',height:7,id:1},
+            {num:'0.8mm',height:7,id:1},
             {num:'0.9mm',height:9,id:2},
-            {num:'12mm',height:12,id:3},
+            {num:'1.2mm',height:12,id:3},
             {num:'1.6mm',height:16,id:4},
-            {num:'2.1mm',height:21,id:5},
-            {num:'2.8mm',height:28,id:6},
-            {num:'3.4mm',height:34,id:7},
+            {num:'2.0mm',height:21,id:5},
+            {num:'2.5mm',height:28,id:6},
+            {num:'3.2mm',height:34,id:7},
             {num:'4.8mm',height:48,id:8},
             {num:'6.4mm',height:64,id:9},
-            {num:'8.8mm',height:88,id:10},
+            {num:'8.0mm',height:88,id:10},
             {num:'9.5mm',height:95,id:11},
             {num:'11mm',height:110,id:12},
             {num:'12.7mm',height:127,id:13}
@@ -381,6 +381,8 @@ export default {
                             midLine.style.height = self.rulerNumAtr[i].height+'px';
                             cubeBox1.style.height =self.rulerNumAtr[i].height+'px';
                             self.nowTouchIndex =i;
+                            console.log(self.rulerNumAtr);
+                            console.log(i);
                             break;
                        }
                         
@@ -395,7 +397,7 @@ export default {
                 })
             let settimeOutFlag =true;
             downLineSlider.addEventListener('touchmove',(e)=>{ //屏幕滑动事件
-                     console.log(e.changedTouches[0].pageY);
+                     
                      self.clacThinknessByTouch(e.changedTouches[0].pageY);
                      //1、下滑 增加
                     // if(e.changedTouches[0].pageY>self.touchStartY){
@@ -476,11 +478,17 @@ export default {
         var circlrTY=maxTY-minTY;//范围区间
         //计算出每个长度对应的位置
          for (let i = 0; i < self.rulerNumAtr.length; i++) {
-            if(pagey>(((self.rulerNumAtr[i].height/130)*circlrTY+minTY)-6) && pagey<(((self.rulerNumAtr[i].height/130)*circlrTY+minTY)+1) ){
+             //公式原则：在区间+-1 1算是精确度
+             console.log(self.rulerNumAtr)
+             console.log(pagey)
+             console.log(((self.rulerNumAtr[i].height/130)*circlrTY+minTY)-1)
+             console.log(((self.rulerNumAtr[i].height/130)*circlrTY+minTY)+1)
+            if(pagey>(((self.rulerNumAtr[i].height/130)*circlrTY+minTY)-1) && pagey<(((self.rulerNumAtr[i].height/130)*circlrTY+minTY)+1) ){
                 midLine.style.height = self.rulerNumAtr[i].height+'px';
                 cubeBox1.style.height =self.rulerNumAtr[i].height+'px';
                 self.actualNum =self.rulerNumAtr[i].num;
-                self.nowTouchIndex =i;
+                self.nowTouchIndex =self.rulerNumAtr[i].id;
+                console.log(i)
                 break;
             }
         //    if(self.rulerNumAtr[i].num==self.actualNum){

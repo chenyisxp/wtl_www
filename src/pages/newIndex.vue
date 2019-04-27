@@ -1,5 +1,6 @@
 <template>
-  <div class="newIndex"  :style="{height:this.screenHeight+'px'}">
+  <!-- <div class="newIndex"  :style="{height:this.screenHeight+'px'}"> -->
+    <div class="newIndex">
     <div class="header">
         <div class="blue-icon" @click="go('/blueToothManage')"></div>
         <div class="connectedstatus">Bluetooth {{nowConnectStatus}}</div>
@@ -796,7 +797,10 @@ export default {
        position: absolute;
        padding-left: 20px;
        left: 15px;
-       top: 50%;
+       top: 55%;
+       color: #fff;
+       font-size: 14px;
+       font-weight: bold;
        transform: translate(0,-50%);
     }
     .mechineId{
@@ -822,18 +826,20 @@ export default {
   }
   .line{
       width: 100%;
-      height: 5px;;
+      height: 2px;;
       // background:url(../assets/images/line.png) no-repeat; 
       // background-position: center;
       // margin-bottom: 20px;
       .left{
         float: left;
+        zoom: 1;
         width: 50%;
         height: 100%;
         background: linear-gradient(to left, #083846 , #fdfcff);
         background: -webkit-linear-gradient(left, #083846 , #fdfcff);
       }
       .right{
+        zoom: 1;
         width: 50%;
         height: 100%;
         float: left;
@@ -855,6 +861,7 @@ export default {
             
             .c-img{
               float: left;
+              zoom: 1;
               position: absolute;
               img{
                 width: 300px;
@@ -962,6 +969,7 @@ export default {
               position: relative;
                 .btn{
                 float: left;
+                zoom: 1;
                 width: 10px;
                 height: 10px;
                 border-radius: 10px;
@@ -986,7 +994,7 @@ export default {
   }
   
   .footer-btns{
-        position: absolute;
+        position: fixed;
         bottom: 0;
         width: 100%;
         height: 40px;
@@ -996,6 +1004,7 @@ export default {
           width: 33.33%;
           height: 40px;
           float: left;
+          zoom: 1;
           text-align: center;
           color: #fff;
           // color: #000;

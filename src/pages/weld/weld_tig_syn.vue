@@ -255,14 +255,14 @@ export default {
             [0,{num:'0.6mm',height:6,id:0}],
             [1,{num:'0.7mm',height:7,id:1}],
             [2,{num:'0.9mm',height:9,id:2}],
-            [3,{num:'12mm',height:12,id:3}],
+            [3,{num:'1.2mm',height:12,id:3}],
             [4,{num:'1.6mm',height:16,id:4}],
             [5,{num:'2.1mm',height:21,id:5}],
             [6,{num:'2.8mm',height:28,id:6}],
             [7,{num:'3.4mm',height:34,id:7}],
             [8,{num:'4.8mm',height:48,id:8}],
             [8,{num:'6.4mm',height:64,id:9}],
-            [9,{num:'8.8mm',height:88,id:10}],
+            [9,{num:'8.0mm',height:88,id:10}],
             [10,{num:'9.5mm',height:95,id:11}],
             [11,{num:'11mm',height:110,id:12}],
             [12,{num:'12.7mm',height:127,id:13}]
@@ -453,11 +453,16 @@ export default {
         var circlrTY=maxTY-minTY;//范围区间
         //计算出每个长度对应的位置
          for (let i = 0; i < self.rulerNumAtr.length; i++) {
-            if(pagey>(((self.rulerNumAtr[i].height/130)*circlrTY+minTY)-6) && pagey<(((self.rulerNumAtr[i].height/130)*circlrTY+minTY)+1) ){
+             //公式原则：在区间+-1 1算是精确度
+            //  console.log(pagey)
+            //  console.log(((self.rulerNumAtr[i].height/130)*circlrTY+minTY)-1)
+            //  console.log(((self.rulerNumAtr[i].height/130)*circlrTY+minTY)+1)
+            if(pagey>(((self.rulerNumAtr[i].height/130)*circlrTY+minTY)-1) && pagey<(((self.rulerNumAtr[i].height/130)*circlrTY+minTY)+1) ){
                 midLine.style.height = self.rulerNumAtr[i].height+'px';
                 cubeBox1.style.height =self.rulerNumAtr[i].height+'px';
                 self.actualNum =self.rulerNumAtr[i].num;
-                self.nowTouchIndex =i;
+                self.nowTouchIndex =self.rulerNumAtr[i].id;//这里应该使用id不能用i i只是循环标记
+                console.log(self.nowTouchIndex)
                 break;
             }
         }
@@ -644,6 +649,8 @@ export default {
     },
     //厚度专用
      changeThinckChecked(type,value,index){
+         console.log(this.nowTypeList);
+         console.log(this.nowTouchIndex)
         this.nowTypeList.forEach(element => {
             if(element.typeName==type){
                 element.chooseKey=this.nowTouchIndex;//修改当前选中的数值 改造为以index为记录值 兼容不同单位
@@ -730,6 +737,8 @@ export default {
     },
       //数组 滑动 数组构造
     buildRulerArrRange(min,max){
+        console.log(max)
+        console.log(min)
         var tempArr =[];
         var tempInchArr =[];
         var i =min;
@@ -742,7 +751,7 @@ export default {
                 this.rulerNumAtr.push(this.rulerNumAtrMap.get(parseInt(i)))
             }
         }
-       
+       console.log(this.rulerNumAtr);
       let vag =Math.round((this.commonContainHeight/130)*100)/100;
       this.rulerNumAtr.forEach(element => {
          element.height= Math.round((vag * element.height)*10)/10;
