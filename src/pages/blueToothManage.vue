@@ -58,7 +58,7 @@
             <ul>
                 <li class="b-li"  v-for="(item,index) in orderList2" @click="setBleConnect(item.address,item.bleName)">
                         <div class="d title">Name</div>
-                        <div class="d name">{{item.bleName}}</div>
+                        <div class="d name">{{item.bleName}}{{item.address}}</div>
                         <div class="d connect">Connect ></div>
                 </li>
             </ul>
@@ -85,7 +85,9 @@
             @on-ok="comeraConnectTo"
             @on-cancel="asyncCancell"
             >
-            <p>Whether to connect to {{cameraRstName}}</p>
+            <p>Whether to connect to machine?</p>
+            <p>name:{{cameraRstName}}</p>
+            <p>ip:{{cameraRstIp}}</p>
         </Modal>
     <!-- 测试入口 -->
     <div class="testWay welding" @click="goWeldingExperiential">go to welding experiential.<Icon type="ios-arrow-dropright-circle" /></div>
@@ -133,17 +135,19 @@ export default {
   },
   methods: {
       comeraConnectTo(){
+           this.comeraRstFlag =false;
            if(this.GLOBAL_CONFIG.TESTFLAG){
+               
                 Toast({
-                    message: '模拟连接',
+                    message: 'test connected',
                     position: 'middle',
                     iconClass: 'icon icon-success',
                     duration: 1500
                 });
+
               return;
             }
-          this.comeraRstFlag =false;
-          //TODO 调用到蓝牙连接 类似点击历史连接
+          // 调用到蓝牙连接 类似点击历史连接
           this.setBleConnect(this.cameraRstIp,this.cameraRstName)
       },
       //体验模式
@@ -476,14 +480,23 @@ export default {
             //测试模式时
             if(self.GLOBAL_CONFIG.TESTFLAG){
                 self.cameraRstName=data;
+                self.cameraRstIp="78:78:878:78:78";
+                self.comeraRstFlag=true
                 return;
             }
-            // var data ="78,78,878,78,78||WELD";
+            // var data ="F0:B5:D1:59:23:4A||HC-08";
             if(data.indexOf('||')>-1){
                 let tempArr = data.split('||');
                 self.cameraRstIp=tempArr[0].replace(/,/g,":");
                 self.comeraRstFlag=true;
                 self.cameraRstName =data.split('||')[1];
+            }else{
+                Toast({
+                        message: 'scanned data is not in rule'+data,
+                        position: 'middle',
+                        iconClass: 'icon icon-success',
+                        duration: 2500
+                });
             }
            
         }

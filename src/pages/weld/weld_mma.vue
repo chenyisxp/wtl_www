@@ -106,9 +106,9 @@
                 </Card> -->
                 <div class="title">
                     <div class="le">
-                       <img v-if="nowtypename=='POLATRITY'" src="../../assets/images/weld_icon_new_acdc.png"> 
+                       <img v-if="nowtypename=='POLATRITY'" src="../../assets/images/blue_acdc.png"> 
                         <img v-if="nowtypename=='ELECTRODE'" src="../../assets/images/blue_weld_icon_new_elecode.png"> 
-                        <img v-if="nowtypename=='DIAMETER'" src="../../assets/images/blue_weld_icon_new_diameter.png"> 
+                        <img v-if="nowtypename=='DIAMETER'" src="../../assets/images/blue_mma_diameter.png"> 
                         <img v-if="nowtypename=='THICKNESS'" src="../../assets/images/blue_weld_icon_new_thinkness.png"> 
                     </div>
                     <div class="ri">{{changeStrShowName(nowtypename)}}</div>
@@ -1102,7 +1102,7 @@ export default {
         background-position: left center;
       }
        .typename.DIAMETER{
-        background: url(../../assets/images/weld_icon_new_diameter.png) no-repeat;
+        background: url(../../assets/images/mma_diameter.png) no-repeat;
         background-size: 40px;
         background-position: left center;
       }

@@ -82,7 +82,7 @@
                 <div class="title">
                     <div class="le">
                         <img v-if="nowtypename=='MATERIAL'" src="../../assets/images/blue_weld_icon_new_meterial.png"> 
-                        <img v-if="nowtypename=='DIAMETER'" src="../../assets/images/weld_icon_new_diameter.png"> 
+                        <img v-if="nowtypename=='DIAMETER'" src="../../assets/images/blue_tig_diameter.png"> 
                     </div>
                     <div class="ri">{{changeStrShowName(nowtypename)}}</div>
                 </div>
@@ -1008,7 +1008,7 @@ export default {
         background-position: left center;
       }
        .typename.DIAMETER{
-        background: url(../../assets/images/weld_icon_new_diameter.png) no-repeat;
+        background: url(../../assets/images/tig_diameter.png) no-repeat;
         background-size: 40px;
         background-position: left center;
       }

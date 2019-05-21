@@ -14,10 +14,10 @@
          {{returnmsg}}
        </div> -->
        <!-- <video preload='auto' id='my-video'  src='../assets/video/app_video.mp4'  webkit-playsinline='true' playsinline='true' x-webkit-airplay='true' x5-video-player-type='h5' x5-video-player-fullscreen='true' x5-video-ignore-metadata='true'  width='100%' height='100%'><p> 不支持video</p> </video> -->
-   <video :class="{'hid':hidFlag}" preload='auto' muted=“muted”  webkit-playsinline='true' playsinline='true' x-webkit-airplay='true' x5-video-player-type='h5' x5-video-player-fullscreen='true' x5-video-ignore-metadata='true'    autoplay="autoplay"  width='100%' height='100%'>
+   <!-- <video :class="{'hid':hidFlag}" preload='auto' muted=“muted”  webkit-playsinline='true' playsinline='true' x-webkit-airplay='true' x5-video-player-type='h5' x5-video-player-fullscreen='true' x5-video-ignore-metadata='true'    autoplay="autoplay"  width='100%' height='100%'>
       <source src="../assets/video/app_video.mp4" type="video/mp4" />
       Your browser does not support the video tag.
-    </video>
+    </video> -->
   </div>
 </template>
 

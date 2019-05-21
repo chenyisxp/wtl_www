@@ -15,10 +15,10 @@ let BASE_CONFIG = {
    DirectStart:'DA',
    callWeldTypeData:{
        migsyn:{data:'100000',crcCode:'0570',name:'MIG SYN',modelKey:'MIGSYN',url:'/weld_common?type=MIGSYN',newIndex:0},
-       migman:{data:'100100',crcCode:'C5B1',name:'MIG MAN',modelKey:'MIGMAN',url:'/weld_common?type=MIGMAN',newIndex:1},
-       tigsyn:{data:'100200',crcCode:'C4F1',name:'TIG SYN',modelKey:'TIGSYN',url:'/weld_tig_syn',newIndex:2},
-       tigman:{data:'100300',crcCode:'0430',name:'TIG MAN',modelKey:'TIGMAN',url:'/weld_tig_man',newIndex:3},
-          mma:{data:'100400',crcCode:'C671',name:'MMA',modelKey:'MMA',url:'/weld_mma',newIndex:4}
+       migman:{data:'100001',crcCode:'C5B1',name:'MIG MAN',modelKey:'MIGMAN',url:'/weld_common?type=MIGMAN',newIndex:1},
+       tigsyn:{data:'100002',crcCode:'C4F1',name:'TIG SYN',modelKey:'TIGSYN',url:'/weld_tig_syn',newIndex:2},
+       tigman:{data:'100003',crcCode:'0430',name:'TIG MAN',modelKey:'TIGMAN',url:'/weld_tig_man',newIndex:3},
+          mma:{data:'100004',crcCode:'C671',name:'MMA',modelKey:'MMA',url:'/weld_mma',newIndex:4}
    },
    testData:{
         //1、常规的模拟

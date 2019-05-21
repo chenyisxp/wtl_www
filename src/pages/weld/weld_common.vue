@@ -116,7 +116,7 @@
                 <div class="title">
                     <div class="le">
                         <img v-if="nowtypename=='MATERIAL'" src="../../assets/images/blue_weld_icon_new_meterial.png"> 
-                        <img v-if="nowtypename=='DIAMETER'" src="../../assets/images/weld_icon_new_diameter.png"> 
+                        <img v-if="nowtypename=='DIAMETER'" src="../../assets/images/blue_mig_weld_icon_new_diameter.png"> 
                         <img v-if="nowtypename=='POLATRITY'" src="../../assets/images/weld_icon_polatrity.png"> 
                         <img v-if="nowtypename=='MODE'" src="../../assets/images/blue_weld_icon_new_mode.png"> 
                         
