@@ -83,7 +83,8 @@ export default {
       }
     },
     goBack(){
-      this.go('/newIndex');
+      // this.go('/newIndex');
+      this.$router.back() 
       console.log('触发回退');
     }
   },

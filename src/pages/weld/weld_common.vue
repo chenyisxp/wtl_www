@@ -327,9 +327,23 @@ export default {
         rulerNumAtr:[],
         rulerInchNumAtr:[],
         nowThinknessSendIndex:'',
-        inducanceValue:''//电感量
-        
-
+        inducanceValue:'',//电感量
+        changeComList:
+           {
+            '0':{id:0,key:'6mm',value:'0.6mm'},
+            '1':{id:1,key:'8mm',value:'0.8mm'},
+            '2':{id:2,key:'9mm',value:'0.9mm'},
+            '3':{id:3,key:'10mm',value:'1.0mm'},
+            '4':{id:4,key:'12mm',value:'1.2mm'}
+           },
+        //单位切换inch
+        changeInchComList:{
+            '0':{id:0,key:'6mm',value:'.023"'},
+            '1':{id:1,key:'8mm',value:'.030"'},
+            '2':{id:2,key:'9mm',value:'.035"'},
+            '3':{id:3,key:'10mm',value:'.040"'},
+            '4':{id:4,key:'12mm',value:'.045"'}
+        }        
      }
   },
 
@@ -850,6 +864,67 @@ export default {
                 });
             }
         }
+        
+        if(type=='MATERIAL' || type=='GAS'){
+            this.sepecialDiameter();
+        }
+       
+
+    },
+    sepecialDiameter(){
+        //特殊处理，不同的厚度 规则见文档
+        console.log(this.nowTypeList);
+        let metiralChoosed =0;
+        let gasChoosed =0;
+        this.nowTypeList.forEach(element => {
+           if(element.typeName=='MATERIAL'){
+               metiralChoosed=element.chooseKey;
+           }else if(element.typeName=='GAS'){
+               gasChoosed=element.chooseKey;
+           }
+        });
+        console.log(metiralChoosed+'||'+gasChoosed)
+        switch (metiralChoosed) {
+            case 0:
+               if(gasChoosed==0){
+                  this.specialDiaChoosed([0,3]);
+               }else if(gasChoosed==1){
+                 this.specialDiaChoosed([1,3])
+               }
+                break;
+            case 1:
+                this.specialDiaChoosed([1,2])
+                break;
+            case 2:
+                this.specialDiaChoosed([2,3])
+                break;
+            case 3:
+                this.specialDiaChoosed([2,4])
+                break;
+            case 4:
+                this.specialDiaChoosed([3,4])
+                break;
+            default:
+                break;
+        }
+    },
+    specialDiaChoosed(keyArr){
+        let comList =[];
+        let inchComList=[];
+        keyArr.forEach(element => {
+            comList.push(this.changeComList[element])
+            inchComList.push(this.changeInchComList[element])
+        });
+        this.nowTypeList.forEach(element => {
+            if(element.typeName=='DIAMETER'){
+                element.comList=comList;
+                element.inchComList=inchComList;
+                if(keyArr.indexOf(element.chooseKey)<0){
+                    //不在数组里默认选中0
+                    element.chooseKey=comList[0].id;
+                }
+            }
+        });
     },
     //厚度专用
      changeThinckChecked(type,value,index){

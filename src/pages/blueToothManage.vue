@@ -423,6 +423,8 @@ export default {
         }
     },
     goBack(){
+        this.$router.back() 
+        // window.history.back()
       return;
     },
     handleCameraScan(){
@@ -480,13 +482,14 @@ export default {
             //测试模式时
             if(self.GLOBAL_CONFIG.TESTFLAG){
                 self.cameraRstName=data;
-                self.cameraRstIp="78:78:878:78:78";
+                self.cameraRstIp="78,78,878,78,78";
                 self.comeraRstFlag=true
                 return;
             }
             // var data ="F0:B5:D1:59:23:4A||HC-08";
             if(data.indexOf('||')>-1){
                 let tempArr = data.split('||');
+                // self.cameraRstIp=tempArr[0].replace(/,/g,":");
                 self.cameraRstIp=tempArr[0].replace(/,/g,":");
                 self.comeraRstFlag=true;
                 self.cameraRstName =data.split('||')[1];

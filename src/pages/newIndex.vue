@@ -648,6 +648,8 @@ export default {
       },
     goBack(){
       // alert('cso');
+      this.$router.push({path:'/blueToothManage',query:{}});
+      // this.$router.back() 
       return;
     },
     timeOutGo(url,params,delayTime){
@@ -714,6 +716,7 @@ export default {
       } 
        window['broastFromAndroid'] = (data,pageFrom) => {
           //如果和现在选的模式不一致，不进行跳转
+          // alert(data)
           var tempType=that.getModelType(data.substring(2,4));
           if(that.modelType!=tempType){
             return;
@@ -744,10 +747,10 @@ export default {
       //   window.history.pushState(null, null, "#");
       // })
 
-      // if (window.history && window.history.pushState) {
-      //   history.pushState(null, null, document.URL);
-      //   window.addEventListener('popstate', this.goBack, false);
-      // } 
+      if (window.history && window.history.pushState) {
+        history.pushState(null, null, document.URL);
+        window.addEventListener('popstate', this.goBack, false);
+      } 
   },
   created () {
       this.pageHeight=window.innerHeight+'px';
@@ -762,7 +765,7 @@ export default {
     clearTimeout(this.unconnectedTimer);
     this.isLoading=false;
     MessageBox.close(); 
-    // window.removeEventListener('popstate',null, false);
+    window.removeEventListener('popstate',this.goBack, false);
     //记录当前模式id
     // this.$store.state.nowModalTypeId =;
     

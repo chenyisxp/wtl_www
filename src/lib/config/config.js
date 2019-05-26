@@ -25,7 +25,10 @@ let BASE_CONFIG = {
         migsyn:{heade:'dae',headm:'dad',headc:'dac',data:'1 00 00 00 00 02 00 3C00 3D00 b400 c800 02 09 2E77'},
         // migman:{heade:'dae',headm:'dad',headc:'dac',data:'2 00 3D00 c800 00 3535'},
         // tigsyn:{heade:'dae',headm:'dad',headc:'dac',data:'3 00 00 03 6400 6400 02 09  2C61'},
-        tigman:{heade:'dae',headm:'dad',headc:'dac',data:'4 00 c0 32 3200 32 3200 3200 e800 32 32 3200 32 50 23 3082'},
+        // tigman:{heade:'dae',headm:'dad',headc:'dac',data:'4 00 c0 32 3200 32 3200 3200 e800 32 32 3200 32 50 23 3082'},
+        // tigman:{heade:'dae',headm:'dad',headc:'dac',data:'442063A0F004F15000F000A00050052000A320F4A13'},
+        tigman:{heade:'dae',headm:'dad',headc:'dac',data:'44202041e004f690069000a0005001e001e32ff4f1'},
+
         mma:{heade:'dae',headm:'dad',headc:'dac',data:'5 82 00 01 09 6400 6400 FD9D'},
         //2、焊接准备中的状态 参数模拟       
         // migsyn:{heade:'dae',headm:'dad',headc:'dac',data:'1 40 00 00 00 02 00 3C00 3D00 b400 c800 02 09 DE46'},

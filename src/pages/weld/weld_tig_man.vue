@@ -1710,17 +1710,45 @@ export default {
     },
      //根据传过来的值重新赋值
     keysChangelistMap(list){
+      //新
       this.keysRangeMap.get('pre_gas').nowValue=list.PRE_GAS_VAL/10;
-      this.keysRangeMap.get('start_cur_end').nowValue=list.START_CUR_VAL;
-      this.keysRangeMap.get('weld_cur').nowValue=list.WELD_CUR_VAL;
-      this.keysRangeMap.get('base_cur').nowValue=list.BASE_CUR_VAL;
-      this.keysRangeMap.get('pulse_fre').nowValue=list.BASE_CUR_VAL/10;
+      this.keysRangeMap.get('start_cur_end').nowValue=
+          this.calcRang(list.START_CUR_VAL,this.keysRangeMap.get('start_cur_end').min,this.keysRangeMap.get('start_cur_end').max);
+      this.keysRangeMap.get('weld_cur').nowValue=
+          this.calcRang(list.WELD_CUR_VAL,this.keysRangeMap.get('weld_cur').min,this.keysRangeMap.get('weld_cur').max);
+      this.keysRangeMap.get('base_cur').nowValue=
+          this.calcRang(list.BASE_CUR_VAL,this.keysRangeMap.get('base_cur').min,this.keysRangeMap.get('base_cur').max);;
+      this.keysRangeMap.get('pulse_fre').nowValue=list.PULSE_FRE_VAL/10;
       this.keysRangeMap.get('pulse_duty').nowValue=list.DUTY_VAL/10;
       this.keysRangeMap.get('slop_down').nowValue=list.SLOP_DOWN_VAL/10;
-      this.keysRangeMap.get('crater_cur').nowValue=list.CRATER_CUR_VAL;
-      this.keysRangeMap.get('post_gas').nowValue=list.POST_GAS_VAL/10;
-      this.keysRangeMap.get('ac_fre').nowValue=list.AC_FRE_VAL;
+      this.keysRangeMap.get('crater_cur').nowValue=
+          this.calcRang(list.CRATER_CUR_VAL,this.keysRangeMap.get('crater_cur').min,this.keysRangeMap.get('crater_cur').max);;;
+      this.keysRangeMap.get('post_gas').nowValue=
+          this.calcRang(list.POST_GAS_VAL/10,this.keysRangeMap.get('post_gas').min,this.keysRangeMap.get('post_gas').max);;;;
+      this.keysRangeMap.get('ac_fre').nowValue=list.AC_FRE_VAL>this.keysRangeMap.get('ac_fre').max?this.keysRangeMap.get('ac_fre').max:list.AC_FRE_VAL;
       this.keysRangeMap.get('ac_balance').nowValue=list.AC_DUTY_VAL;
+      ;
+      //旧
+      // this.keysRangeMap.get('pre_gas').nowValue=list.PRE_GAS_VAL/10;
+      // this.keysRangeMap.get('start_cur_end').nowValue=list.START_CUR_VAL;
+      // this.keysRangeMap.get('weld_cur').nowValue=list.WELD_CUR_VAL;
+      // this.keysRangeMap.get('base_cur').nowValue=list.BASE_CUR_VAL;
+      // this.keysRangeMap.get('pulse_fre').nowValue=list.BASE_CUR_VAL/10;
+      // this.keysRangeMap.get('pulse_duty').nowValue=list.DUTY_VAL/10;
+      // this.keysRangeMap.get('slop_down').nowValue=list.SLOP_DOWN_VAL/10;
+      // this.keysRangeMap.get('crater_cur').nowValue=list.CRATER_CUR_VAL;
+      // this.keysRangeMap.get('post_gas').nowValue=list.POST_GAS_VAL/10;
+      // this.keysRangeMap.get('ac_fre').nowValue=list.AC_FRE_VAL;
+      // this.keysRangeMap.get('ac_balance').nowValue=list.AC_DUTY_VAL;
+    },
+    calcRang(value,min,max){
+      if(value<min){
+        return min;
+      }else if(value>max){
+        return max;
+      }else{
+        return value;
+      }
     },
     //计算最小电流最大电流区间
     clacTigManCur(){
@@ -1798,7 +1826,7 @@ export default {
     this.nowTypeList =list.nowTypeList;
     //000.给线条字段赋值
     //11、范围构建函数 初始化
-    this.pfc_num =list.initBean.pfc==1?list.initBean.unit:0;
+    this.pfc_num =list.initBean.pfc==1?list.initBean.pfc:0;
     this.ac_dc_num=list.initBean.polatrity==1?list.initBean.polatrity:0;
     this.hf_lift_num=list.initBean.ifhf==1?list.initBean.ifhf:0;
     this.isReadyFlag =list.initBean.isReadyFlag;//是否焊接准备完毕
@@ -1806,8 +1834,8 @@ export default {
     this.clacTigMax_AC_FRE(list.BASE_CUR_VAL,list.WELD_CUR_VAL);
     this.initKeysValueMap();
     this.initKeysRangeMap();
-    //关闭重新赋值
-    // this.keysChangelistMap(list);
+    //关闭重新赋值??20190526开启之前为什么关闭，导致不能实时更新
+    this.keysChangelistMap(list);
       
    //00.基本参数设置
     // this.nowDCORACFLAG ='0',//dc
@@ -1865,7 +1893,6 @@ export default {
   },
   computed: {
      getAndriodNewMsg () {
-            // alert(this.$store.state.AdroidNewMsg+'||||'+this.$store.state.AdroidOldMsg);
             return this.$store.state.AdroidNewMsg;　　//需要监听的数据
         }
   },
@@ -1876,7 +1903,6 @@ export default {
                 this.$store.state.AdroidOldMsg=val;
                 //更新操作
                 this.modelType=this.getModelType(val.substring(2,4));
-                //   alert(this.modelType)
                 this.wtlLog('weld_tigman_bfa3','this.modelType'+this.modelType);
                   
                 var rst =this.buildData('newIndex',this.modelType,val.replace(/\s+/g,"").replace(/(.{2})/g,'$1 ').replace(/(^\s*)|(\s*$)/g, ""));
@@ -1887,7 +1913,6 @@ export default {
                     //新规则: 指令ff+crc+检验crc   测试模式不发送
                     this.callSendDataToBleUtil('newIndex','DAFF'+invalue+this.crcModelBusClacQuery('FF'+invalue, true),invalue);
                     //重新初始化
-                    // alert(11)
                     this.initFuc();
                 }
                 

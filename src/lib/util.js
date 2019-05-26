@@ -498,7 +498,8 @@ Array.prototype.in_array = function (element) {
 
                            rstInfo.MMA_MIN_CUR=10;
                         //    rstInfo.MMA_MAX_CUR=byte1Bean.pfc==1?200:110;
-                           rstInfo.MMA_MAX_CUR=byte1Bean.pfc==1?220:200;//2019.01.25修改之前错了？？？
+                        //    rstInfo.MMA_MAX_CUR=byte1Bean.pfc==1?220:200;//2019.01.25修改之前错了？？？
+                           rstInfo.MMA_MAX_CUR=byte1Bean.pfc==1?220:110;//2019.05.25修改之前错了？？？
                            rstInfo.initBean=byte1Bean;//包含很多焊接状态和单位等
                        }
                       break;
@@ -1075,6 +1076,7 @@ Array.prototype.in_array = function (element) {
             } 
             //公共 ：安卓蓝牙交互出入口
             Vue.prototype.callSendDataToBleUtil = function(pageFrom,sendData,crc) {
+                // alert(sendData)
                 this.wtlLog(pageFrom,'sendData='+sendData+',crc='+crc);
                 if(!this.GLOBAL_CONFIG.TESTFLAG){
                     window.android.callSendDataToBle(pageFrom,sendData,crc);

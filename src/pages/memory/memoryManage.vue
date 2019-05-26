@@ -138,6 +138,7 @@ export default {
           console.log('newData:::::'+newData);
           var rst =this.buildData('memory',tmpRstcrc.crcCode,newData.replace(/(.{2})/g,'$1 ').replace(/(^\s*)|(\s*$)/g, ""));
           console.log("mammama:"+rst)
+          this.$store.state.weldingStatus=0;//记忆模式 清楚正在焊接中
           this.wtlLog('weld_memory_manage',"rst="+JSON.stringify(rst),'');
           if(JSON.stringify(rst) != "{}"){
               //发送确认收到的指令给安卓
@@ -235,7 +236,7 @@ export default {
     //TODO 读取九个通道在安卓里的备注名
     //1、请求九个通道数据 默认每个通道都有值
     window['broastMemoryFromAndroid'] = (data,pageFrom) => {
-        //  alert(data)
+         alert(data)
         self.wtlLog('memoryManage','broastHistoryFromAndroid='+data);
         self.broastFromAndroid(data,pageFrom,self.nowChooseId,self.GLOBAL_CONFIG.TESTFLAG);
     }

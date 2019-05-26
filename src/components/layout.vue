@@ -162,7 +162,6 @@ export default {
           return;
         } 
         this.$store.state.nowModelDirectice=this.modelType;
-        alert(lalll);
         var rst =this.buildData('newIndex',this.getModelType(data.substring(2,4)),data.replace(/\s+/g,"").replace(/(.{2})/g,'$1 ').replace(/(^\s*)|(\s*$)/g, ""));
         if(JSON.stringify(rst) != "{}"){
           // alert(rst)
@@ -312,7 +311,7 @@ export default {
       this.wtlLog('layout','tellVueWelding='+data);
       this.buildWeldingData(data);
     }
-     //全局挂载监听函数 安卓捕获后退键进行判断后 返回去哪里  目前就去主页
+     //全局挂载监听函数 安卓捕获后退键进行判断后 返回去哪里  目前就去主页 废弃
     window['tellVueGoWhere'] = (data) => {
         //处理返回的焊接中的数据...DAB1 0000 0000 E721
         // alert("main"+data); 
