@@ -1904,7 +1904,7 @@ export default {
                 //更新操作
                 this.modelType=this.getModelType(val.substring(2,4));
                 this.wtlLog('weld_tigman_bfa3','this.modelType'+this.modelType);
-                  
+                alert(val)
                 var rst =this.buildData('newIndex',this.modelType,val.replace(/\s+/g,"").replace(/(.{2})/g,'$1 ').replace(/(^\s*)|(\s*$)/g, ""));
                  
                  if(JSON.stringify(rst) != "{}"){

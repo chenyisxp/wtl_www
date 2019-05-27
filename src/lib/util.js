@@ -232,7 +232,7 @@ Array.prototype.in_array = function (element) {
             //指令数组
             const MIGSYN_DIRECTIVE_MAP=new Map([['MODE','A0'],['MATERIAL','A1'],['GAS','A2'],['DIAMETER','A3'],['THICKNESS','A4'],['SPEED','A5'],['V_WELDING','A6'],['Getready','AE'],['Memory','AF']]);
             const MIGMAN_DIRECTIVE_MAP=new Map([['MODE','B0'],['SPEED','B1'],['V_WELDING','B2'],['Getready','BE'],['Memory','BF']]);
-            const TIGSYN_DIRECTIVE_MAP=new Map([['DIAMETER','C0'],['MATERIAL','C1'],['THICKNESS','C2'],['POLATRITY','C3'],['WELDCUR','C4'],['Getready','CE'],['Memory','CF']]);
+            const TIGSYN_DIRECTIVE_MAP=new Map([['DIAMETER','C0'],['MATERIAL','C1'],['THICKNESS','C2'],['POLATRITY','C3'],['WELDCUR','C4'],['slowDownTime','C5'],['Getready','CE'],['Memory','CF']]);
             const MMA_DIRECTIVE_MAP = new Map([['POLATRITY','E0'],['ELECTRODE','E1'],['DIAMETER','E2'],['THICKNESS','E3'],['FORCE','E4'],['MMA_CURRENT','E5'],['Getready','EE'],['Memory','EF']]);
             const TIGMAN_DIRECTIVE_MAP =new Map([['TDCHFPULSE','D0'],['pre_gas','D1'],['start_cur_end','D2'], ['slop_up','D3'],['weld_cur','D4'],['base_cur','D5'],['pulse_fre','D6'],['pulse_duty','D7'],['slop_down','D8'],['crater_cur','D9'],['post_gas','DA'],['ac_fre','DB'],['ac_balance','DB'],['Getready','DE'],['Memory','DF']]);
            //特殊指令数组 存储、历史等
@@ -385,7 +385,7 @@ Array.prototype.in_array = function (element) {
                         rstInfo.weldTypeNum=_this.GLOBAL_CONFIG.callWeldTypeData.tigsyn.newIndex;//这个和首页里的配对
                        //确认指令
                        console.log('arrayList.length'+arrayList.length)
-                       if((arrayList[1]=='227'||arrayList[1]=='211'||arrayList[1]=='195') &&arrayList.length==9){
+                       if((arrayList[1]=='227'||arrayList[1]=='211'||arrayList[1]=='195') &&arrayList.length==11){
                            //赋值开始  ......
                            var byte1Bean = num16To2Arr(arrayList[2],'');
                            //拆解成
@@ -416,6 +416,12 @@ Array.prototype.in_array = function (element) {
                             rstInfo.TIGSYN_MIN_CUR=10;
                             rstInfo.TIGSYN_MAX_CUR=byte1Bean.pfc==1?200:140;
                             rstInfo.initBean=byte1Bean;//包含很多焊接状态和单位等
+                            //新增
+                            console.log(arrayList)
+                            rstInfo.slowDownTime =arrayList[9];//缓降时间
+                            rstInfo.sdTime_min=0;
+                            rstInfo.sdTime_max=100;
+                            rstInfo.postGasTime =arrayList[10] || '-';//后送气时间
                        }
                       break;
                     case weldDirctive.tigMan:
@@ -639,6 +645,8 @@ Array.prototype.in_array = function (element) {
                     temp10.push(parseInt(("0x"+strArr[8]+strArr[7]),16).toString(10));//电流
                     temp10.push(parseInt(("0x"+strArr[9]),16).toString(10));//板厚最小值
                     temp10.push(parseInt(("0x"+strArr[10]),16).toString(10));//板厚最大值
+                    temp10.push(parseInt(("0x"+strArr[11]),16).toString(10));//缓降时间
+                    temp10.push(parseInt(("0x"+strArr[12]),16).toString(10));//后置气时间
                     //转成10进制
                     rstInfo = setWeldDataByType(temp10,weldDirctive.tigSyn,pageFrom,_this);
                 }else if(compareString(dirctiveType,weldDirctive.mma)){

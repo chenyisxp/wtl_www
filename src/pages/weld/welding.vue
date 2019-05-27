@@ -187,7 +187,7 @@ export default {
             if(JSON.stringify(list) != "{}"){
                   //1、tig模式的话关闭第二个滑块 且第一个滑块单位是A
                     if(list.weldType=='TIGSYN'){
-                        this.hidSlide2 =false;
+                        
                         this.unitslider1='A';
                         //params:min+max+nowpositionx+dffmin+difmax
                         this.min = list.TIGSYN_MIN_CUR;
@@ -201,6 +201,20 @@ export default {
                        this.buildSliderData1(this.min,this.max,this.nowPosionX, this.diffMin,this.diffMax);
                        this.paramIncreaseDistance=1;
                        this.bleParamKey1 ='WELDCUR';//参照util里
+                       //2、缓降时间
+                        this.hidSlide2 =false;
+                        this.unitslider2='s';
+                        this.min2=list.sdTime_min;
+                        this.max2 =list.sdTime_max/10;
+                        this.nowPosionX2 =list.slowDownTime/10;
+                        this.oldNowPosionX2 =this.nowPosionX2;
+                        //电流初始化  推荐值正负20即可
+                        this.diffMin2 =list.sdTime_min;
+                        this.diffMax2 =list.sdTime_max/10;
+                        this.block2 =this.max2-this.min2;
+                        this.buildSliderData2(this.min2,this.max2,this.nowPosionX2, this.diffMin2,this.diffMax2);
+                        this.paramIncreaseDistance2=0.1; 
+                        this.bleParamKey2 ='slowDownTime';//参照util里
                     }else if(list.weldType=='TIGMAN'){
                         this.hidSlide2 =false;
                         this.unitslider1='A';

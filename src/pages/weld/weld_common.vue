@@ -676,7 +676,8 @@ export default {
                     }
             }, 1000);
         }
-    },addFuc2(){
+    }
+    ,addFuc2(){
         if(this.nowPosionX2==this.max2){
             return;
         }else{

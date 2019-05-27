@@ -58,7 +58,7 @@
             <ul>
                 <li class="b-li"  v-for="(item,index) in orderList2" @click="setBleConnect(item.address,item.bleName)">
                         <div class="d title">Name</div>
-                        <div class="d name">{{item.bleName}}{{item.address}}</div>
+                        <div class="d name">{{item.bleName}}</div>
                         <div class="d connect">Connect ></div>
                 </li>
             </ul>

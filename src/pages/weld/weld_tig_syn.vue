@@ -59,10 +59,35 @@
                     <div class="rdown">
                         {{min}}~{{max}}A
                     </div>
-                    
+                </div>
+                <!-- 电压 -->
+                <div class="electricCurrent Voltage">
+                    <div class="up">
+                        <div class="u-left"><img  src="../../assets/images/voltage.png"></div>
+                        <div class="u-right">
+                            <div class="bt del" @click="delFuc2()"></div>
+                            <div class="value" :class="nowPosionX2<diffMin2 || nowPosionX2>diffMax2?'dangerColor':''">{{nowPosionX2}}</div>
+                            <div class="bt add" @click="addFuc2()"></div>
+                        </div>
+                    </div>
+                    <div class="slider" ref="mySlider2">
+                        <div class="bgSlider"></div>
+                        <div class="dangerRange" ref="dangerRange2"></div>
+                        <!-- <div class="sliderBtn" @touchstart="tStart()" @touchmove="tmove()" @touchend="tEnd()" ref="silderBtnId" :style="{left:nowPosionX+'px'}"></div> -->
+                        <div class="sliderBtn" ref="sbtn2">
+                            <div class="left"></div>
+                            <div class="right"></div>
+                        </div>
+                    </div>
+                    <div class="rdown">
+                        {{min2}}~{{max2}}s
+                    </div>
                 </div>
         </div>
    <div class="footers" :class="btFooterFlag?'unEnough':''">
+                        <div class="inducance">
+                            <div class="showna">PostGasTime:<span>{{postGasTime}}</span></div>
+                        </div>
                         <div class="new-footer-btns">
                             <div class="btn n-1"  @click="go('/saveManage')">
                                 <div class="shuxian"></div>
@@ -233,11 +258,11 @@ export default {
 					isBtn:2,//焦点
 					propoWidth:0
 				},
-        max2:200,
-        min2:10,
-        block2:190,//总的区间
-        diffMin2:20,//特殊区间段最小值
-        diffMax2:60,//特殊区间最大值
+        max2:100,
+        min2:0,
+        block2:100,//总的区间
+        diffMin2:0,//特殊区间段最小值
+        diffMax2:0,//特殊区间最大值
         nowPosionX2:36,//当前位置
         oldNowPosionX2:'',
         timerPosition2:'',//定时器避免重复点击 造成连续发送
@@ -285,9 +310,8 @@ export default {
         ]),
         rulerNumAtr:[],
         rulerInchNumAtr:[],
-        nowThinknessSendIndex:''
-    
-
+        nowThinknessSendIndex:'',
+        postGasTime:''
      }
   },
 
@@ -565,13 +589,14 @@ export default {
     buildSliderChangeData(value,type){
         // var aa = (Array(2).join('0') + parseInt(positionNum*10,10).toString(16)).slice(-2);
         //计算 查找 发送请求给ble告知 修改了
-        var dirctCode = this.getDirective(this.typeName,'WELDCUR')//电流;
+        var dirctCode = this.getDirective(this.typeName,type)//电流;
         //新规则占两个字节的字段需要特殊处理
         var  num =this.jinzhiChangeFuc(value);
         // var num = (Array(4).join('0') + parseInt(value,10).toString(16)).slice(-4);
         //     num= num.substring(2,4)+num.substring(0,2);
         var crc =this.crcModelBusClacQuery(dirctCode+num, true);
         var sendData ="DA"+dirctCode+num+crc;
+        console.log(value+'||'+sendData)
         this.callSendDataToBleUtil('weld_tig_syn',sendData,crc);
     },
     delFuc(){
@@ -587,6 +612,39 @@ export default {
                     if(this.nowPosionX!=this.oldPosionX){
                         this.oldPosionX =this.nowPosionX;
                         this.buildSliderChangeData(this.nowPosionX,'WELDCUR');
+                    }
+            }, 1000);
+        }
+    },addFuc2(){
+        if(this.nowPosionX2==this.max2){
+            return;
+        }else{
+            this.nowPosionX2= Math.round((parseFloat(this.nowPosionX2)+this.paramIncreaseDistance2)*10)/10;
+            let sliderBtn =  this.$refs.sbtn2
+            //00、初始化滚动条位置 占比是百分比
+            sliderBtn.style.left = (this.nowPosionX2-this.min2)/this.block2*100+'%';
+            clearTimeout(this.timerPosition2);
+            this.timerPosition2 = setTimeout(() => {
+                    if(this.oldNowPosionX2!=this.nowPosionX2){
+                        this.oldNowPosionX2 =this.nowPosionX2;
+                        this.buildSliderChangeData(this.nowPosionX2*10,'slowDownTime');
+                    }
+            }, 1000);
+        }
+    },
+    delFuc2(){
+            if(this.nowPosionX==this.min2){
+            return;
+        }else{
+            this.nowPosionX2=Math.round((parseFloat(this.nowPosionX2)-this.paramIncreaseDistance2)*10)/10;
+            let sliderBtn =  this.$refs.sbtn2
+            //00、初始化滚动条位置 占比是百分比
+            sliderBtn.style.left = (this.nowPosionX2-this.min2)/this.block2*100+'%';
+            clearTimeout(this.timerPosition2);
+            this.timerPosition2 = setTimeout(() => {
+                    if(this.oldNowPosionX2!=this.nowPosionX2){
+                        this.oldNowPosionX2 =this.nowPosionX2;
+                        this.buildSliderChangeData(this.nowPosionX2*10,'slowDownTime');
                     }
             }, 1000);
         }
@@ -735,6 +793,80 @@ export default {
             })
           
     },
+    initVotalage(){
+                let mySlider = this.$refs.mySlider2;
+                let dangerRange = this.$refs.dangerRange2;
+                let mySliderWidth =mySlider.offsetWidth;//条子宽度
+                // let btnWidth='';//滑动块所占百分比
+                let sliderBtn =  this.$refs.sbtn2;
+                //00、初始化滚动条位置 占比是百分比
+                sliderBtn.style.left = (this.nowPosionX2-this.min2)/this.block2*100+'%' 
+                //01、初始化 危险区域位置
+                dangerRange.style.width=((this.diffMax2-this.diffMin2)/this.block2) *mySliderWidth+'px';
+                dangerRange.style.left =((this.diffMin2-this.min2)/this.block2)*100+'%';
+
+                let myWidth = 0;
+                let propo = mySlider.children[0];//底色不变
+                //1、
+                const elementLeft = (e) => { //计算x坐标
+				var offset = e.offsetLeft;
+				if(e.offsetParent != null) offset += elementLeft(e.offsetParent);
+                    return offset;
+                }
+                //2、
+                const myCount = () => { //计算滑动
+                        if(this.myPosition2.right>this.myPosition2.left){ //判断滑动范围
+                            this.myPosition2.propoWidth = this.myPosition2.right - this.myPosition2.left
+                            // this.valueFun(parseInt(this.myPosition.left),parseInt(this.myPosition.right),parseInt(this.myPosition.propoWidth))
+                        }else if(this.myPosition2.right<this.myPosition2.left){
+                            this.myPosition2.propoWidth = this.myPosition2.left - this.myPosition2.right
+                            // this.valueFun(parseInt(this.myPosition.right),parseInt(this.myPosition.left),parseInt(this.myPosition.propoWidth))
+                        }else if(this.myPosition2.right==this.myPosition2.left){//按钮位置滑到最大值或者最小值
+                            this.myPosition2.propoWidth = this.myPosition2.left - this.myPosition2.right
+                            // this.valueFun(parseInt(this.myPosition.right),parseInt(this.myPosition.left),parseInt(this.myPosition.propoWidth))
+                        }
+                        
+                }
+
+            let mySliderX = elementLeft(mySlider) //滑动块x坐标
+            mySlider.addEventListener('touchmove',(e)=>{ //屏幕滑动事件
+                    let pageX = e.touches[0].pageX-mySliderX; //获取滑动x坐标
+                    myWidth = (pageX/mySlider.offsetWidth)*100 //计算百分比
+                    if(myWidth>100){ //判断不超出范围
+                        myWidth=100;
+                    }else if(myWidth<0){
+                        myWidth=0
+                    }
+                     this.nowPosionX2=Math.round(this.block2*(Math.round(myWidth)/100)*10)/10+this.min2;//四舍五入保留一位小数
+                    // this.nowPosionX2=Math.round(this.block2*(Math.round(myWidth)/100))+this.min2;//四舍五入取舍
+                    //判断是否在危险区
+                    // if(this.myPosition2>=){
+                    //    InDangerFlag2=true; 
+                    // }
+                    if(this.myPosition2.isBtn == 1){//判断焦点
+                        this.myPosition.left = myWidth
+                        rightBtn.style.left = myWidth+'%' 
+                    }else if(this.myPosition2.isBtn == 2){
+                        this.myPosition.right = myWidth
+                        sliderBtn.style.left = myWidth+'%' 
+                    }
+                    myCount()
+                    e.preventDefault()
+
+			})
+
+			mySlider.addEventListener('touchstart',(e)=>{//屏幕触摸事件
+				let touchX = e.touches[0].pageX-mySliderX
+                // btnWidth = (sliderBtn.offsetWidth/mySlider.offsetWidth)*100; //计算按钮宽度
+                // btnWidth=btnWidth.toFixed(2);//保留两位有效数字
+				this.myPosition2.now = (touchX/mySlider.offsetWidth)*100
+				mySliderX = elementLeft(mySlider) //滑动块x坐标
+            })
+            mySlider.addEventListener('touchend',(e)=>{//屏幕触摸结束事件
+                // 发送请求给ble告诉 修改了
+               this.buildSliderChangeData(this.nowPosionX2*10,'slowDownTime');
+            })
+    },
       //数组 滑动 数组构造
     buildRulerArrRange(min,max){
         console.log(max)
@@ -764,6 +896,7 @@ export default {
         }else{
             list  =this.$store.state.rstInfo;
         }
+        console.log(list)
         // alert(JSON.stringify(this.$store.state.rstInfo))
         //最新的
         // list.initBean.unit=1;
@@ -808,8 +941,21 @@ export default {
             // this.diffMin = 80;
             // this.diffMax = 100;
             this.block =this.max-this.min;
+        //缓降时间 初始化
+        this.min2=list.sdTime_min;
+        this.max2 =list.sdTime_max/10;
+        console.log(list.slowDownTime)
+        this.nowPosionX2 =list.slowDownTime/10;
+        this.oldNowPosionX2 =this.nowPosionX2;
+             //电压初始化  推荐值正负20即可
+            this.diffMin2 =0;
+            this.diffMax2 =10;
+            this.block2 =this.max2-this.min2;
     //初始化 电流控制器
     this.initElecticCurrent();
+    //初始化 缓降时间 控制器
+    this.initVotalage();
+    this.postGasTime=list.postGasTime;//前送气时间
     //初始化滑动选择器 不在这里初始化
     // this.sliderParentInit();
     
@@ -910,7 +1056,7 @@ export default {
                 }
                 
             }
-        },
+            },
         //list渲染完执行高度计算 更精确
            nowTypeList:function() {
                   this.$nextTick(function(){
@@ -921,6 +1067,12 @@ export default {
                             this.btFooterFlag =true;
                         }
                  });               
+            },
+            nowPosionX2(val, oldVal){//普通的watch监听
+                    var now = val+'';
+                    if(now.indexOf('.')<0){
+                        this.nowPosionX2+='.0';
+                    }
             },
             // nowPosionX(val, oldVal){//普通的watch监听
             //     var now = val+'';
@@ -1196,15 +1348,39 @@ export default {
          color: #00c6ff;
      }
   }
-  .inducance{
+//   .inducance{
+//       height: 50px;
+//       line-height: 50px;
+//       color: #fff;
+//       text-align: center;
+//       background: #01303e;
+//       background: linear-gradient(to top, #0c3648 , #2c5361,#0c3648);
+//   }
+.inducance{
       height: 50px;
       line-height: 50px;
-      color: #fff;
-      text-align: center;
+      font-size: 16px;
+      color: #8a9cab;
+      text-align: left;
       background: #01303e;
       background: linear-gradient(to top, #0c3648 , #2c5361,#0c3648);
+      .showna{
+        height: 50px;
+        line-height: 50px;
+        background: url(../../assets/images/weld_icon_introduce.png) no-repeat;
+        background-size: 20px;
+        background-position: left center;
+        padding-left: 25px;
+        margin-left: 25px;
+        span{
+            font-size: 20px;
+            padding-left: 15px;
+        }
+        .red{
+            color: red;
+        }
+      }
   }
-   
   .new-footer-btns{
         // position: fixed;
         // bottom: 0;

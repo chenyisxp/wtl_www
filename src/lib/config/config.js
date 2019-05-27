@@ -33,7 +33,7 @@ let BASE_CONFIG = {
         //2、焊接准备中的状态 参数模拟       
         // migsyn:{heade:'dae',headm:'dad',headc:'dac',data:'1 40 00 00 00 02 00 3C00 3D00 b400 c800 02 09 DE46'},
         migman:{heade:'dae',headm:'dad',headc:'dac',data:'2 40 3D00 c800 00 F53B'},
-        tigsyn:{heade:'dae',headm:'dad',headc:'dac',data:'3 40 00 03 6400 6400 02 09  EF50'},
+        tigsyn:{heade:'dae',headm:'dad',headc:'dac',data:'3 40 00 03 6400 6400 02 09 50 05  8F81'},
         // tigman:{heade:'dae',headm:'dad',headc:'dac',data:'4 40 c0 32 3200 32 3200 3200 e800 32 32 3200 32 50 23 FF97'},
         // mma:{heade:'dae',headm:'dad',headc:'dac',data:'5 c2 00 01 09 6400 6400 CD99'},
    },
@@ -41,7 +41,7 @@ let BASE_CONFIG = {
    testWeldingData:{
         migsyn:{data:'dae1 04 00 00 00 02 00 3C00 3D00 b400 c800 02 09 ED75'},
         migman:{data:'dae2 04 3D00 c800 00 B134'},
-        tigsyn:{data:'dae3 04 00 03 6400 6400 02 09  EC53'},
+        tigsyn:{data:'dae3 04 00 03 6400 6400 02 09 50 05 7EC1'},
         tigman:{data:'dae4 04 c0 32 3200 32 3200 3200 e800 32 32 3200 32 50 23 0073'},
         mma:{data:'dae5 04 00 01 09 6400 6400 28F6'}
    },
@@ -69,6 +69,7 @@ let BASE_CONFIG = {
             material:'C1',
             thickness:'C2',
             polatrity:'C3',
+            slowDownTime:'C4',
             getready:'CE',
             memory:'CF'
         },
