@@ -22,7 +22,8 @@ let BASE_CONFIG = {
    },
    testData:{
         //1、常规的模拟
-        migsyn:{heade:'dae',headm:'dad',headc:'dac',data:'1 00 00 00 00 02 00 3C00 3D00 b400 c800 02 09 2E77'},
+        // migsyn:{heade:'dae',headm:'dad',headc:'dac',data:'1 00 00 00 00 02 00 3C00 3D00 b400 c800 02 09 2E77'},
+        migsyn:{heade:'dae',headm:'dad',headc:'dac',data:'1 82 040103063541004100dc00dc00020895d1'},//板厚异常
         // migman:{heade:'dae',headm:'dad',headc:'dac',data:'2 00 3D00 c800 00 3535'},
         // tigsyn:{heade:'dae',headm:'dad',headc:'dac',data:'3 00 00 03 6400 6400 02 09  2C61'},
         // tigman:{heade:'dae',headm:'dad',headc:'dac',data:'4 00 c0 32 3200 32 3200 3200 e800 32 32 3200 32 50 23 3082'},
@@ -32,7 +33,8 @@ let BASE_CONFIG = {
         mma:{heade:'dae',headm:'dad',headc:'dac',data:'5 82 00 01 09 6400 6400 FD9D'},
         //2、焊接准备中的状态 参数模拟       
         // migsyn:{heade:'dae',headm:'dad',headc:'dac',data:'1 40 00 00 00 02 00 3C00 3D00 b400 c800 02 09 DE46'},
-        migman:{heade:'dae',headm:'dad',headc:'dac',data:'2 40 3D00 c800 00 F53B'},
+        // migman:{heade:'dae',headm:'dad',headc:'dac',data:'2 40 3D00 c800 00 F53B'},
+        migman:{heade:'dae',headm:'dad',headc:'dac',data:'2 42 6a00 ac00 03 054e'},
         tigsyn:{heade:'dae',headm:'dad',headc:'dac',data:'3 40 00 03 6400 6400 02 09 50 05  8F81'},
         // tigman:{heade:'dae',headm:'dad',headc:'dac',data:'4 40 c0 32 3200 32 3200 3200 e800 32 32 3200 32 50 23 FF97'},
         // mma:{heade:'dae',headm:'dad',headc:'dac',data:'5 c2 00 01 09 6400 6400 CD99'},
@@ -69,7 +71,8 @@ let BASE_CONFIG = {
             material:'C1',
             thickness:'C2',
             polatrity:'C3',
-            slowDownTime:'C4',
+            slowDownTime:'C5',
+            mode:'C6',
             getready:'CE',
             memory:'CF'
         },

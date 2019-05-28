@@ -69,6 +69,12 @@ Array.prototype.in_array = function (element) {
                 ], /** tigsyn模式**/
                 tigsynList:[
                     {
+                        typeName:'MODE',
+                        chooseKey:0,//默认选中
+                        comList:[
+                            {id:0,key:'2T',value:'2T'},{id:1,key:'4T',value:'4T'}
+                        ]
+                    },{
                         typeName:'MATERIAL',
                         chooseKey:0,//默认选中
                         comList:[
@@ -232,7 +238,7 @@ Array.prototype.in_array = function (element) {
             //指令数组
             const MIGSYN_DIRECTIVE_MAP=new Map([['MODE','A0'],['MATERIAL','A1'],['GAS','A2'],['DIAMETER','A3'],['THICKNESS','A4'],['SPEED','A5'],['V_WELDING','A6'],['Getready','AE'],['Memory','AF']]);
             const MIGMAN_DIRECTIVE_MAP=new Map([['MODE','B0'],['SPEED','B1'],['V_WELDING','B2'],['Getready','BE'],['Memory','BF']]);
-            const TIGSYN_DIRECTIVE_MAP=new Map([['DIAMETER','C0'],['MATERIAL','C1'],['THICKNESS','C2'],['POLATRITY','C3'],['WELDCUR','C4'],['slowDownTime','C5'],['Getready','CE'],['Memory','CF']]);
+            const TIGSYN_DIRECTIVE_MAP=new Map([['DIAMETER','C0'],['MATERIAL','C1'],['THICKNESS','C2'],['POLATRITY','C3'],['WELDCUR','C4'],['slowDownTime','C5'],['MODE','C6'],['Getready','CE'],['Memory','CF']]);
             const MMA_DIRECTIVE_MAP = new Map([['POLATRITY','E0'],['ELECTRODE','E1'],['DIAMETER','E2'],['THICKNESS','E3'],['FORCE','E4'],['MMA_CURRENT','E5'],['Getready','EE'],['Memory','EF']]);
             const TIGMAN_DIRECTIVE_MAP =new Map([['TDCHFPULSE','D0'],['pre_gas','D1'],['start_cur_end','D2'], ['slop_up','D3'],['weld_cur','D4'],['base_cur','D5'],['pulse_fre','D6'],['pulse_duty','D7'],['slop_down','D8'],['crater_cur','D9'],['post_gas','DA'],['ac_fre','DB'],['ac_balance','DB'],['Getready','DE'],['Memory','DF']]);
            //特殊指令数组 存储、历史等
@@ -366,10 +372,11 @@ Array.prototype.in_array = function (element) {
                             rstInfo.V_WELDING =arrayList[4];//电压
                             // rstInfo.INDUCTANCE =arrayList[5];//机器上发不能改 不知道干嘛的
                             var parr5 =((Array(8).join(0) + parseInt(arrayList[5],10).toString(2)).slice(-8));
+                            // alert(arrayList[5]+"||"+parr5)
                             //bit4-7
-                            rstInfo.INDUCTANCE =parseInt(parr5.substring(0,4),2).toString(10);//机器上发不能改 不知道干嘛的
+                            rstInfo.INDUCTANCE =parseInt(parr5.substring(4,8),2).toString(10);//机器上发不能改 不知道干嘛的
                             //bit0-3
-                            rstInfo.RECOMMEND_INDUCTANCE =parseInt(parr5.substring(4,8),2).toString(10);//机器上发不能改 不知道干嘛的
+                            rstInfo.RECOMMEND_INDUCTANCE =parseInt(parr5.substring(0,4),2).toString(10);//机器上发不能改 不知道干嘛的
                             rstInfo.initBean=byte1Bean;
                             //最大送丝速度
                             rstInfo.MAX_SPEED_DISPLAY=maxSpeedBuild(byte1Bean.unit,byte1Bean.pfc);
@@ -392,6 +399,9 @@ Array.prototype.in_array = function (element) {
                            var  arrtwo= num16To2ArrSpecial02(arrayList[3]);
                            rstInfo.nowTypeList.forEach(element => {
                                 switch (element.typeName) {
+                                    case 'MODE':
+                                        element.chooseKey=byte1Bean.mode;
+                                        break;
                                     case 'MATERIAL':
                                         element.chooseKey=arrtwo.material;
                                         break;

@@ -196,6 +196,7 @@ export default {
   },
   data () {
     return {
+        firstInit:true,
         isReadyFlag:0,//是否焊接准备完毕
         minTRange:'',
         maxTRange:'',

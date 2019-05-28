@@ -108,6 +108,7 @@
                     <div class="le">
                         <img v-if="nowtypename=='MATERIAL'" src="../../assets/images/blue_weld_icon_new_meterial.png"> 
                         <img v-if="nowtypename=='DIAMETER'" src="../../assets/images/blue_tig_diameter.png"> 
+                        <img v-if="nowtypename=='MODE'" src="../../assets/images/blue_weld_icon_new_mode.png"> 
                     </div>
                     <div class="ri">{{changeStrShowName(nowtypename)}}</div>
                 </div>
@@ -193,6 +194,7 @@ export default {
   },
   data () {
     return {
+        firstInit:true,
         isReadyFlag:0,//是否焊接准备完毕
         minTRange:'',
         maxTRange:'',
@@ -900,30 +902,34 @@ export default {
         // alert(JSON.stringify(this.$store.state.rstInfo))
         //最新的
         // list.initBean.unit=1;
-          //滑动thinkness赋值
-        this.buildRulerArrRange(list.TIG_MIN_THICHNESS,list.TIG_MAX_THICHNESS);
-        this.typeName=list.weldType;
-        
-        // this.typeName='TIG SYN';
-        if(list.initBean.unit==1){
-            this.UnitFlag=1;
-            this.rulerNumAtr =this.rulerInchNumAtr;
-               this.rulerNumAtr.forEach(element => {
-                if(element.id==list.THINKNESS_VALUE){
-                     this.actualNum =element.num;
-                     return false;
-                }
-            });
-            // this.actualNum = '24GA'
-        }else{
-            this.rulerNumAtr.forEach(element => {
-                if(element.id==list.THINKNESS_VALUE){
-                     this.actualNum =element.num;
-                     return false;
-                }
-            });
-             this.UnitFlag=0;
+        if(this.firstInit){
+            this.firstInit=false;
+            //滑动thinkness赋值
+            this.buildRulerArrRange(list.TIG_MIN_THICHNESS,list.TIG_MAX_THICHNESS);
+            this.typeName=list.weldType;
+            
+            // this.typeName='TIG SYN';
+            if(list.initBean.unit==1){
+                this.UnitFlag=1;
+                this.rulerNumAtr =this.rulerInchNumAtr;
+                this.rulerNumAtr.forEach(element => {
+                    if(element.id==list.THINKNESS_VALUE){
+                        this.actualNum =element.num;
+                        return false;
+                    }
+                });
+                // this.actualNum = '24GA'
+            }else{
+                this.rulerNumAtr.forEach(element => {
+                    if(element.id==list.THINKNESS_VALUE){
+                        this.actualNum =element.num;
+                        return false;
+                    }
+                });
+                this.UnitFlag=0;
+            }
         }
+        
         this.isReadyFlag =list.initBean.isReadyFlag;//是否焊接准备完毕
         this.minTRange = this.rulerNumAtr[0].num;
         this.maxTRange = this.rulerNumAtr[this.rulerNumAtr.length-1].num;
@@ -936,8 +942,10 @@ export default {
         this.nowPosionX=list.SYN_WELD_CUR;
         this.oldPosionX =this.nowPosionX;
              //weld_cur赋值----电流
-            this.diffMin = this.clacDangerRang(this.min,list.SYN_RECOMMEND_CUR,'min');
-            this.diffMax = this.clacDangerRang(this.max,list.SYN_RECOMMEND_CUR,'max');
+            // alert(list.SYN_RECOMMEND_CUR+9)
+            this.diffMin = this.clacDangerRang(this.min,parseInt(list.SYN_RECOMMEND_CUR),'min');
+            this.diffMax = this.clacDangerRang(this.max,parseInt(list.SYN_RECOMMEND_CUR),'max');
+            //  alert(this.diffMin+'||'+ this.diffMax)
             // this.diffMin = 80;
             // this.diffMax = 100;
             this.block =this.max-this.min;
@@ -1082,6 +1090,7 @@ export default {
             // }
   },
   destroyed(){
+      this.firstInit =true;
        clearTimeout(this.autoTimeoutFlag);
     //    window.removeEventListener('popstate', this.go('/newIndex'), false);
   }

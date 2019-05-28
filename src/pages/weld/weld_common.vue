@@ -206,6 +206,7 @@ export default {
   },
   data () {
     return {
+        firstInit:true,
         isReadyFlag:0,//是否焊接准备完毕
         minTRange:'',
         maxTRange:'',
@@ -414,6 +415,7 @@ export default {
                             midLine.style.height = self.rulerNumAtr[i].height+'px';
                             cubeBox1.style.height =self.rulerNumAtr[i].height+'px';
                             self.nowTouchIndex =i;
+                            alert(cubeBox1.style.height+"||"+midLine.style.height+'||'+JSON.stringify(self.rulerNumAtr))
                             break;
                        }
                         
@@ -885,9 +887,10 @@ export default {
            }
         });
         console.log(metiralChoosed+'||'+gasChoosed)
-        switch (metiralChoosed) {
+        switch (parseInt(metiralChoosed)) {
             case 0:
                if(gasChoosed==0){
+                   console.log(99999)
                   this.specialDiaChoosed([0,3]);
                }else if(gasChoosed==1){
                  this.specialDiaChoosed([1,3])
@@ -906,16 +909,20 @@ export default {
                 this.specialDiaChoosed([3,4])
                 break;
             default:
+             console.log(22)
                 break;
         }
     },
     specialDiaChoosed(keyArr){
+        console.log(1111111111)
         let comList =[];
         let inchComList=[];
         keyArr.forEach(element => {
             comList.push(this.changeComList[element])
             inchComList.push(this.changeInchComList[element])
         });
+        console.log(comList)
+        console.log(inchComList)
         this.nowTypeList.forEach(element => {
             if(element.typeName=='DIAMETER'){
                 element.comList=comList;
@@ -926,6 +933,7 @@ export default {
                 }
             }
         });
+        console.log(this.nowTypeList)
     },
     //厚度专用
      changeThinckChecked(type,value,index){
@@ -1091,7 +1099,9 @@ export default {
         
         var tempArr =[];
         var tempInchArr =[];
-       
+        this.rulerInchNumAtr=[];
+        this.rulerNumAtr=[];
+
         min =parseInt(min);
         var i =parseInt(min);
         max =parseInt(max);
@@ -1121,11 +1131,13 @@ export default {
     initData(){
          this.wtlLog('weld_common','pageBackTo='+this.pageBackTo+',typeName'+this.typeName+',list'+JSON.stringify(this.$store.state.rstInfo));
     // this.nowTypeList =this.tigTypeList;
+    //滑动弹层应该是关闭的
+    this.downshowFlag=false;
+    this.hideFlag=false;
    if( this.typeName=='MIGMAN'){
         // var list ={"nowTypeList":[{"typeName":"MODE","chooseKey":"0","comList":[{"id":0,"key":"2T","value":"2T"},{"id":1,"key":"4T","value":"4T"}]}],"weldType":"migman","SPEED_DISPLAY":"61","V_WELDING":"200","INDUCTANCE":"0","initBean":{"unit":"0","pfc":"0","weldStatus":"0","hotStatus":"0","flowStatus":"0","empty1":"0","empty2":"0","mode":"0"},"MAX_SPEED_DISPLAY":10,"MIN_SPEED_DISPLAY":1.5,"MAX_WELD_V_DISPLAY":23};
         // var list ={"nowTypeList":[{"typeName":"MODE","chooseKey":"0","comList":[{"id":0,"key":"2T","value":"2T"},{"id":1,"key":"4T","value":"4T"}],"inchComList":[{"id":0,"key":"2T","value":"2T"},{"id":1,"key":"4T","value":"4T"}]}],"weldType":"migman","weldTypeNum":3,"SPEED_DISPLAY":"61","V_WELDING":"200","INDUCTANCE":"0","initBean":{"unit":"1","pfc":"0","weldStatus":"0","hotStatus":"0","flowStatus":"0","empty1":"0","empty2":"1","mode":"0"},"MAX_SPEED_DISPLAY":40,"MIN_SPEED_DISPLAY":1.5,"MAX_WELD_V_DISPLAY":23}
         var list  ={};
-        // alert(this.pageBackTo);
         if(this.pageBackTo=='/memoryManage'){//来自momery页
             list  =this.$store.state.memoryInfo;
             console.log(list)
@@ -1183,7 +1195,8 @@ export default {
             }
             this.block2 =this.max2-this.min2;
             
-    }else if(this.typeName=='MIGSYN'){
+    }
+    else if(this.typeName=='MIGSYN'){
         // var list ={"nowTypeList":[{"typeName":"MODE","chooseKey":"0","comList":[{"id":0,"key":"2T","value":"2T"},{"id":1,"key":"4T","value":"4T"}],"inchComList":[{"id":0,"key":"2T","value":"2T"},{"id":1,"key":"4T","value":"4T"}]},{"typeName":"MATERIAL","chooseKey":"0","comList":[{"id":0,"key":"FE","value":"FE"},{"id":1,"key":"SS","value":"SS"},{"id":2,"key":"AL","value":"AL"},{"id":3,"key":"FCAW-S","value":"FCAW-S"},{"id":4,"key":"FCAW-G","value":"FCAW-G"}],"inchComList":[{"id":0,"key":"FE","value":"FE"},{"id":1,"key":"SS","value":"SS"},{"id":2,"key":"AL","value":"AL"},{"id":3,"key":"FCAW-S","value":"FCAW-S"},{"id":4,"key":"FCAW-G","value":"FCAW-G"}]},{"typeName":"GAS","chooseKey":"0","comList":[{"id":0,"key":"CO2","value":"CO2"},{"id":1,"key":"MIX","value":"MIX"}],"inchComList":[{"id":0,"key":"CO2","value":"CO2"},{"id":1,"key":"MIX","value":"MIX"}]},{"typeName":"DIAMETER","chooseKey":"0","comList":[{"id":0,"key":"6MM","value":"0.6mm"},{"id":1,"key":"8MM","value":"0.8mm"},{"id":2,"key":"9MM","value":"0.9mm"},{"id":3,"key":"10MM","value":"1.0mm"},{"id":4,"key":"12MM","value":"1.2mm"}],"inchComList":[{"id":0,"key":"6MM","value":".023\""},{"id":1,"key":"8MM","value":".030\""},{"id":2,"key":"9MM","value":".035\""},{"id":3,"key":"10MM","value":".040\""},{"id":4,"key":"12MM","value":".045\""}]},{"typeName":"THICKNESS","chooseKey":"0","comList":[{"id":0,"key":"6MM","value":"0.6mm"},{"id":1,"key":"7MM","value":"0.7mm"},{"id":2,"key":"9MM","value":"0.9mm"},{"id":3,"key":"12MM","value":"1.2mm"},{"id":4,"key":"16MM","value":"1.6mm"},{"id":5,"key":"21MM","value":"2.1mm"},{"id":6,"key":"28MM","value":"2.8mm"},{"id":7,"key":"34MM","value":"3.4mm"},{"id":8,"key":"48MM","value":"4.8mm"},{"id":9,"key":"64MM","value":"6.4mm"},{"id":10,"key":"80MM","value":"8.0mm"},{"id":11,"key":"95MM","value":"9.5mm"},{"id":12,"key":"110MM","value":"11mm"},{"id":13,"key":"127MM","value":"12.7mm"}],"inchComList":[{"id":0,"key":"6MM","value":"24GA"},{"id":1,"key":"7MM","value":"22GA"},{"id":2,"key":"9MM","value":"20GA"},{"id":3,"key":"12MM","value":"18GA"},{"id":4,"key":"16MM","value":"16GA"},{"id":5,"key":"21MM","value":"14GA"},{"id":6,"key":"28MM","value":"12GA"},{"id":7,"key":"34MM","value":"1/8\""},{"id":8,"key":"48MM","value":"3/16\""},{"id":9,"key":"64MM","value":"1/4\""},{"id":10,"key":"80MM","value":"5/16\""},{"id":11,"key":"95MM","value":"3/8\""},{"id":12,"key":"110MM","value":"7/16\""},{"id":13,"key":"127MM","value":"1/2\""}]}],"weldType":"migSyn","INDUCTANCE":"0","RECOMMEND_INDUCTANCE":"0","RECOMMEND_SPEED_DISPLAY":"60","SPEED_DISPLAY":"61","RECOMMEND_V_WELDING":"180","V_WELDING":"200","MIG_MIN_THICHNESS":"0","MIG_MAX_THICHNESS":"13","initBean":{"unit":"0","pfc":"0","weldStatus":"0","hotStatus":"0","flowStatus":"0","empty1":"0","empty2":"0","mode":"0"},"MAX_SPEED_DISPLAY":10,"MIN_SPEED_DISPLAY":1.5,"MAX_WELD_V_DISPLAY":23,"MIG_MATERIAL":"0"};
         // var list ={"nowTypeList":[{"typeName":"MODE","chooseKey":"2T","comList":[{"key":"2T","value":"2T"},{"key":"4T","value":"4T"}],"inchComList":[{"key":"2T","value":"2T"},{"key":"4T","value":"4T"}]},{"typeName":"MATERIAL","chooseKey":"FE","comList":[{"key":"FE","value":"FE"},{"key":"SS","value":"SS"},{"key":"AL","value":"AL"},{"key":"FCAW-S","value":"FCAW-S"},{"key":"FCAW-G","value":"FCAW-G"}],"inchComList":[{"key":"FE","value":"FE"},{"key":"SS","value":"SS"},{"key":"AL","value":"AL"},{"key":"FCAW-S","value":"FCAW-S"},{"key":"FCAW-G","value":"FCAW-G"}]},{"typeName":"GAS","chooseKey":"CO2","comList":[{"key":"MIX","value":"MIX"},{"key":"CO2","value":"CO2"}],"inchComList":[{"key":"MIX","value":"MIX"},{"key":"CO2","value":"CO2"}]},{"typeName":"DIAMETER","chooseKey":"6MM","comList":[{"key":"6MM","value":"0.6mm"},{"key":"8MM","value":"0.8mm"},{"key":"9MM","value":"0.9mm"},{"key":"10MM","value":"1.0mm"},{"key":"12MM","value":"1.2mm"}],"inchComList":[{"key":"6MM","value":".023\""},{"key":"8MM","value":".030\""},{"key":"9MM","value":".035\""},{"key":"10MM","value":".040\""},{"key":"12MM","value":".045\""}]},{"typeName":"THICKNESS","chooseKey":"0","comList":[{"id":0,"key":"6MM","value":"0.6mm"},{"id":1,"key":"7MM","value":"0.7mm"},{"id":2,"key":"9MM","value":"0.9mm"},{"id":3,"key":"12MM","value":"1.2mm"},{"id":4,"key":"16MM","value":"1.6mm"},{"id":5,"key":"21MM","value":"2.1mm"},{"id":6,"key":"28MM","value":"2.8mm"},{"id":7,"key":"34MM","value":"3.4mm"},{"id":8,"key":"48MM","value":"4.8mm"},{"id":9,"key":"64MM","value":"6.4mm"},{"id":10,"key":"80MM","value":"8.0mm"},{"id":11,"key":"95MM","value":"9.5mm"},{"id":12,"key":"110MM","value":"11mm"},{"id":13,"key":"127MM","value":"12.7mm"}],"inchComList":[{"id":0,"key":"6MM","value":"24GA"},{"id":1,"key":"7MM","value":"22GA"},{"id":2,"key":"9MM","value":"20GA"},{"id":3,"key":"12MM","value":"18GA"},{"id":4,"key":"16MM","value":"16GA"},{"id":5,"key":"21MM","value":"14GA"},{"id":6,"key":"28MM","value":"12GA"},{"id":7,"key":"34MM","value":"1/8\""},{"id":8,"key":"48MM","value":"3/16\""},{"id":9,"key":"64MM","value":"1/4\""},{"id":10,"key":"80MM","value":"5/16\""},{"id":11,"key":"95MM","value":"3/8\""},{"id":12,"key":"110MM","value":"7/16\""},{"id":13,"key":"127MM","value":"1/2\""}]}],"weldType":"migSyn","MIG_MIN_THICHNESS":"2","MIG_MAX_THICHNESS":"5","INDUCTANCE":"10","RECOMMEND_INDUCTANCE":"15","SPEED_DISPLAY":"20","RECOMMEND_SPEED_DISPLAY":"40","V_WELDING":"150","RECOMMEND_V_WELDING":"189","initBean":{"unit":"1","pfc":"0","weldStatus":"0","hotStatus":"0","flowStatus":"0","empty1":"0","empty2":"1","mode":"0"},"MAX_SPEED_DISPLAY":40,"MIN_SPEED_DISPLAY":1.5,"MAX_WELD_V_DISPLAY":23}
         var list  ={};
@@ -1197,32 +1210,36 @@ export default {
         if(list.RECOMMEND_INDUCTANCE<=this.inducanceValue){
             this.overInducanceFlag=true;
         }
-        //滑动thinkness赋值
-        this.buildRulerArrRange(list.MIG_MIN_THICHNESS,list.MIG_MAX_THICHNESS);
-        //最新的
-        if(list.initBean.unit==1){
-            this.UnitFlag=1;
-            this.rulerNumAtr =this.rulerInchNumAtr;
-             this.rulerNumAtr.forEach(element => {
-                if(element.id==list.THINKNESS_VALUE){
-                     this.actualNum =element.num;
-                     return false;
-                }
-            });
-            this.minTRange = this.rulerNumAtr[0].num;
-            this.maxTRange = this.rulerNumAtr[this.rulerNumAtr.length-1].num;
-            // this.actualNum = '24GA'
-        }else{
-            this.rulerNumAtr.forEach(element => {
-                if(element.id==list.THINKNESS_VALUE){
-                     this.actualNum =element.num;
-                     return false;
-                }
-            });
-            this.minTRange = this.rulerNumAtr[0].num;
-            this.maxTRange = this.rulerNumAtr[this.rulerNumAtr.length-1].num;
-            //  this.actualNum = '0.6mm'
-             this.UnitFlag=0;
+        if(this.firstInit){
+            this.firstInit=false;
+            //滑动thinkness赋值
+            this.buildRulerArrRange(list.MIG_MIN_THICHNESS,list.MIG_MAX_THICHNESS);
+            
+            //最新的
+            if(list.initBean.unit==1){
+                this.UnitFlag=1;
+                this.rulerNumAtr =this.rulerInchNumAtr;
+                this.rulerNumAtr.forEach(element => {
+                    if(element.id==list.THINKNESS_VALUE){
+                        this.actualNum =element.num;
+                        return false;
+                    }
+                });
+                this.minTRange = this.rulerNumAtr[0].num;
+                this.maxTRange = this.rulerNumAtr[this.rulerNumAtr.length-1].num;
+                // this.actualNum = '24GA'
+            }else{
+                this.rulerNumAtr.forEach(element => {
+                    if(element.id==list.THINKNESS_VALUE){
+                        this.actualNum =element.num;
+                        return false;
+                    }
+                });
+                this.minTRange = this.rulerNumAtr[0].num;
+                this.maxTRange = this.rulerNumAtr[this.rulerNumAtr.length-1].num;
+                //  this.actualNum = '0.6mm'
+                this.UnitFlag=0;
+            }
         }
         this.isReadyFlag =list.initBean.isReadyFlag;//是否焊接准备完毕
         //  alert('list.weldTypeNum'+list.weldTypeNum);
@@ -1255,7 +1272,8 @@ export default {
              //电压初始化  推荐值正负20即可
             this.diffMin2 =Math.round((parseInt(list.RECOMMEND_V_WELDING)-20))/10;
             this.diffMax2 =Math.round((parseInt(list.RECOMMEND_V_WELDING)+20))/10;
-            this.block2 =this.max2-this.min2;
+            this.block2 =this.max2-this.min2; 
+       this.sepecialDiameter();    
     }
   
     //初始化 电流控制器
@@ -1327,6 +1345,7 @@ export default {
   },
   destroyed(){
       let self =this;
+      self.firstInit=true;
       clearTimeout(self.autoTimeoutFlag);
     //   window.removeEventListener(null, self.goBack, "#");
   },
@@ -1339,7 +1358,7 @@ export default {
                 this.modelType=this.getModelType(val.substring(2,4));
                 //   alert(this.modelType)
                 this.wtlLog('newIndex_bfa3','this.modelType'+this.modelType);
-                  
+                  alert(val)
                 var rst =this.buildData('newIndex',this.modelType,val.replace(/\s+/g,"").replace(/(.{2})/g,'$1 ').replace(/(^\s*)|(\s*$)/g, ""));
                  
                  if(JSON.stringify(rst) != "{}"){
@@ -1348,7 +1367,6 @@ export default {
                     //新规则: 指令ff+crc+检验crc   测试模式不发送
                     this.callSendDataToBleUtil('newIndex','DAFF'+invalue+this.crcModelBusClacQuery('FF'+invalue, true),invalue);
                     //重新初始化
-                    // alert(11)
                     this.initData();
                 }
                 
