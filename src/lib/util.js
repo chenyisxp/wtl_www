@@ -47,23 +47,32 @@ Array.prototype.in_array = function (element) {
                         typeName:'DIAMETER',
                         chooseKey:0,//默认选中
                         comList:[
-                            {id:0,key:'25mm',value:'2.5mm'},{id:1,key:'32mm',value:'3.2mm'},{id:2,key:'40mm',value:'4.0mm'},{id:3,key:'50mm',value:'5.0mm'}
+                            {id:0,key:'25mm',value:'2.5mm'},{id:1,key:'32mm',value:'3.2mm'},{id:2,key:'40mm',value:'4.0mm'}
                         ],
                          //单位切换inch
                          inchComList:[
-                            {id:0,key:'25mm',value:'3/32"'},{id:1,key:'32mm',value:'1/8"'},{id:2,key:'40mm',value:'5/32"'},{id:4,key:'50mm',value:'3/16"'}
+                            {id:0,key:'25mm',value:'3/32"'},{id:1,key:'32mm',value:'1/8"'},{id:2,key:'40mm',value:'5/32"'}
                         ]
                     },{
                         typeName:'THICKNESS',
                         chooseKey:0,//默认选中
+                        // comList:[
+                        //     {id:0,key:'6mm',value:'0.6mm'},{id:1,key:'8mm',value:'0.8mm'},{id:2,key:'9mm',value:'0.9mm'},{id:3,key:'12mm',value:'1.2mm'},{id:4,key:'16mm',value:'1.6mm'},{id:5,key:'20mm',value:'2.0mm'},{id:6,key:'25mm',value:'2.5mm'},{id:7,key:'32mm',value:'3.2mm'},{id:8,key:'48mm',value:'4.8mm'},{id:9,key:'64mm',value:'6.4mm'},{id:10,key:'80mm',value:'8.0mm'},{id:11,key:'95mm',value:'9.5mm'}
+                        //     ,{id:12,key:'110mm',value:'11mm'},{id:13,key:'127mm',value:'12.7mm'}
+                        // ],
+                        // //单位切换inch
+                        // inchComList:[
+                        //     {id:0,key:'6mm',value:'24GA'},{id:1,key:'8mm',value:'22GA'},{id:2,key:'9mm',value:'20GA'},{id:3,key:'12mm',value:'18GA'},{id:4,key:'16mm',value:'16GA'},{id:5,key:'20mm',value:'14GA'},{id:6,key:'25mm',value:'12GA'},{id:7,key:'32mm',value:'1/8"'},{id:8,key:'48mm',value:'3/16"'},{id:9,key:'64mm',value:'1/4"'},{id:10,key:'80mm',value:'5/16"'},{id:11,key:'95mm',value:'3/8"'}
+                        //     ,{id:12,key:'110mm',value:'7/16"'},{id:13,key:'127mm',value:'1/2"'}
+                        // ]
                         comList:[
-                            {id:0,key:'6mm',value:'0.6mm'},{id:1,key:'8mm',value:'0.8mm'},{id:2,key:'9mm',value:'0.9mm'},{id:3,key:'12mm',value:'1.2mm'},{id:4,key:'16mm',value:'1.6mm'},{id:5,key:'20mm',value:'2.0mm'},{id:6,key:'25mm',value:'2.5mm'},{id:7,key:'32mm',value:'3.2mm'},{id:8,key:'48mm',value:'4.8mm'},{id:9,key:'64mm',value:'6.4mm'},{id:10,key:'80mm',value:'8.0mm'},{id:11,key:'95mm',value:'9.5mm'}
-                            ,{id:12,key:'110mm',value:'11mm'},{id:13,key:'127mm',value:'12.7mm'}
+                            {id:0,key:'6MM',value:'0.6mm'},{id:1,key:'7MM',value:'0.7mm'},{id:2,key:'9MM',value:'0.9mm'},{id:3,key:'12MM',value:'1.2mm'},{id:4,key:'16MM',value:'1.6mm'},{id:5,key:'21MM',value:'2.1mm'},{id:6,key:'28MM',value:'2.8mm'},{id:7,key:'34MM',value:'3.4mm'},{id:8,key:'48MM',value:'4.8mm'},{id:9,key:'64MM',value:'6.4mm'},{id:10,key:'80MM',value:'8.0mm'},{id:11,key:'95MM',value:'9.5mm'}
+                            ,{id:12,key:'110MM',value:'11mm'},{id:13,key:'127MM',value:'12.7mm'}
                         ],
                         //单位切换inch
                         inchComList:[
-                            {id:0,key:'6mm',value:'24GA'},{id:1,key:'8mm',value:'22GA'},{id:2,key:'9mm',value:'20GA'},{id:3,key:'12mm',value:'18GA'},{id:4,key:'16mm',value:'16GA'},{id:5,key:'20mm',value:'14GA'},{id:6,key:'25mm',value:'12GA'},{id:7,key:'32mm',value:'1/8"'},{id:8,key:'48mm',value:'3/16"'},{id:9,key:'64mm',value:'1/4"'},{id:10,key:'80mm',value:'5/16"'},{id:11,key:'95mm',value:'3/8"'}
-                            ,{id:12,key:'110mm',value:'7/16"'},{id:13,key:'127mm',value:'1/2"'}
+                            {id:0,key:'6MM',value:'24GA'},{id:1,key:'7MM',value:'22GA'},{id:2,key:'9MM',value:'20GA'},{id:3,key:'12MM',value:'18GA'},{id:4,key:'16MM',value:'16GA'},{id:5,key:'21MM',value:'14GA'},{id:6,key:'28MM',value:'12GA'},{id:7,key:'34MM',value:'1/8"'},{id:8,key:'48MM',value:'3/16"'},{id:9,key:'64MM',value:'1/4"'},{id:10,key:'80MM',value:'5/16"'},{id:11,key:'95MM',value:'3/8"'}
+                            ,{id:12,key:'110MM',value:'7/16"'},{id:13,key:'127MM',value:'1/2"'}
                         ]
                     }
                 ], /** tigsyn模式**/
@@ -131,13 +140,13 @@ Array.prototype.in_array = function (element) {
                         typeName:'POLATRITY',
                         chooseKey:0,//默认选中
                         comList:[
-                            {id:0,key:'DC',value:'DC'},{id:1,key:'AC',value:'AC'}
+                            {id:0,key:'AC',value:'AC'},{id:1,key:'DC',value:'DC'}
                         ]
                     },{
                         typeName:'Pluse',
                         chooseKey:0,//默认选中
                         comList:[
-                            {id:0,key:'PULSE',value:'On'},{id:1,key:'NOPULSE',value:'Off'}
+                            {id:0,key:'NOPULSE',value:'Off'},{id:1,key:'PULSE',value:'On'}
                         ]
                     },{
                         typeName:'HF',
@@ -484,7 +493,7 @@ Array.prototype.in_array = function (element) {
                         rstInfo.weldType='MMA';
                         rstInfo.weldTypeNum=_this.GLOBAL_CONFIG.callWeldTypeData.mma.newIndex;//这个和首页里的配对
                        //确认指令
-                       if((arrayList[1]=='229'||arrayList[1]=='213'||arrayList[1]=='197') &&arrayList.length==8){
+                       if((arrayList[1]=='229'||arrayList[1]=='213'||arrayList[1]=='197') &&arrayList.length==10){
                            //赋值开始  ......
                            var byte1Bean = num16To2Arr(arrayList[2],'MMA');
                            //拆解成
@@ -493,6 +502,7 @@ Array.prototype.in_array = function (element) {
                                 switch (element.typeName) {
                                     case 'POLATRITY':
                                         element.chooseKey=byte1Bean.acdc;
+                                        // alert(element.chooseKey)
                                         break;
                                     case 'ELECTRODE':
                                         element.chooseKey=arrthree.electrode;
@@ -507,6 +517,7 @@ Array.prototype.in_array = function (element) {
                                         break;
                                 }
                             });
+                           rstInfo.THINKNESS_VALUE=arrayList[4]?arrayList[4]:0;
                            rstInfo.ARC_FORCE_VAL =arrayList[5];
                         //    alert(  rstInfo.ARC_FORCE_VAL)
                            rstInfo.MMA_RECOMMEND_CURRENT =arrayList[6];//推荐电流
@@ -516,6 +527,8 @@ Array.prototype.in_array = function (element) {
                         //    rstInfo.MMA_MAX_CUR=byte1Bean.pfc==1?200:110;
                         //    rstInfo.MMA_MAX_CUR=byte1Bean.pfc==1?220:200;//2019.01.25修改之前错了？？？
                            rstInfo.MMA_MAX_CUR=byte1Bean.pfc==1?220:110;//2019.05.25修改之前错了？？？
+                           rstInfo.MMA_MIN_THICHNESS= arrayList[8];//板厚最小值
+                           rstInfo.MMA_MAX_THICHNESS= arrayList[9];//板厚最大值
                            rstInfo.initBean=byte1Bean;//包含很多焊接状态和单位等
                        }
                       break;
@@ -670,6 +683,8 @@ Array.prototype.in_array = function (element) {
                     temp10.push(parseInt(("0x"+strArr[5]),16).toString(10));//电弧推力
                     temp10.push(parseInt(("0x"+strArr[7]+strArr[6]),16).toString(10));//电流推荐值
                     temp10.push(parseInt(("0x"+strArr[9]+strArr[8]),16).toString(10));//电流
+                    temp10.push(parseInt(("0x"+strArr[10]),16).toString(10));//板厚最小值
+                    temp10.push(parseInt(("0x"+strArr[11]),16).toString(10));//板厚最大值
                     //转成10进制
                     rstInfo = setWeldDataByType(temp10,weldDirctive.mma,pageFrom,_this);
                 }else if(compareString(dirctiveType,weldDirctive.tigMan)){

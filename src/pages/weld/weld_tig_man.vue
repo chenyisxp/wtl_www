@@ -249,8 +249,8 @@ export default {
           typeName: "POLATRITY",
           chooseKey: 0, //默认选中
           comList: [
-            { id: 0, key: "DC", value: "DC" },
-            { id: 1, key: "AC", value: "AC" },
+            { id: 0, key: "AC", value: "AC" },
+            { id: 1, key: "DC", value: "DC" },
           ]
         },
         {
@@ -1535,6 +1535,8 @@ export default {
       }
       console.log(this.keyArr)
       console.log(this.nowChooseLineKey);
+      //记录选中的 避免每次刷新后重置选项
+      window.android.saveKeyStorage('tig_man_nowChooseLineKey',this.nowChooseLineKey);
       //1、画选中的那条线
       // this.drawCharMainContrl(this.nowModelTypeName);
       //11、改造为 图片替换成当前模式的图片即可 不画图了

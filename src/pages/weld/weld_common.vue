@@ -2,8 +2,9 @@
   <div class="weldMMA" :class="ifFixedFlag?'weldFixed':''" ref="allPage">
         <div class="mmp" ref="mmpId" id="idid">
                  <div class="header"><Icon type="ios-arrow-back" @click="go('/newIndex')"/>{{changeStrEmptyName(typeName)}}<span class="setupyi">SET UP</span></div>
-                 <!-- 业务需要 mig_material 值 ==0 显示gas选项否则隐藏 只有FCAW-S 没有气体--> 
-                <div class="containList" v-for="(item,index) in nowTypeList" :key="index" :class="item.typeName=='GAS'&& MIG_MATERIAL ==3?'eleUnShow':''">
+                 <!-- 业务需要 mig_material 值 ==0 显示gas选项否则隐藏 只有FCAW-S 没有气体 又改为显示no gas--> 
+                <!-- <div class="containList" v-for="(item,index) in nowTypeList" :key="index" :class="item.typeName=='GAS'&& MIG_MATERIAL ==3?'eleUnShow':''"> -->
+                <div class="containList" v-for="(item,index) in nowTypeList" :key="index">
                 <!-- <div class="containList" v-for="(item,index) in nowTypeList" :key="index"> -->
                     <div class="common" >
                         <div class="typename" v-if="UnitFlag==1" :class="item.typeName" @click="openModal(item.typeName,item.inchComList,item.chooseKey)">{{changeStrShowName(item.typeName)}}</div>
@@ -16,7 +17,7 @@
                             @click="openModal(item.typeName,item.comList,item.chooseKey)"
                             >
                                 <span style="padding-right:11px">{{bean.value}}</span>
-                                <span style="padding-right:10px;"><img src="../../assets/images/edit.png" ></span>
+                                <span style="padding-right:10px;" v-if="!(item.typeName=='GAS' && MIG_MATERIAL==3)"><img src="../../assets/images/edit.png" ></span>
                             </div>
                         </div>
                         <div class="btn" v-if="UnitFlag==1">
@@ -27,7 +28,7 @@
                             @click="openModal(item.typeName,item.inchComList,item.chooseKey)"
                             >
                                 <span style="padding-right:11px">{{bean.value}}</span>
-                                <span style="padding-right:10px;"><img src="../../assets/images/edit.png" ></span>
+                                <span style="padding-right:10px;" v-if="!(item.typeName=='GAS' && MIG_MATERIAL==3)"><img src="../../assets/images/edit.png" ></span>
                             </div>
                         </div>
                     </div>
@@ -567,6 +568,10 @@ export default {
           this.nowChoose =key;
       },
     openModal(typename,comList,chooseKey){
+        // 特殊处理
+        if(typename==='GAS' && chooseKey===8){
+            return;
+        }
       let self =this;
       //00、 判断是不是焊接中，焊接中不能编辑部分参数
       if(self.$store.state.weldingStatus==1){
@@ -799,26 +804,26 @@ export default {
                        }
                     }
                 });
-            }else if(chooseTempKey==1){//Ss mix
+            }else if(chooseTempKey==1){//Ss co2
             console.log('ss')
                   this.nowTypeList.forEach(element => {
                       console.log(element.typeName);
                     if(element.typeName=='GAS'){
                         console.log(element.chooseKey)
-                       if(element.chooseKey==1){
+                       if(element.chooseKey==0){
                             element.comList=[
-                               {id:1,key:'MIX',value:'MIX'}
+                               {id:0,key:'CO2',value:'CO2'}
                             ];
                             element.inchComList=[
-                               {id:1,key:'MIX',value:'MIX'}
+                               {id:0,key:'CO2',value:'CO2'}
                             ]
                        }else{
-                            element.chooseKey=1//默认选中
+                            element.chooseKey=0//默认选中
                             element.comList=[
-                                {id:1,key:'MIX',value:'MIX'}
+                                {id:0,key:'CO2',value:'CO2'}
                             ];
                             element.inchComList=[
-                              {id:1,key:'MIX',value:'MIX'}
+                              {id:0,key:'CO2',value:'CO2'}
                             ]
                        }
                     }
@@ -844,7 +849,20 @@ export default {
                        }
                     }
                 });
-            }else if(chooseTempKey==4){//Ss|fcaw-g = mix
+            }else if(chooseTempKey==3){//FCAW-Ss = no gas
+                  this.nowTypeList.forEach(element => {
+                    if(element.typeName=='GAS'){
+                        element.chooseKey=8//默认选中                       
+                        element.comList=[
+                            {id:8,key:'nogas',value:'NO GAS'}
+                        ],
+                        element.inchComList=[
+                            {id:8,key:'nogas',value:'NO GAS'}
+                        ]
+                    }
+                });
+            }
+            else if(chooseTempKey==4){//Ss|fcaw-g = mix
                   this.nowTypeList.forEach(element => {
                     if(element.typeName=='GAS'){
                        if(element.chooseKey==1){

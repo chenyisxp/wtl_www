@@ -288,11 +288,11 @@ export default {
             [6,{num:'2.8mm',height:28,id:6}],
             [7,{num:'3.4mm',height:34,id:7}],
             [8,{num:'4.8mm',height:48,id:8}],
-            [8,{num:'6.4mm',height:64,id:9}],
-            [9,{num:'8.0mm',height:88,id:10}],
-            [10,{num:'9.5mm',height:95,id:11}],
-            [11,{num:'11mm',height:110,id:12}],
-            [12,{num:'12.7mm',height:127,id:13}]
+            [9,{num:'6.4mm',height:64,id:9}],
+            [10,{num:'8.0mm',height:88,id:10}],
+            [11,{num:'9.5mm',height:95,id:11}],
+            [12,{num:'11mm',height:110,id:12}],
+            [13,{num:'12.7mm',height:127,id:13}]
         ]),
            rulerInchNumAtrMap:  new Map([
             [0,{num:'24GA',height:6,id:0}],
@@ -477,6 +477,7 @@ export default {
         var maxTY =btTY-90;//去除底部高度
         var minTY =btTY -90-150;
         var circlrTY=maxTY-minTY;//范围区间
+         
         //计算出每个长度对应的位置
          for (let i = 0; i < self.rulerNumAtr.length; i++) {
              //公式原则：在区间+-1 1算是精确度
@@ -880,16 +881,18 @@ export default {
         if(max<=min){
             return;
         }else{
-            for( i;i<max;i++){
+            for( i;i<=max;i++){
+                console.log(this.rulerNumAtrMap.get(parseInt(i)))
                 this.rulerInchNumAtr.push(this.rulerInchNumAtrMap.get(parseInt(i)));
                 this.rulerNumAtr.push(this.rulerNumAtrMap.get(parseInt(i)))
             }
         }
-       console.log(this.rulerNumAtr);
+       
       let vag =Math.round((this.commonContainHeight/130)*100)/100;
       this.rulerNumAtr.forEach(element => {
          element.height= Math.round((vag * element.height)*10)/10;
       });
+    //   console.log(this.commonContainHeight);
     },
     initFuc(){
         var list  ={};

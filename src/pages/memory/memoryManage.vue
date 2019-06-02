@@ -102,16 +102,20 @@ export default {
     },
     //for android 给安卓用的方法 begin
     broastFromAndroid(data,pageFrom,index,openTestFlag){
-      
           this.isLoading=false;
           clearTimeout(this.LoadingTimer)
           //去除空格 截取出通道号
           data = data.replace(/\s+/g,"");
           var pupnum =data.substring(4,6);//通道号
-          var newData=data.substring(0,4)+data.substring(6,data.length);
+          // let temp =parseInt(pupnum,16).toString(2);
+          pupnum =parseInt(parseInt(pupnum,16).toString(2).substring(1,8),2);
+          // var newData=data.substring(0,4)+data.substring(6,data.length);
+          let newData =data;
          
           //返回的通道数不一致
           // console.log(pupnum+'||||'+index+'');
+        
+          // alert('weld_memory_manage'+"pupnum="+pupnum+',index='+index+',newData'+newData);
           this.wtlLog('weld_memory_manage',"pupnum="+pupnum+',index='+index+',newData'+newData);
           if(parseInt(pupnum)!=index){
             Toast({
@@ -178,7 +182,9 @@ export default {
           //存储的byte0字节是个通道 序号
           switch (index) {
             case '1':
-                this.broastFromAndroid('dad1 01 00 00 00 00 02 00 3C00 3D00 b400 c800 02 09 4956','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
+              console.log(1111)
+                // this.broastFromAndroid('dad1 01 00 00 00 00 02 00 3C00 3D00 b400 c800 02 09 4956','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
+                   this.broastFromAndroid('dad1 81 04 01 02 07 55 32 00 4600 e100 da00 05 0a b07e','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
                 break;
             case '2':
                 this.broastFromAndroid('dad2 02 00 3D00 c800 00 7503','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);

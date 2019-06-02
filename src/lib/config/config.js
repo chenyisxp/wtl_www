@@ -30,7 +30,9 @@ let BASE_CONFIG = {
         // tigman:{heade:'dae',headm:'dad',headc:'dac',data:'442063A0F004F15000F000A00050052000A320F4A13'},
         tigman:{heade:'dae',headm:'dad',headc:'dac',data:'44202041e004f690069000a0005001e001e32ff4f1'},
 
-        mma:{heade:'dae',headm:'dad',headc:'dac',data:'5 82 00 01 09 6400 6400 FD9D'},
+        // mma:{heade:'dae',headm:'dad',headc:'dac',data:'5 82 00 01 09 6400 6400 01 09 8768'},
+        // mma:{heade:'dae',headm:'dad',headc:'dac',data:'5 02 00 01 09 6400 6400 01 09 6F6F'},
+        mma:{heade:'dae',headm:'dad',headc:'dac',data:'5 02 10 09 09 aa00 aa00 07 09 6f8e'},
         //2、焊接准备中的状态 参数模拟       
         // migsyn:{heade:'dae',headm:'dad',headc:'dac',data:'1 40 00 00 00 02 00 3C00 3D00 b400 c800 02 09 DE46'},
         // migman:{heade:'dae',headm:'dad',headc:'dac',data:'2 40 3D00 c800 00 F53B'},
@@ -45,7 +47,7 @@ let BASE_CONFIG = {
         migman:{data:'dae2 04 3D00 c800 00 B134'},
         tigsyn:{data:'dae3 04 00 03 6400 6400 02 09 50 05 7EC1'},
         tigman:{data:'dae4 04 c0 32 3200 32 3200 3200 e800 32 32 3200 32 50 23 0073'},
-        mma:{data:'dae5 04 00 01 09 6400 6400 28F6'}
+        mma:{data:'dae5 04 00 01 09 6400 6400  01 09 708F'}
    },
    callEditDirect:{
        migsyn:{

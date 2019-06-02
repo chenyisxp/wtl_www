@@ -280,38 +280,41 @@ export default {
         typeName:'',
         nowTypeList:[],//共通title数据集合
         chooseKey:[],//共通选中集合
-        rulerNumAtr:  [
-            {num:'0.6mm',height:6,id:0},
-            {num:'0.8mm',height:7,id:1},
-            {num:'0.9mm',height:9,id:2},
-            {num:'1.2mm',height:12,id:3},
-            {num:'1.6mm',height:16,id:4},
-            {num:'2.0mm',height:21,id:5},
-            {num:'2.5mm',height:28,id:6},
-            {num:'3.2mm',height:34,id:7},
-            {num:'4.8mm',height:48,id:8},
-            {num:'6.4mm',height:64,id:9},
-            {num:'8.0mm',height:88,id:10},
-            {num:'9.5mm',height:95,id:11},
-            {num:'11mm',height:110,id:12},
-            {num:'12.7mm',height:127,id:13}
-        ],
-           rulerInchNumAtr:  [
-            {num:'24GA',height:6,id:0},
-            {num:'22GA',height:7,id:1},
-            {num:'20GA',height:9,id:2},
-            {num:'18GA',height:12,id:3},
-            {num:'16GA',height:16,id:4},
-            {num:'14GA',height:21,id:5},
-            {num:'12GA',height:28,id:6},
-            {num:'1/8"',height:34,id:7},
-            {num:'3/16"',height:48,id:8},
-            {num:'1/4"',height:64,id:9},
-            {num:'5/16"',height:88,id:10},
-            {num:'3/8"',height:95,id:11},
-            {num:'7/16"',height:110,id:12},
-            {num:'1/2"',height:127,id:13}
-        ]
+        rulerNumAtrMap:  new Map([
+            [0,{num:'0.6mm',height:6,id:0}],
+            [1,{num:'0.8mm',height:8,id:1}],
+            [2,{num:'0.9mm',height:9,id:2}],
+            [3,{num:'1.2mm',height:12,id:3}],
+            [4,{num:'1.6mm',height:16,id:4}],
+            [5,{num:'2.1mm',height:21,id:5}],
+            [6,{num:'2.8mm',height:28,id:6}],
+            [7,{num:'3.4mm',height:34,id:7}],
+            [8,{num:'4.8mm',height:48,id:8}],
+            [9,{num:'6.4mm',height:64,id:9}],
+            [10,{num:'8.0mm',height:88,id:10}],
+            [11,{num:'9.5mm',height:95,id:11}],
+            [12,{num:'11mm',height:110,id:12}],
+            [13,{num:'12.7mm',height:127,id:13}]
+        ]),
+        rulerInchNumAtrMap:  new Map([
+            [0,{num:'24GA',height:6,id:0}],
+            [1,{num:'22GA',height:7,id:1}],
+            [2,{num:'20GA',height:9,id:2}],
+            [3,{num:'18GA',height:12,id:3}],
+            [4,{num:'16GA',height:16,id:4}],
+            [5,{num:'14GA',height:21,id:5}],
+            [6,{num:'12GA',height:28,id:6}],
+            [7,{num:'1/8"',height:34,id:7}],
+            [8,{num:'3/16"',height:48,id:8}],
+            [9,{num:'1/4"',height:64,id:9}],
+            [10,{num:'5/16"',height:88,id:10}],
+            [11,{num:'3/8"',height:95,id:11}],
+            [12,{num:'7/16"',height:110,id:12}],
+            [13,{num:'1/2"',height:127,id:13}]
+        ]),
+        rulerNumAtr:[],
+        rulerInchNumAtr:[],
+        nowThinknessSendIndex:''
 
 
      }
@@ -379,11 +382,15 @@ export default {
                 if(self.actualNum){
                     for (let i = 0; i < self.rulerNumAtr.length; i++) {
                         if(self.rulerNumAtr[i].num==self.actualNum){
+                            self.nowThinknessSendIndex = self.rulerNumAtr[i].id;//当前的厚度索引值
                             midLine.style.height = self.rulerNumAtr[i].height+'px';
                             cubeBox1.style.height =self.rulerNumAtr[i].height+'px';
                             self.nowTouchIndex =i;
-                            console.log(self.rulerNumAtr);
-                            console.log(i);
+                            // midLine.style.height = self.rulerNumAtr[i].height+'px';
+                            // cubeBox1.style.height =self.rulerNumAtr[i].height+'px';
+                            // self.nowTouchIndex =i;
+                            // console.log(self.rulerNumAtr);
+                            // console.log(i);
                             break;
                        }
                         
@@ -477,19 +484,28 @@ export default {
         var maxTY =btTY-90;//去除底部高度
         var minTY =btTY -90-150;
         var circlrTY=maxTY-minTY;//范围区间
+         
         //计算出每个长度对应的位置
          for (let i = 0; i < self.rulerNumAtr.length; i++) {
              //公式原则：在区间+-1 1算是精确度
-             console.log(self.rulerNumAtr)
-             console.log(pagey)
-             console.log(((self.rulerNumAtr[i].height/130)*circlrTY+minTY)-1)
-             console.log(((self.rulerNumAtr[i].height/130)*circlrTY+minTY)+1)
+            //  console.log(self.rulerNumAtr)
+            //  console.log(pagey)
+            //  console.log(((self.rulerNumAtr[i].height/130)*circlrTY+minTY)-1)
+            //  console.log(((self.rulerNumAtr[i].height/130)*circlrTY+minTY)+1)
+            // if(pagey>(((self.rulerNumAtr[i].height/130)*circlrTY+minTY)-1) && pagey<(((self.rulerNumAtr[i].height/130)*circlrTY+minTY)+1) ){
+            //     midLine.style.height = self.rulerNumAtr[i].height+'px';
+            //     cubeBox1.style.height =self.rulerNumAtr[i].height+'px';
+            //     self.actualNum =self.rulerNumAtr[i].num;
+            //     self.nowTouchIndex =self.rulerNumAtr[i].id;
+            //     console.log(self.nowTouchIndex)
+            //     break;
+            // }
             if(pagey>(((self.rulerNumAtr[i].height/130)*circlrTY+minTY)-1) && pagey<(((self.rulerNumAtr[i].height/130)*circlrTY+minTY)+1) ){
                 midLine.style.height = self.rulerNumAtr[i].height+'px';
                 cubeBox1.style.height =self.rulerNumAtr[i].height+'px';
                 self.actualNum =self.rulerNumAtr[i].num;
-                self.nowTouchIndex =self.rulerNumAtr[i].id;
-                console.log(i)
+                self.nowTouchIndex =self.rulerNumAtr[i].id;//这里应该使用id不能用i i只是循环标记
+                console.log(self.nowTouchIndex)
                 break;
             }
         //    if(self.rulerNumAtr[i].num==self.actualNum){
@@ -712,7 +728,9 @@ export default {
             if(element.typeName==type){
                 element.chooseKey=this.nowTouchIndex;//修改当前选中的数值 改造为以index为记录值 兼容不同单位
                  var dirctCode = this.getDirective(this.typeName,type);
-               var num = (Array(4).join('0') + parseInt(this.nowTouchIndex,10).toString(16)).slice(-4);
+            //    var num = (Array(4).join('0') + parseInt(this.nowTouchIndex,10).toString(16)).slice(-4);
+              //new 新规则
+              var num =this.jinzhiChangeFuc(this.nowThinknessSendIndex);
                var crc =this.crcModelBusClacQuery(dirctCode+num, true);
                var sendData ="DA"+dirctCode+num+crc;
                
@@ -891,6 +909,30 @@ export default {
             break;
        }
       },
+          //数组 滑动 数组构造
+    buildRulerArrRange(min,max){
+        console.log(max)
+        console.log(min)
+        var tempArr =[];
+        var tempInchArr =[];
+        
+        var i =min;
+        //根据上传的范围显示出范围 先轴的值不变值限范围就好
+        if(max<=min){
+            return;
+        }else{
+            for( i;i<=max;i++){
+                this.rulerInchNumAtr.push(this.rulerInchNumAtrMap.get(parseInt(i)));
+                this.rulerNumAtr.push(this.rulerNumAtrMap.get(parseInt(i)))
+            }
+        }
+       
+      let vag =Math.round((this.commonContainHeight/130)*100)/100;
+      this.rulerNumAtr.forEach(element => {
+         element.height= Math.round((vag * element.height)*10)/10;
+      });
+      console.log(this.rulerNumAtr);
+    },
     initFuc(){
         var list  ={};
         if(this.pageBackTo=='/memoryManage'){//来自momery页
@@ -898,14 +940,41 @@ export default {
         }else{
             list  =this.$store.state.rstInfo;
         }
-        if(list.initBean.unit==1){
+        if(this.firstInit){
+            this.firstInit=false;
+            //滑动thinkness赋值
+            this.buildRulerArrRange(list.MMA_MIN_THICHNESS,list.MMA_MAX_THICHNESS);
+            // this.typeName='TIG SYN';
+            if(list.initBean.unit==1){
                 this.UnitFlag=1;
                 this.rulerNumAtr =this.rulerInchNumAtr;
-                this.actualNum = '24GA'
-        }else{
-            this.actualNum = '0.6mm'
-            this.UnitFlag=0;
+                this.rulerNumAtr.forEach(element => {
+                    if(element.id==list.THINKNESS_VALUE){
+                        this.actualNum =element.num;
+                        return false;
+                    }
+                });
+                // this.actualNum = '24GA'
+            }else{
+                this.rulerNumAtr.forEach(element => {
+                    if(element.id==list.THINKNESS_VALUE){
+                        this.actualNum =element.num;
+                        return false;
+                    }
+                });
+                this.UnitFlag=0;
+            }
         }
+        // if(list.initBean.unit==1){
+        //         this.UnitFlag=1;
+        //         this.rulerNumAtr =this.rulerInchNumAtr;
+        //         this.actualNum = '24GA'
+        // }else{
+        //     this.actualNum = '0.6mm'
+        //     this.UnitFlag=0;
+        // }
+        console.log(list)
+        console.log(this.actualNum)
         this.isReadyFlag =list.initBean.isReadyFlag;//是否焊接准备完毕
         this.nowModalTypeId =list.weldTypeNum;//后退回去时用
         this.nowTypeList =list.nowTypeList;
@@ -1024,6 +1093,7 @@ export default {
   destroyed(){
     //   alert('add')
     let self =this;
+     self.firstInit =true;
     clearTimeout(self.autoTimeoutFlag);
     // window.removeEventListener('popstate', this.go('/newIndex'), false);
   }
