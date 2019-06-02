@@ -882,7 +882,7 @@ export default {
             return;
         }else{
             for( i;i<=max;i++){
-                console.log(this.rulerNumAtrMap.get(parseInt(i)))
+                // console.log(this.rulerNumAtrMap.get(parseInt(i)))
                 this.rulerInchNumAtr.push(this.rulerInchNumAtrMap.get(parseInt(i)));
                 this.rulerNumAtr.push(this.rulerNumAtrMap.get(parseInt(i)))
             }
@@ -891,8 +891,9 @@ export default {
       let vag =Math.round((this.commonContainHeight/130)*100)/100;
       this.rulerNumAtr.forEach(element => {
          element.height= Math.round((vag * element.height)*10)/10;
+         console.log(element.height)
       });
-    //   console.log(this.commonContainHeight);
+      console.log(this.rulerNumAtr);
     },
     initFuc(){
         var list  ={};

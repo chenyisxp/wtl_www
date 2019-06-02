@@ -921,17 +921,25 @@ export default {
         if(max<=min){
             return;
         }else{
+            let temp ='';
             for( i;i<=max;i++){
+                // console.log(this.rulerNumAtrMap.get(parseInt(i)))
+                temp=i;
                 this.rulerInchNumAtr.push(this.rulerInchNumAtrMap.get(parseInt(i)));
                 this.rulerNumAtr.push(this.rulerNumAtrMap.get(parseInt(i)))
             }
+            //  let vag =Math.round((this.commonContainHeight/130)*100)/100;
+            // this.rulerNumAtr.forEach(element => {
+            //     element.height= Math.round((vag * element.height)*10)/10;
+            //     console.log(element.height)
+            //     // console.log(this.rulerNumAtr)
+            // });
+            
+            
         }
        
-      let vag =Math.round((this.commonContainHeight/130)*100)/100;
-      this.rulerNumAtr.forEach(element => {
-         element.height= Math.round((vag * element.height)*10)/10;
-      });
-      console.log(this.rulerNumAtr);
+     
+      
     },
     initFuc(){
         var list  ={};
