@@ -96,11 +96,13 @@ Array.prototype.in_array = function (element) {
                         typeName:'DIAMETER',
                         chooseKey:0,//默认选中
                         comList:[
-                            {id:0,key:'16MM',value:'1.6mm'},{id:1,key:'24MM',value:'2.4mm'},{id:2,key:'32MM',value:'3.2mm'},{id:3,key:'40MM',value:'4.0mm'}
+                            {id:0,key:'16MM',value:'1.6mm'},{id:1,key:'24MM',value:'2.4mm'},{id:2,key:'32MM',value:'3.2mm'}
+                            // ,{id:3,key:'40MM',value:'4.0mm'}
                         ],
                         //单位切换inch
                         inchComList:[
-                            {id:0,key:'16MM',value:'1/16"'},{id:1,key:'24MM',value:'3/32"'},{id:2,key:'32MM',value:'1/8"'},{id:4,key:'40MM',value:'5/32"'}
+                            {id:0,key:'16MM',value:'1/16"'},{id:1,key:'24MM',value:'3/32"'},{id:2,key:'32MM',value:'1/8"'}
+                            // ,{id:4,key:'40MM',value:'5/32"'}
                         ]
                     },
                     {
@@ -527,8 +529,8 @@ Array.prototype.in_array = function (element) {
                         //    rstInfo.MMA_MAX_CUR=byte1Bean.pfc==1?200:110;
                         //    rstInfo.MMA_MAX_CUR=byte1Bean.pfc==1?220:200;//2019.01.25修改之前错了？？？
                            rstInfo.MMA_MAX_CUR=byte1Bean.pfc==1?220:110;//2019.05.25修改之前错了？？？
-                           rstInfo.MMA_MIN_THICHNESS= arrayList[8];//板厚最小值
-                           rstInfo.MMA_MAX_THICHNESS= arrayList[9];//板厚最大值
+                           rstInfo.MMA_MIN_THICHNESS= arrayList[8] ||0;//板厚最小值
+                           rstInfo.MMA_MAX_THICHNESS= arrayList[9] ||13;//板厚最大值
                            rstInfo.initBean=byte1Bean;//包含很多焊接状态和单位等
                        }
                       break;
@@ -816,6 +818,7 @@ Array.prototype.in_array = function (element) {
                     bean.electrode=0;//默认值
                 }
                 bean.diameter= parseInt(buildArr[3]+buildArr[4]+buildArr[5],2);
+                
                 if( bean.diameter>3){
                     bean.diameter=0;//默认值
                 }

@@ -489,7 +489,7 @@ export default {
                 cubeBox1.style.height =self.rulerNumAtr[i].height+'px';
                 self.actualNum =self.rulerNumAtr[i].num;
                 self.nowTouchIndex =self.rulerNumAtr[i].id;//这里应该使用id不能用i i只是循环标记
-                console.log(self.nowTouchIndex)
+                self.nowThinknessSendIndex =self.rulerNumAtr[i].id
                 break;
             }
         }
@@ -524,12 +524,30 @@ export default {
                 self.ifFixedFlag=true;
                 //初始化滑动组件
                 // self.actualNum=chooseValue.replace('mm','');
+                self.getNowThinknessChoosed(chooseKey);
                 self.sliderParentInit();
             }
           }
           
         ,200)
    
+    },
+     getNowThinknessChoosed(id){
+        //选中的id
+        if( this.UnitFlag==1){
+                this.rulerNumAtr =this.rulerInchNumAtr;
+                this.rulerNumAtr.forEach(element => {
+                    if(element.id==id){
+                        this.actualNum =element.num;
+                    }
+                });
+            }else{
+                this.rulerNumAtr.forEach(element => {
+                    if(element.id==id){
+                        this.actualNum =element.num;
+                    }
+                });
+            }
     },
     //抽屉弹层的确认键
     newCloseModal(modalType){

@@ -716,7 +716,14 @@ export default {
       } 
        window['broastFromAndroid'] = (data,pageFrom) => {
           //如果和现在选的模式不一致，不进行跳转
+          //  alert(data)
+          if(that.$store.state.oldBroastData && that.$store.state.oldBroastData===data){
+            //重复不做处理
+            // return;
+          }
           // alert(data)
+          that.$store.state.oldBroastData =data;
+          
           var tempType=that.getModelType(data.substring(2,4));
           if(that.modelType!=tempType){
             return;

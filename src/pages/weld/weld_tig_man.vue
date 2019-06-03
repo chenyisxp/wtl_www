@@ -604,9 +604,10 @@ export default {
                 this.nowChooseKeysMap.get('MODE')
               +this.nowChooseKeysMap.get('POLATRITY')
               +this.nowChooseKeysMap.get('HF')
-              +this.nowChooseKeysMap.get('PLUSE');
+              +this.nowChooseKeysMap.get('Pluse');
             //  num = (Array(4).join('0') + parseInt(num,2).toString(16)).slice(-4)
              //新规则占两个字节的字段需要特殊处理
+             console.log(num)
               var num =this.jinzhiChangeFuc(parseInt(num,2));
         var crc = this.crcModelBusClacQuery(dirctCode + num, true);
         var sendData = "DA" + dirctCode + num + crc;        
@@ -627,16 +628,16 @@ export default {
           this.nowDCORACFLAG=0;
         }
         if(this.nowChooseKeysMap.get('MODE')==1){//4T
-          if(this.nowChooseKeysMap.get('Pluse')==0){//脉冲  
-            this.nowModelTypeName ='4T_PULSE_DC';
-          }else{
+          if(this.nowChooseKeysMap.get('Pluse')==0){//脉冲 no pluse
             this.nowModelTypeName ='4T_NOPULSE_DC';
+          }else{
+            this.nowModelTypeName ='4T_PULSE_DC';
           }
         }else{//2T
-          if(this.nowChooseKeysMap.get('Pluse')==0){//脉冲
-            this.nowModelTypeName ='2T_PULSE_DC';
-          }else{
+          if(this.nowChooseKeysMap.get('Pluse')==0){//脉冲 pluse
             this.nowModelTypeName ='2T_NOPULSE_DC';
+          }else{
+            this.nowModelTypeName ='2T_PULSE_DC';
           }
         }
         //绘图
@@ -1906,7 +1907,7 @@ export default {
                 //更新操作
                 this.modelType=this.getModelType(val.substring(2,4));
                 this.wtlLog('weld_tigman_bfa3','this.modelType'+this.modelType);
-                alert(val)
+                
                 var rst =this.buildData('newIndex',this.modelType,val.replace(/\s+/g,"").replace(/(.{2})/g,'$1 ').replace(/(^\s*)|(\s*$)/g, ""));
                  
                  if(JSON.stringify(rst) != "{}"){

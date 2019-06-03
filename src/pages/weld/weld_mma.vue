@@ -282,7 +282,7 @@ export default {
         chooseKey:[],//共通选中集合
         rulerNumAtrMap:  new Map([
             [0,{num:'0.6mm',height:6,id:0}],
-            [1,{num:'0.8mm',height:8,id:1}],
+            [1,{num:'0.7mm',height:7,id:1}],
             [2,{num:'0.9mm',height:9,id:2}],
             [3,{num:'1.2mm',height:12,id:3}],
             [4,{num:'1.6mm',height:16,id:4}],
@@ -293,7 +293,7 @@ export default {
             [9,{num:'6.4mm',height:64,id:9}],
             [10,{num:'8.0mm',height:88,id:10}],
             [11,{num:'9.5mm',height:95,id:11}],
-            [12,{num:'11mm',height:110,id:12}],
+            [12,{num:'11.0mm',height:110,id:12}],
             [13,{num:'12.7mm',height:127,id:13}]
         ]),
         rulerInchNumAtrMap:  new Map([
@@ -505,6 +505,7 @@ export default {
                 cubeBox1.style.height =self.rulerNumAtr[i].height+'px';
                 self.actualNum =self.rulerNumAtr[i].num;
                 self.nowTouchIndex =self.rulerNumAtr[i].id;//这里应该使用id不能用i i只是循环标记
+                self.nowThinknessSendIndex =self.rulerNumAtr[i].id
                 console.log(self.nowTouchIndex)
                 break;
             }
@@ -550,12 +551,32 @@ export default {
                 self.ifFixedFlag=true;
                 //初始化滑动组件
                 // self.actualNum=chooseValue.replace('mm','');
+                // alert(chooseKey+"||"+self.actualNum)
+                self.getNowThinknessChoosed(chooseKey);
                 self.sliderParentInit();
+                console.log(self.actualNum+'||'+chooseKey)
             }
           }
           
         ,200)
    
+    },
+    getNowThinknessChoosed(id){
+        //选中的id
+        if( this.UnitFlag==1){
+                this.rulerNumAtr =this.rulerInchNumAtr;
+                this.rulerNumAtr.forEach(element => {
+                    if(element.id==id){
+                        this.actualNum =element.num;
+                    }
+                });
+            }else{
+                this.rulerNumAtr.forEach(element => {
+                    if(element.id==id){
+                        this.actualNum =element.num;
+                    }
+                });
+            }
     },
     //抽屉弹层的确认键
     newCloseModal(modalType){
@@ -733,7 +754,7 @@ export default {
               var num =this.jinzhiChangeFuc(this.nowThinknessSendIndex);
                var crc =this.crcModelBusClacQuery(dirctCode+num, true);
                var sendData ="DA"+dirctCode+num+crc;
-               
+               console.log(this.nowTouchIndex+'|||||'+this.nowThinknessSendIndex)
                this.callSendDataToBleUtil('weld_mma',sendData,crc);
             }
         });
@@ -915,8 +936,13 @@ export default {
         console.log(min)
         var tempArr =[];
         var tempInchArr =[];
-        
-        var i =min;
+        min =parseInt(min);
+        var i =parseInt(min);
+        max =parseInt(max);
+        if(max>13){
+            max=13;
+        }
+        // var i =min;
         //根据上传的范围显示出范围 先轴的值不变值限范围就好
         if(max<=min){
             return;

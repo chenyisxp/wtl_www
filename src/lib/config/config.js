@@ -32,6 +32,7 @@ let BASE_CONFIG = {
 
         // mma:{heade:'dae',headm:'dad',headc:'dac',data:'5 82 00 01 09 6400 6400 01 09 8768'},
         // mma:{heade:'dae',headm:'dad',headc:'dac',data:'5 02 00 01 09 6400 6400 01 09 6F6F'},
+        // mma:{heade:'dae',headm:'dad',headc:'dac',data:'5 02 10 09 09 aa00 aa00 07 09 6f8e'},
         mma:{heade:'dae',headm:'dad',headc:'dac',data:'5 02 10 09 09 aa00 aa00 07 09 6f8e'},
         //2、焊接准备中的状态 参数模拟       
         // migsyn:{heade:'dae',headm:'dad',headc:'dac',data:'1 40 00 00 00 02 00 3C00 3D00 b400 c800 02 09 DE46'},

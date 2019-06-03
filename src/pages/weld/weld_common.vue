@@ -416,7 +416,7 @@ export default {
                             midLine.style.height = self.rulerNumAtr[i].height+'px';
                             cubeBox1.style.height =self.rulerNumAtr[i].height+'px';
                             self.nowTouchIndex =i;
-                            alert(cubeBox1.style.height+"||"+midLine.style.height+'||'+JSON.stringify(self.rulerNumAtr))
+                            // alert(cubeBox1.style.height+"||"+midLine.style.height+'||'+JSON.stringify(self.rulerNumAtr))
                             break;
                        }
                         
@@ -517,6 +517,7 @@ export default {
                 cubeBox1.style.height =self.rulerNumAtr[i].height+'px';
                 self.actualNum =self.rulerNumAtr[i].num;
                 self.nowTouchIndex =self.rulerNumAtr[i].id;
+                self.nowThinknessSendIndex =self.rulerNumAtr[i].id
                 break;
             }
             
@@ -570,34 +571,50 @@ export default {
     openModal(typename,comList,chooseKey){
         // 特殊处理
         if(typename==='GAS' && chooseKey===8){
-            return;
-        }
-      let self =this;
-      //00、 判断是不是焊接中，焊接中不能编辑部分参数
-      if(self.$store.state.weldingStatus==1){
-          return;
-      }
-      self.showBtnList=comList;
-      self.nowChoose =chooseKey;
-      self.nowtypename=typename;
-
-      self.hideFlag=true;
-      self.downshowFlag=true;
-       setTimeout(
-          function fuc(params) {
-            self.upshowFlag=true;//延迟显示底色
-            //延迟初始化 否则会读取不到原素！！！！！！！！
-            if(typename=='THICKNESS'){
-                //底部 需要fixed化 避免滚动重复
-                self.ifFixedFlag=true;
-                //初始化滑动组件
-                // self.actualNum=chooseValue.replace('mm','');
-                self.sliderParentInit();
+                    return;
+                }
+            let self =this;
+            //00、 判断是不是焊接中，焊接中不能编辑部分参数
+            if(self.$store.state.weldingStatus==1){
+                return;
             }
-          }
-          
+            self.showBtnList=comList;
+            self.nowChoose =chooseKey;
+            self.nowtypename=typename;
+
+            self.hideFlag=true;
+            self.downshowFlag=true;
+            setTimeout(
+                function fuc(params) {
+                    self.upshowFlag=true;//延迟显示底色
+                    //延迟初始化 否则会读取不到原素！！！！！！！！
+                    if(typename=='THICKNESS'){
+                        //底部 需要fixed化 避免滚动重复
+                        self.ifFixedFlag=true;
+                        //初始化滑动组件
+                        // self.actualNum=chooseValue.replace('mm','');
+                        self.getNowThinknessChoosed(chooseKey);
+                        self.sliderParentInit();
+                    }
+                }    
         ,200)
-   
+    },
+    getNowThinknessChoosed(id){
+        //选中的id
+        if( this.UnitFlag==1){
+                this.rulerNumAtr =this.rulerInchNumAtr;
+                this.rulerNumAtr.forEach(element => {
+                    if(element.id==id){
+                        this.actualNum =element.num;
+                    }
+                });
+            }else{
+                this.rulerNumAtr.forEach(element => {
+                    if(element.id==id){
+                        this.actualNum =element.num;
+                    }
+                });
+            }
     },
     //抽屉弹层的确认键
     newCloseModal(modalType){
@@ -914,8 +931,8 @@ export default {
                  this.specialDiaChoosed([1,3])
                }
                 break;
-            case 1:
-                this.specialDiaChoosed([1,2])
+            case 1://ss
+                this.specialDiaChoosed([1,3])
                 break;
             case 2:
                 this.specialDiaChoosed([2,3])
@@ -1123,6 +1140,9 @@ export default {
         min =parseInt(min);
         var i =parseInt(min);
         max =parseInt(max);
+        if(max>13){
+            max=13;
+        }
         //根据上传的范围显示出范围 先轴的值不变值限范围就好
         if(max<=min){
             return;
@@ -1376,7 +1396,6 @@ export default {
                 this.modelType=this.getModelType(val.substring(2,4));
                 //   alert(this.modelType)
                 this.wtlLog('newIndex_bfa3','this.modelType'+this.modelType);
-                  alert(val)
                 var rst =this.buildData('newIndex',this.modelType,val.replace(/\s+/g,"").replace(/(.{2})/g,'$1 ').replace(/(^\s*)|(\s*$)/g, ""));
                  
                  if(JSON.stringify(rst) != "{}"){
