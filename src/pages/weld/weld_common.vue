@@ -923,28 +923,27 @@ export default {
         });
         console.log(metiralChoosed+'||'+gasChoosed)
         switch (parseInt(metiralChoosed)) {
-            case 0:
-               if(gasChoosed==0){
+            case 0://fe
+               if(gasChoosed==0){//co2
                    console.log(99999)
-                  this.specialDiaChoosed([0,3]);
-               }else if(gasChoosed==1){
-                 this.specialDiaChoosed([1,3])
+                  this.specialDiaChoosed([1,2,3]);
+               }else if(gasChoosed==1){//mix
+                 this.specialDiaChoosed([0,1,2,3])
                }
                 break;
             case 1://ss
                 this.specialDiaChoosed([1,3])
                 break;
-            case 2:
+            case 2://ai
                 this.specialDiaChoosed([2,3])
                 break;
-            case 3:
-                this.specialDiaChoosed([2,4])
+            case 3://FCAW-S
+                this.specialDiaChoosed([2,3,4])
                 break;
-            case 4:
+            case 4://FCAW-G
                 this.specialDiaChoosed([3,4])
                 break;
             default:
-             console.log(22)
                 break;
         }
     },
