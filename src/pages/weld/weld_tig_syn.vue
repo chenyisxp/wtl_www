@@ -890,8 +890,8 @@ export default {
     },
       //数组 滑动 数组构造
     buildRulerArrRange(min,max){
-        console.log(max)
-        console.log(min)
+        max =parseInt(max);
+        min =parseInt(min);
         var tempArr =[];
         var tempInchArr =[];
         var i =min;
