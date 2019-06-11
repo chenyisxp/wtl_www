@@ -67,8 +67,15 @@
                        <input class="secd" type="number" v-model="secdTime"  min="1" max="20" >s
                     </div>
                 </li>
+                  <li class="d-li">
+                    <div class="lf">接收的报文</div>
+                   
+                </li>
+                 
             </ul>
-           
+           <div>
+               {{'22222222a2222222222222222222222a2222222222a2222222222222222222'}}
+           </div>
       </div>
         <div class="goback" @click="goback">
                 BACK
@@ -83,6 +90,7 @@ export default {
   components: {},
   data() {
     return {
+        getReportData:'',
         TESTFLAG:this.GLOBAL_CONFIG.TESTFLAG,//测试开关
         LOGFLAG:this.GLOBAL_CONFIG.LOGFLAG,//日志开关
         testDeep:this.GLOBAL_CONFIG.TESTDEEPTH,//日志深度
@@ -230,6 +238,9 @@ export default {
   watch: {
     secdTime(){
         this.GLOBAL_CONFIG.autoRouterTime = this.secdTime * 1000;
+    },
+    getReportData(){
+        return this.$store.state.oldBroastData;
     }
   }
 };
@@ -252,6 +263,7 @@ export default {
                 line-height: 50px;
                 margin: 5px 0;
                 padding: 0 15px;
+                zoom:1;
                 .lf{
                     width: 35%;
                     font-size: 14px;

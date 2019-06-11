@@ -111,7 +111,7 @@ export default {
           pupnum =parseInt(parseInt(pupnum,16).toString(2).substring(1,8),2);
           // var newData=data.substring(0,4)+data.substring(6,data.length);
           let newData =data;
-         
+          // alert(data)
           //返回的通道数不一致
           // console.log(pupnum+'||||'+index+'');
         

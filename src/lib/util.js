@@ -601,12 +601,13 @@ Array.prototype.in_array = function (element) {
                 //1、来自那个页面有自己独立的数据处理方式
                 switch (pageFrom) {
                     case 'newIndex':
-                        console.log(dirctiveType+':llll');
                         rstInfo =buidDataByPagefrom(pageFrom,dirctiveType,data,this);
                         break;
                     case 'memory':
                         console.log(dirctiveType+':ll22ll');
-                        rstInfo =buidDataByPagefrom(pageFrom,dirctiveType,data,this);
+                        let temp =data.substring(0,5)+data.substring(8,data.length)
+                        
+                        rstInfo =buidDataByPagefrom(pageFrom,dirctiveType,temp,this);
                         //  alert(JSON.stringify(rstInfo))
                         break;
                     default:
