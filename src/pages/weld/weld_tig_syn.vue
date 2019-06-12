@@ -63,7 +63,7 @@
                 <!-- 电压 -->
                 <div class="electricCurrent Voltage">
                     <div class="up">
-                        <div class="u-left"><img  src="../../assets/images/voltage.png"></div>
+                        <div class="u-left"><img  src="../../assets/images/postGas.png"></div>
                         <div class="u-right">
                             <div class="bt del" @click="delFuc2()"></div>
                             <div class="value" :class="nowPosionX2<diffMin2 || nowPosionX2>diffMax2?'dangerColor':''">{{nowPosionX2}}</div>
@@ -1398,7 +1398,7 @@ export default {
       .showna{
         height: 50px;
         line-height: 50px;
-        background: url(../../assets/images/weld_icon_introduce.png) no-repeat;
+        background: url(../../assets/images/slowTime.png) no-repeat;
         background-size: 20px;
         background-position: left center;
         padding-left: 25px;

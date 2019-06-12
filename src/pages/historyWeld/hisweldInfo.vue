@@ -176,7 +176,7 @@ export default {
                     self.$router.push({ path: '/weld_tig_syn', query:{type:'TIGMAN',pageBackTo:'/hisWeldList'} });
                     break;
                 case 3://tigman
-                    self.$router.push({ path: '/weld_tig_man', query:{type:'TIGMAN',pageBackTo:'/hisWeldList'} });
+                    self.$router.push({ path: '/weld_tig_man_his', query:{type:'TIGMAN',pageBackTo:'/hisWeldList'} });
                     break;
                 case 4://mma
                     self.$router.push({ path: '/weld_mma', query:{type:'MMA',pageBackTo:'/hisWeldList'} });
@@ -465,7 +465,7 @@ export default {
 
             }
             .m-show{
-                padding: 0 20px;
+                padding: 0 15px;
                 min-height: 50px;
                 font-size: 46px;
                 // color: #83cadf;

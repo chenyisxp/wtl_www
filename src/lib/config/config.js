@@ -28,7 +28,9 @@ let BASE_CONFIG = {
         // tigsyn:{heade:'dae',headm:'dad',headc:'dac',data:'3 00 00 03 6400 6400 02 09  2C61'},
         // tigman:{heade:'dae',headm:'dad',headc:'dac',data:'4 00 c0 32 3200 32 3200 3200 e800 32 32 3200 32 50 23 3082'},
         // tigman:{heade:'dae',headm:'dad',headc:'dac',data:'442063A0F004F15000F000A00050052000A320F4A13'},
-        tigman:{heade:'dae',headm:'dad',headc:'dac',data:'44202041e004f690069000a0005001e001e32ff4f1'},
+        // tigman:{heade:'dae',headm:'dad',headc:'dac',data:'44202041e004f690069000a0005001e001e32ff4f1'},
+        //tigman新规则
+        tigman:{heade:'dae',headm:'dad',headc:'dac',data:'4 42 02 04  1100 D923'},
 
         // mma:{heade:'dae',headm:'dad',headc:'dac',data:'5 82 00 01 09 6400 6400 01 09 8768'},
         // mma:{heade:'dae',headm:'dad',headc:'dac',data:'5 02 00 01 09 6400 6400 01 09 6F6F'},

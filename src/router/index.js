@@ -72,6 +72,11 @@ const router = new Router({
 			name: 'weld_tig_man',
 			meta:{index:17},
 			component: resolve => require(['@/pages/weld/weld_tig_man.vue'],resolve)
+		},{ //TIGM his memory
+			path: '/weld_tig_man_his',
+			name: 'weld_tig_man_his',
+			meta:{index:24},
+			component: resolve => require(['@/pages/weld/weld_tig_man_his.vue'],resolve)
 		},{ //TIGsyn模式
 			path: '/weld_tig_syn',
 			name: 'weld_tig_syn',

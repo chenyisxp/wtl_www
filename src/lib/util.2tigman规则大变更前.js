@@ -547,43 +547,6 @@ Array.prototype.in_array = function (element) {
                console.log(rstInfo);
                return rstInfo;
              }
-             function newTigmanDataBuild(arrayList,type,pageFrom,_this){
-                var rstInfo={};
-                rstInfo.nowTypeList=weldParam.tigmanList;
-                console.log(rstInfo.nowTypeList)
-                rstInfo.weldType='TIGMAN';
-                rstInfo.weldTypeNum=_this.GLOBAL_CONFIG.callWeldTypeData.tigman.newIndex;//这个和首页里的配对
-                //确认指令
-                console.log(arrayList.length+'aa')
-                if((arrayList[1]=='228'||arrayList[1]=='212'||arrayList[1]=='196') &&arrayList.length==6){
-                    var  rstBean = tigmanSpecilBuildHeader(arrayList[2],arrayList[3]);
-                    console.log(rstBean);
-                    rstInfo.nowTypeList.forEach(element => {
-                            switch (element.typeName) {
-                                case 'MODE':
-                                    element.chooseKey=rstBean.mode;
-                                    break;
-                                case 'POLATRITY':
-                                    element.chooseKey=rstBean.polatrity;
-                                    break;
-                                case 'Pluse':
-                                    element.chooseKey=rstBean.ifpulse;
-                                    break;
-                                case 'HF':
-                                    element.chooseKey=rstBean.ifhf
-                                    break;
-                                default:
-                                    break;
-                            }
-                        });
-                    //赋值开始  ......
-                    rstInfo.nowChooseIndex =arrayList[4];
-                    rstInfo.paramValue =arrayList[5];
-                    rstInfo.initBean=rstBean;//包含很多焊接状态和单位等
-                } 
-                store.state.rstInfo = rstInfo;
-                return rstInfo;
-             }
             //比较字符串是否相等 忽略大小写
             function  compareString(subStr,str){
                 var reg = eval("/"+subStr+"/ig");
@@ -638,6 +601,7 @@ Array.prototype.in_array = function (element) {
                 //1、来自那个页面有自己独立的数据处理方式
                 switch (pageFrom) {
                     case 'newIndex':
+                        console.log(9999999999999999)
                         rstInfo =buidDataByPagefrom(pageFrom,dirctiveType,data,this);
                         break;
                     case 'memory':
@@ -727,7 +691,7 @@ Array.prototype.in_array = function (element) {
                     temp10.push(parseInt(("0x"+strArr[11]),16).toString(10));//板厚最大值
                     //转成10进制
                     rstInfo = setWeldDataByType(temp10,weldDirctive.mma,pageFrom,_this);
-                }else if(compareString(dirctiveType,weldDirctive.tigMan) && pageFrom=='memory'){
+                }else if(compareString(dirctiveType,weldDirctive.tigMan)){
                     var strArr =data.split(' ');
                     console.log(strArr)
                     var temp10 =[];
@@ -750,20 +714,6 @@ Array.prototype.in_array = function (element) {
                     //转成10进制
                     console.log(temp10)
                     rstInfo = setWeldDataByType(temp10,weldDirctive.tigMan,pageFrom,_this);
-                }else if(compareString(dirctiveType,weldDirctive.tigMan) && pageFrom=='newIndex'){
-                    //新规则
-                    var strArr =data.split(' ');
-                    var temp10 =[];
-                    temp10.push(parseInt(("0x"+strArr[0]),16).toString(10));//头DA 218
-                    temp10.push(parseInt(("0x"+strArr[1]),16).toString(10));//指令 228
-                    temp10.push(parseInt(("0x"+strArr[2]),16).toString(10));//焊接状态等 66
-                    temp10.push(parseInt(("0x"+strArr[3]),16).toString(10));//MODE+ADCD+2T4T+PULSE 2
-                    temp10.push(parseInt(("0x"+strArr[4]),16).toString(10));//count 对应当前选中哪个参数 4
-                    temp10.push(parseInt(("0x"+strArr[6]+strArr[5]),16).toString(10));//数值 0
-                    // ["218", "228", "66", "2", "4", "0"]
-                    //转成10进制
-                    console.log(temp10)
-                    rstInfo = newTigmanDataBuild(temp10,weldDirctive.tigMan,pageFrom,_this);
                 }
                 return rstInfo;
             }

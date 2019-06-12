@@ -198,7 +198,7 @@ export default {
                 self.$router.push({ path: '/weld_tig_syn', query:{type:'TIGSYN',pageBackTo:'/memoryManage'} });
                 break;
             case self.GLOBAL_CONFIG.callWeldTypeData.tigman.crcCode://tigman
-                self.$router.push({ path: '/weld_tig_man', query:{type:'TIGMAN',pageBackTo:'/memoryManage'} });
+                self.$router.push({ path: '/weld_tig_man_his', query:{type:'TIGMAN',pageBackTo:'/memoryManage'} });
                 break;
             case self.GLOBAL_CONFIG.callWeldTypeData.mma.crcCode://mma
                 self.$router.push({ path: '/weld_mma', query:{type:'MMA',pageBackTo:'/memoryManage'} });
@@ -524,7 +524,7 @@ export default {
 
             }
             .m-show{
-                padding: 0 20px;
+                padding: 0 15px;
                 min-height: 50px;
                 font-size: 46px;
                 // color: #83cadf;

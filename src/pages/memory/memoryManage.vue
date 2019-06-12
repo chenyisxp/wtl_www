@@ -108,7 +108,10 @@ export default {
           data = data.replace(/\s+/g,"");
           var pupnum =data.substring(4,6);//通道号
           // let temp =parseInt(pupnum,16).toString(2);
-          pupnum =parseInt(parseInt(pupnum,16).toString(2).substring(1,8),2);
+          // pupnum =parseInt(parseInt(pupnum,16).toString(2).substring(1,8),2);
+          //20190611 新通道规则 byte 876543210 其中 0:是单位 7-1:通道 8位 2t4t
+          // 10000010  对应16进制 82
+          pupnum =parseInt(parseInt(pupnum,16).toString(2).substring(1,7),2);
           // var newData=data.substring(0,4)+data.substring(6,data.length);
           let newData =data;
           // alert(data)
@@ -184,31 +187,31 @@ export default {
             case '1':
               console.log(1111)
                 // this.broastFromAndroid('dad1 01 00 00 00 00 02 00 3C00 3D00 b400 c800 02 09 4956','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
-                   this.broastFromAndroid('dad1 81 04 01 02 07 55 32 00 4600 e100 da00 05 0a b07e','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
+             this.broastFromAndroid('dad1 82 04 01 02 07 55 32 00 4600 e100 da00 05 0a b07e','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
                 break;
             case '2':
-                this.broastFromAndroid('dad2 02 00 3D00 c800 00 7503','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
+                this.broastFromAndroid('dad2 84 6a00 ac00 03 054e','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
                 break;
             case '3':
-                this.broastFromAndroid('dad3 03 00 00 03 6400 6400 02 09  1EB4','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
+                this.broastFromAndroid('dad3 86 00 03 6400 6400 02 09 50 05  8F81','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
                 break;
             case '4':
-                  this.broastFromAndroid('dad4 04 00 c0 32 3200 32 3200 3200 e800 32 32 3200 32 50 23 5FAD','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
+                  this.broastFromAndroid('dad4 88 040103063541004100dc00dc00020895d1','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
                 break;
             case '5':
-                  this.broastFromAndroid('dad5 05 82 00 01 09 6400 6400 872E','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
+                  this.broastFromAndroid('dad5 8a 10 09 09 aa00 aa00 07 09 6f8e','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
                 break;
             case '6':
-                  this.broastFromAndroid('dad5 06 82 00 01 09 6400 6400 872E','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
+                  this.broastFromAndroid('dad5 8c 10 09 09 aa00 aa00 07 09 6f8e','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
                 break;
             case '7':
-                  this.broastFromAndroid('dad5 07 82 00 01 09 6400 6400 872E','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
+                  this.broastFromAndroid('dad5 8e 10 09 09 aa00 aa00 07 09 6f8eE','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
                 break;
             case '8':
-                  this.broastFromAndroid('dad5 08 82 00 01 09 6400 6400 872E','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
+                  this.broastFromAndroid('dad5 90 10 09 09 aa00 aa00 07 09 6f8e','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
                 break;
             case '9':
-                  this.broastFromAndroid('dad5 09 82 00 01 09 6400 6400 872E','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
+                  this.broastFromAndroid('dad5 92 10 09 09 aa00 aa00 07 09 6f8e','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
                 break;
             default:
                 break;
