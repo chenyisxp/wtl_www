@@ -148,6 +148,8 @@
 <script>
 import { MessageBox, Popup, Toast, Indicator } from "mint-ui";
 import Loading from "@/components/base/Loading";
+import weld_commonVue from './weld_common.vue';
+ const TIGMAN_DIRECTIVE_MAP =new Map([['MODE','D0'],['POLATRITY','D1'],['HF','D2'],['Pluse','D3'],['BTNS','D4'],['PARAMVALUE','D5']]);
 export default {
   name: "",
   components: {
@@ -341,15 +343,17 @@ export default {
         crater_cur:'Crater Current',
         post_gas:'Post Gas',
         ac_balance:'Ac Balance',
-        ac_fre:'Ac Fre'
-
+        ac_fre:'Ac Fre',
+        peak_cur:'Peak Current',
+        weld_cur:'Welding Current'
       },//显示的名字
       pfc_num:'',
       ac_dc_num:'',
       hf_lift_num:'',
       tigman_min_cur:'',
       tigman_max_cur:'',
-      max_ac_fre:''
+      max_ac_fre:'',
+      nowChoosedKeyName:'',
     };
   },
 
@@ -377,19 +381,8 @@ export default {
               });
         },
     nowChooseLineKeyFuc(nowChooseLineKey){
-      if(nowChooseLineKey==this.constant.weld_cur){
-        //非脉冲时 PEAK-CURRENT
-        //脉冲时 WELDING-CURRENT
-        if(this.nowModelTypeName=='4T_PULSE_DC' || this.nowModelTypeName=='2T_PULSE_DC'){
-          return 'Peak Current';
-        }
-        return 'Welding Current';
-      }else{
-        // this.buildStrData(this.nowChooseKeysNameMap[nowChooseLineKey]);
-        let tempKey =this.nowChooseKeysNameMap[nowChooseLineKey];        
-        return tempKey;
-      }
-       
+      //20190611 新逻辑
+      return this.nowChooseKeysNameMap[nowChooseLineKey]; 
     },
     buildStrData(name){
       //显示调整  PEAK-CURRENT --》 Peak Current
@@ -446,31 +439,15 @@ export default {
       }, 500);
     },
     buildSliderChangeData(value, type) {
-     
+    
       // var aa = (Array(2).join('0') + parseInt(positionNum*10,10).toString(16)).slice(-2);
       //计算 查找 发送请求给ble告知 修改了
-      var dirctCode = this.getDirective(this.typeName, type);
+      var dirctCode = TIGMAN_DIRECTIVE_MAP.get('PARAMVALUE');
       var num='';
-      //那些值是大字节 
-      console.log(type)
-      if(type=='pulse_fre'
-        ||type=='base_cur'
-        ||type=='weld_cur'
-        ||type=='start_cur_end'
-        ||type=='crater_cur'){
-        //  num= num.substring(2,4)+num.substring(0,2);
-        //新规则占两个字节的字段需要特殊处理
-        num =this.jinzhiChangeFuc(parseInt(value * this.keysRangeMap.get(type).multi, 10));
-      }else{
-      //   num = (
-      //   Array(4).join("0") + parseInt(value * this.keysRangeMap.get(type).multi, 10).toString(16)
-      // ).slice(-4);
-      //新规则占两个字节的字段需要特殊处理
-        num =this.jinzhiChangeFuc(parseInt(value * this.keysRangeMap.get(type).multi, 10));
-      }
-      
+          num =this.jinzhiChangeFuc(parseInt(value * this.keysRangeMap.get(type).multi, 10));
       var crc = this.crcModelBusClacQuery(dirctCode + num, true);
       var sendData = "DA" + dirctCode + num + crc;
+      console.log(sendData)
       this.callSendDataToBleUtil('weld_tig_man',sendData,crc);
     },
     addFuc2() {
@@ -565,54 +542,15 @@ export default {
       }
     },
     changeChecked(type, value, index) {
-      console.log(type+"||"+value+"||"+index);
-      //重置 
-     if(type!='HF'){
-        this.nowChooseLineKey=this.constant.pre_gas;
-     }
-      this.nowChooseKeysMap =new Map();
-      this.nowTypeList.forEach(element => {
-       
-        if (element.typeName == type) {
-          if(type=='POLATRITY'){
-            this.ac_dc_num=value;
-            this.clacTigManCur();
-            this.initKeysRangeMap();
-          }
-          if(type=='HF'){
-            this.hf_lift_num =value;
-            this.clacTigManCur();
-            this.initKeysRangeMap();
-          }
-          if (type == "MATERIAL") {
-            this.MIG_MATERIAL = value;
-          }
-          element.chooseKey = value;
-        
-        }
-        
-         this.nowChooseKeysMap.set(element.typeName,element.chooseKey);
-      });
-      // 判断当前选了那个模式
-       if(type!='HF'){
-             this.getNowCanvasModel();
-        }
+        console.log(type+"||"+value+"||"+index);
         //计算 查找 发送请求给ble告知 修改了 特殊合成的key
-        var dirctCode = this.getDirective(this.typeName, 'TDCHFPULSE');
-        // 
-        var num =
-                this.nowChooseKeysMap.get('MODE')
-              +this.nowChooseKeysMap.get('POLATRITY')
-              +this.nowChooseKeysMap.get('HF')
-              +this.nowChooseKeysMap.get('Pluse');
-            //  num = (Array(4).join('0') + parseInt(num,2).toString(16)).slice(-4)
-             //新规则占两个字节的字段需要特殊处理
-             console.log(num)
-              var num =this.jinzhiChangeFuc(parseInt(num,2));
-        var crc = this.crcModelBusClacQuery(dirctCode + num, true);
-        var sendData = "DA" + dirctCode + num + crc;        
-        this.callSendDataToBleUtil('weld_tig_man',sendData,crc);
-       
+        let dirctCode = TIGMAN_DIRECTIVE_MAP.get(type);
+        let num =this.jinzhiChangeFuc(value);
+        let crc = this.crcModelBusClacQuery(dirctCode + num, true);
+        let sendData = "DA" + dirctCode + num + crc;
+        if(!this.GLOBAL_CONFIG.TESTFLAG){
+          this.callSendDataToBleUtil('weld_tig_man',sendData,crc);
+        }
      
     },
     //当前是哪个模式
@@ -1505,46 +1443,34 @@ export default {
     },
     //切换线条
     chooseParam(type) {
-      console.log(type)
-      console.log(this.nowtypename)
-      console.log(this.nowModelTypeName)
        //焊接中不能切换只能是电流
        if(this.$store.state.weldingStatus==1){
          return;
        }
-
-      for (var i = 0; i < this.keyArr.length; i++) {
-        if (this.keyArr[i] == this.nowChooseLineKey) {
-          if (type == 0) {
-            //减往左
-            if (i == 0) {
-              this.nowChooseLineKey = this.keyArr[this.keyArr.length - 1];
-            } else {
-              this.nowChooseLineKey = this.keyArr[i - 1];
-            }
-            break;
-          } else if (type == 1) {
-            //减往右
-            if (i == this.keyArr.length - 1) {
-              this.nowChooseLineKey = this.keyArr[0];
-            } else {
-              this.nowChooseLineKey = this.keyArr[i + 1];
-            }
-            break;
-          }
-        }
-      }
-      console.log(this.keyArr)
-      console.log(this.nowChooseLineKey);
+      this.newChangeRule(type);
       //记录选中的 避免每次刷新后重置选项
-      window.android.saveKeyStorage('tig_man_nowChooseLineKey',this.nowChooseLineKey);
-      //1、画选中的那条线
-      // this.drawCharMainContrl(this.nowModelTypeName);
+      // window.android.saveKeyStorage('tig_man_nowChooseLineKey',this.nowChooseLineKey);
       //11、改造为 图片替换成当前模式的图片即可 不画图了
       //2、选中的参数的初始化变量值
-      this.initChooseline();
+      // this.initChooseline();
       //重新初始化滑动组件
-      this.initSliderLineFuc();
+      // this.initSliderLineFuc();
+    },
+    newChangeRule(type){
+      //20190613
+      if(type==0){//左D4: 0xA0
+        this.newChooseLineChangeData('A000');
+
+      }else{//右0x0A
+        this.newChooseLineChangeData('0A00');
+      }
+    },
+    newChooseLineChangeData(snum) {
+        let dirctCode = TIGMAN_DIRECTIVE_MAP.get('BTNS');
+        let num =snum;
+        let crc = this.crcModelBusClacQuery(dirctCode + num, true);
+        let sendData = "DA" + dirctCode + num + crc;
+        this.callSendDataToBleUtil('weld_tig_man',sendData,crc);
     },
     initChooseline(){
       //滑动组件赋值
@@ -1675,22 +1601,22 @@ export default {
         block:1995 //区间应该独立否则会影响到其他的max-min
       });
       this.keysRangeMap.set("ac_fre", {//50-250 交流频率
-        min: 50,
-        max: 250,
+        min: 25,
+        max: 200,
         nowValue: 190,
         unit: "Hz",
         multi:1,
         increseRang:1,
-        block:200 //区间应该独立否则会影响到其他的max-min
+        block:175 //区间应该独立否则会影响到其他的max-min
       });
       this.keysRangeMap.set("ac_balance", {// 10-50 交流占空比
-        min: 10,
+        min: 15,
         max: 50,
         nowValue: 30,
         unit: "%",
         multi:1,
         increseRang:1,
-        block:40 //区间应该独立否则会影响到其他的max-min
+        block:35 //区间应该独立否则会影响到其他的max-min
       });
 
     },
@@ -1743,6 +1669,57 @@ export default {
       // this.keysRangeMap.get('post_gas').nowValue=list.POST_GAS_VAL/10;
       // this.keysRangeMap.get('ac_fre').nowValue=list.AC_FRE_VAL;
       // this.keysRangeMap.get('ac_balance').nowValue=list.AC_DUTY_VAL;
+    },
+    //20190613
+    newKeysChangelistMap(paramValue){
+      switch (this.nowChooseLineKey) {
+        case 'pre_gas':
+          this.keysRangeMap.get('pre_gas').nowValue=paramValue/10;
+          break;
+        case 'start_cur_end':
+          this.keysRangeMap.get('start_cur_end').nowValue=
+          this.calcRang(paramValue,this.keysRangeMap.get('start_cur_end').min,this.keysRangeMap.get('start_cur_end').max);
+          break;
+        case 'slop_up':
+         
+          break;
+        case 'weld_cur':
+          this.keysRangeMap.get('weld_cur').nowValue=
+          this.calcRang(paramValue,this.keysRangeMap.get('weld_cur').min,this.keysRangeMap.get('weld_cur').max);
+          break;
+        case 'peak_cur':
+         
+          break;
+        case 'pulse_duty':
+          this.keysRangeMap.get('pulse_duty').nowValue=paramValue/10;
+          break;
+        case 'pulse_fre':
+          this.keysRangeMap.get('pulse_fre').nowValue=paramValue/10;
+          break;
+        case 'base_cur':
+          this.keysRangeMap.get('base_cur').nowValue=
+          this.calcRang(paramValue,this.keysRangeMap.get('base_cur').min,this.keysRangeMap.get('base_cur').max);;
+          break;
+        case 'slop_down':
+          this.keysRangeMap.get('slop_down').nowValue=paramValue/10;
+          break;
+        case 'crater_cur':
+          this.keysRangeMap.get('crater_cur').nowValue=
+          this.calcRang(paramValue,this.keysRangeMap.get('crater_cur').min,this.keysRangeMap.get('crater_cur').max);
+          break;
+        case 'post_gas':
+          this.keysRangeMap.get('post_gas').nowValue=
+          this.calcRang(paramValueL/10,this.keysRangeMap.get('post_gas').min,this.keysRangeMap.get('post_gas').max);
+          break;
+        case 'ac_fre':
+          this.keysRangeMap.get('ac_fre').nowValue=paramValue>this.keysRangeMap.get('ac_fre').max?this.keysRangeMap.get('ac_fre').max:paramValue;
+          break;
+        case 'ac_balance':
+          this.keysRangeMap.get('ac_balance').nowValue=paramValue;
+          break;
+        default:
+          break;
+      }
     },
     calcRang(value,min,max){
       if(value<min){
@@ -1838,7 +1815,8 @@ export default {
     this.initKeysValueMap();
     this.initKeysRangeMap();
     //关闭重新赋值??20190526开启之前为什么关闭，导致不能实时更新
-    this.keysChangelistMap(list);
+    this.nowChooseLineKey =list.nowChoosedKeyName;//新规则计算好当前选的keyname
+    this.newKeysChangelistMap(list.paramValue);
       
    //00.基本参数设置
     // this.nowDCORACFLAG ='0',//dc
@@ -1850,19 +1828,6 @@ export default {
     //如果是焊接中的状态
     if(this.$store.state.weldingStatus==1){
         this.nowChooseLineKey = this.constant.weld_cur;//默认选中 电流且不能切换了
-    }else{
-        if(!this.GLOBAL_CONFIG.TESTFLAG){//测试模式不走
-        
-          var result =window.android.queryKeyStorage('tig_man_nowChooseLineKey');
-          if(result!='empty'){
-            this.nowChooseLineKey=result;
-          }else{
-             this.nowChooseLineKey = this.constant.weld_cur;//默认选中
-          }
-        }else{
-          this.nowChooseLineKey = this.constant.weld_cur;//默认选中
-        }
-        
     }
     //11、范围构建函数
     // this.initKeysValueMap();

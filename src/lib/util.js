@@ -254,6 +254,22 @@ Array.prototype.in_array = function (element) {
             const TIGMAN_DIRECTIVE_MAP =new Map([['TDCHFPULSE','D0'],['pre_gas','D1'],['start_cur_end','D2'], ['slop_up','D3'],['weld_cur','D4'],['base_cur','D5'],['pulse_fre','D6'],['pulse_duty','D7'],['slop_down','D8'],['crater_cur','D9'],['post_gas','DA'],['ac_fre','DB'],['ac_balance','DB'],['Getready','DE'],['Memory','DF']]);
            //特殊指令数组 存储、历史等
            const SPECIAL_DIRECTIVE_MAP =new Map([['CALL_MEMORY','20'],['APPY_MEMORY','21'],['CALL_LAST_WELD','30'],['APPY_LAST_WELD','31'],['EDIT_UNIT','40'],['OVERRIDE','22']]);
+            //tigman映射关系
+            const tigmanLineMap = new Map([
+                [0,'pre_gas'],
+                [1,'start_cur_end'],
+                [2,'slop_up'],
+                [3,'weld_cur'],
+                [4,'peak_cur'],
+                [5,'pulse_duty'],
+                [6,'pulse_fre'],
+                [7,'base_cur'],
+                [8,'slop_down'],
+                [9,'crater_cur'],
+                [10,'post_gas'],
+                [11,'ac_fre'],
+                [12,'ac_balance']
+            ]);
             //设置参数
             function setWeldParams(type,value){
                 switch (type) {
@@ -577,11 +593,13 @@ Array.prototype.in_array = function (element) {
                             }
                         });
                     //赋值开始  ......
-                    rstInfo.nowChooseIndex =arrayList[4];
+                    rstInfo.nowChooseIndex =arrayList[4];//
+                    rstInfo.nowChoosedKeyName=tigmanLineMap.get(parseInt(arrayList[4]));
                     rstInfo.paramValue =arrayList[5];
                     rstInfo.initBean=rstBean;//包含很多焊接状态和单位等
                 } 
                 store.state.rstInfo = rstInfo;
+                console.log(rstInfo)
                 return rstInfo;
              }
             //比较字符串是否相等 忽略大小写

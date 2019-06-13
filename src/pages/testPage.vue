@@ -1,23 +1,105 @@
 <template>
-  <div class="registerMain">
-      <!-- <div class="global-bg-line"></div>
-      <div class="register">
-        <h3>测试页</h3>
-          <div class="bindOperation" v-on:click="testAndroidset()">测试SharedPreferences存储方法</div>
-          <div class="bindOperation" v-on:click="testAndroidget()">测试SharedPreferences取值方法</div>
-          <div class="bindOperation" v-on:click="testSqliteset()">测试sqlite存储方法</div>
-          <div class="bindOperation" v-on:click="testSqliteget()">测试sqlite取值方法</div>
-          <div class="bindOperation" v-on:click="testSqliteupdate()">测试sqlite更新方法</div>
-          <div class="bindOperation" v-on:click="testSqlitedelete()">测试sqlite删除方法</div>
-       </div>
-       <div class="msgmsg">
-         {{returnmsg}}
-       </div> -->
-       <!-- <video preload='auto' id='my-video'  src='../assets/video/app_video.mp4'  webkit-playsinline='true' playsinline='true' x-webkit-airplay='true' x5-video-player-type='h5' x5-video-player-fullscreen='true' x5-video-ignore-metadata='true'  width='100%' height='100%'><p> 不支持video</p> </video> -->
-   <!-- <video :class="{'hid':hidFlag}" preload='auto' muted=“muted”  webkit-playsinline='true' playsinline='true' x-webkit-airplay='true' x5-video-player-type='h5' x5-video-player-fullscreen='true' x5-video-ignore-metadata='true'    autoplay="autoplay"  width='100%' height='100%'>
-      <source src="../assets/video/app_video.mp4" type="video/mp4" />
-      Your browser does not support the video tag.
-    </video> -->
+  <div class="mSalary-modal">
+    <div class="close-btn"><span>关闭</span></div>
+    <table>
+        <tbody>
+          <tr class="fs14 ftwet">
+          基本信息
+          </tr>
+          <tr>
+            <td class="t-name">姓名</td>
+            <td class="t-msg ffColor">xxxx</td>
+          </tr>
+          <tr>
+            <td class="t-name">公司</td>
+            <td class="t-msg">xxx</td>
+            <td class="t-name">薪资职级</td>
+            <td class="t-msg">xxxxx</td>
+          </tr>
+          <tr>
+            <td class="t-name">部门</td>
+            <td class="t-msg">xxx</td>
+            <td class="t-name">身份证号</td>
+            <td class="t-msg">xxxxx</td>
+          </tr>
+          <tr class="midLine">
+            <td class="txLeft fs14" >薪资明细</td>
+            <td class="eeColor">单位：元</td>
+          </tr>
+          <tr>
+            <td class="t-name">基本工资</td>
+            <td class="t-msg ffColor">10000.00</td>
+            <td class="t-name">社保个人部分</td>
+            <td class="t-msg">xxxxx</td>
+          </tr>
+          <tr>
+            <td class="t-name">调整前工资</td>
+            <td class="t-msg">xxx</td>
+            <td class="t-name">社保个人补缴</td>
+            <td class="t-msg">xxxxx</td>
+          </tr>
+          <tr>
+            <td class="t-name">餐补</td>
+            <td class="t-msg">xxx</td>
+            <td class="t-name">公积金个人部分</td>
+            <td class="t-msg">xxxxx</td>
+          </tr>
+          <tr>
+            <td class="t-name">异地调遣津贴</td>
+            <td class="t-msg">xxx</td>
+            <td class="t-name">公积金个人补缴</td>
+            <td class="t-msg">xxxxx</td>
+          </tr>
+           <tr>
+            <td class="t-name">值班费</td>
+            <td class="t-msg">xxx</td>
+            <td class="t-name">补充公积金个人</td>
+            <td class="t-msg">xxxxx</td>
+          </tr>
+          <tr>
+            <td class="t-name">其他补款</td>
+            <td class="t-msg">xxx</td>
+            <td class="t-name">奖金/福利</td>
+            <td class="t-msg">xxxxx</td>
+          </tr>
+          <tr>
+            <td class="t-name">事假/旷工扣款</td>
+            <td class="t-msg">xxx</td>
+            <td class="t-name">应税收入</td>
+            <td class="t-msg">xxxxx</td>
+          </tr>
+          <tr>
+            <td class="t-name">病假扣款</td>
+            <td class="t-msg">-</td>
+            <td class="t-name">个人所得税</td>
+            <td class="t-msg">-</td>
+          </tr>
+          <tr>
+            <td class="t-name">迟到早退扣款</td>
+            <td class="t-msg">-</td>
+            <td class="t-name">税后调整</td>
+            <td class="t-msg">-</td>
+          </tr>
+          <tr>
+            <td class="t-name">其他扣款</td>
+            <td class="t-msg">-</td>
+            <td class="t-name">工会费</td>
+            <td class="t-msg">-</td>
+          </tr>
+          <tr>
+            <td class="t-name">应付工资</td>
+            <td class="t-msg">xxxxxxxxx</td>
+            <td class="t-name">实发工资</td>
+            <td class="t-msg">xxxx</td>
+          </tr>
+        </tbody>
+    </table>
+    <div class="footer-btns">
+        <div class="f-contain">
+          <span class="left"><上一个</span>
+          <span class="right">下一个></span>
+        </div>
+    </div>
   </div>
 </template>
 
@@ -107,24 +189,91 @@ export default {
 </script>
 
 <style scoped>
-.registerMain{width: 100%;}
-.hid{
-  opacity: 0;
-}
-.register h3{text-align: left;font-size: 12px;line-height:2.3125rem;color: #33333}
-.register input{background: #eeeeee;width: 100%;border: 0px;padding: 0;height: 44px;margin-bottom: 10px;text-indent: 20px;border-radius: 5px;line-height:44px;}
-.register label{position: absolute;top: 9px;right: 0px;background: #fff;border: 1px solid #5576dc;border-radius: 4px;margin-right: 10px;color: #fefefe;font-size: 14px;line-height: 27px;width: 115px;text-align: center;}
-.register input:-moz-placeholder {color: #999999; opacity:1;}
-.register input::-moz-placeholder {color: #999999;opacity:1;}
-.register input:-ms-input-placeholder{color: #999999;opacity:1;}
-.register input::-webkit-input-placeholder{color: #999999;}
-.register{padding: 0 15px;margin-top: 2.8125rem;}
-.bindOperation{background: #fff;border: 1px solid #5576dc;text-align: center;color: #333;height: 45px;font-size: 18px;line-height: 45px;border-radius: 5px;}
-.pass{position: relative;margin-bottom: 20px;}
-.register .mint-popup{border-radius: 6px;top: 138px;}
-.msgmsg{
-  padding: 0 20px;
+.mSalary-modal .close-btn{
+  height: 20px;
   font-size: 14px;
+  text-align: right;
+  color: #148afb;
+  cursor: pointer;
+}
+.mSalary-modal table tr td{
+  border: 1px solid #333;
+  text-align: right;
+  padding-right: 6px;
+}
+.mSalary-modal table tr{
+  font-size: 13px;
+  height: 30px;
+  line-height: 30px;
+}
+.mSalary-modal table{
+  width: 100%;
+}
+.mSalary-modal{
+  background: #fff;
+  width: 700px;
+  padding: 15px 35px;
+}
+.mSalary-modal .bnn{
+  border: none;
+}
+.mSalary-modal table tr td:nth-child(1){
+  background: #f2f2f2;
+  min-width: 55px;
+  font-weight: bold;
+}
+.mSalary-modal table tr td:nth-child(2){
+  border-right: 2px solid #333;
+  min-width: 75px;
+  
+}
+.mSalary-modal table tr td:nth-child(3){
+  background: #f2f2f2;
+  min-width: 55px;
+  font-weight: bold;
+}
+.mSalary-modal table tr td:nth-child(4){
+  min-width: 75px;
 
+}
+.mSalary-modal .midLine {
+  height:50px;
+ 
+}
+.mSalary-modal .midLine  td{
+  border:none;
+  border-right:none !important;
+  background: #fff !important;
+  padding-top: 20px;
+}
+.mSalary-modal .txLeft{
+  text-align: left;
+}
+.mSalary-modal .eeColor{
+  color: #999999;
+}
+.mSalary-modal .ffColor{
+  color: #50c35f;
+}
+.mSalary-modal .fs14{
+  font-size: 14px;
+}
+.mSalary-modal .ftwet{
+  font-weight: bold;
+}
+.mSalary-modal .footer-btns{
+  font-size: 14px;
+  height: 75px;
+  line-height: 75px;
+  text-align: center;
+}
+.mSalary-modal .footer-btns .left{
+  padding-right: 20px;
+  cursor: pointer;
+}
+.mSalary-modal .footer-btns .right{
+  padding-left: 20px;
+  color: #148afb;
+  cursor: pointer;
 }
 </style>

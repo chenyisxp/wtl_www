@@ -123,6 +123,7 @@ export default {
   methods: {
     //新的选择器 man和syn 合并
     newChangeFuc(idx,type){
+      this.$store.state.havedClickPage =true;
       //不是c位的图不能选中
       // if(this.reClacExit(idx)!=this.nowMainIndex){
       //   return;
@@ -716,12 +717,16 @@ export default {
       } 
        window['broastFromAndroid'] = (data,pageFrom) => {
           //如果和现在选的模式不一致，不进行跳转
-          //  alert(data)
+          //  alert(data) aa aa
           if(that.$store.state.oldBroastData && that.$store.state.oldBroastData===data){
             //重复不做处理
-            // return;
+            if(!that.$store.state.havedClickPage){
+                return;
+            }
+            
           }
           // alert(data)
+          that.$store.state.havedClickPage=false;
           that.$store.state.oldBroastData =data;
           
           var tempType=that.getModelType(data.substring(2,4));

@@ -7,6 +7,7 @@ Vue.use(Vuex);
 // actions (提供跟后台接口打交道的方法，并调用mutations提供的方法)
 // mutations (提供存储设置state数据的方法)
 const state = {
+    havedClickPage:false,//页面点击
     oldBroastData:'',//旧的广播参数
     nowModalTypeId:'',//当前模式id全局存储，每个页面也有相同的变量
     nowModelDirectice:'',//当前数据焊接指令
