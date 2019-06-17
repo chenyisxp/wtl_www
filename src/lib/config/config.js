@@ -13,17 +13,17 @@ let BASE_CONFIG = {
    TESTDEEPTH:0,//深度
    autoRouterTime:5000,//自动前往焊接中页面的时间：ms
    DirectStart:'DA',
-   callWeldTypeData:{
+   callWeldTypeData:{//注意utils中有独立crccode注意一起改
        migsyn:{data:'100000',crcCode:'0570',name:'MIG SYN',modelKey:'MIGSYN',url:'/weld_common?type=MIGSYN',newIndex:0},
-       migman:{data:'100001',crcCode:'C5B1',name:'MIG MAN',modelKey:'MIGMAN',url:'/weld_common?type=MIGMAN',newIndex:1},
-       tigsyn:{data:'100002',crcCode:'C4F1',name:'TIG SYN',modelKey:'TIGSYN',url:'/weld_tig_syn',newIndex:2},
-       tigman:{data:'100003',crcCode:'0430',name:'TIG MAN',modelKey:'TIGMAN',url:'/weld_tig_man',newIndex:3},
-          mma:{data:'100004',crcCode:'C671',name:'MMA',modelKey:'MMA',url:'/weld_mma',newIndex:4}
+       migman:{data:'100100',crcCode:'9571',name:'MIG MAN',modelKey:'MIGMAN',url:'/weld_common?type=MIGMAN',newIndex:1},
+       tigsyn:{data:'100200',crcCode:'6571',name:'TIG SYN',modelKey:'TIGSYN',url:'/weld_tig_syn',newIndex:2},
+       tigman:{data:'100300',crcCode:'F570',name:'TIG MAN',modelKey:'TIGMAN',url:'/weld_tig_man',newIndex:3},
+          mma:{data:'100400',crcCode:'C572',name:'MMA',modelKey:'MMA',url:'/weld_mma',newIndex:4}
    },
    testData:{
         //1、常规的模拟
         // migsyn:{heade:'dae',headm:'dad',headc:'dac',data:'1 00 00 00 00 02 00 3C00 3D00 b400 c800 02 09 2E77'},
-        migsyn:{heade:'dae',headm:'dad',headc:'dac',data:'1 82 040103063541004100dc00dc00020895d1'},//板厚异常
+        migsyn:{heade:'dae',headm:'dad',headc:'dac',data:'1 02 04 01 04 0a a5 4600 4600 f000 f000 020a ae3c1'},//板厚异常
         // migman:{heade:'dae',headm:'dad',headc:'dac',data:'2 00 3D00 c800 00 3535'},
         // tigsyn:{heade:'dae',headm:'dad',headc:'dac',data:'3 00 00 03 6400 6400 02 09  2C61'},
         // tigman:{heade:'dae',headm:'dad',headc:'dac',data:'4 00 c0 32 3200 32 3200 3200 e800 32 32 3200 32 50 23 3082'},
@@ -31,7 +31,8 @@ let BASE_CONFIG = {
         // tigman:{heade:'dae',headm:'dad',headc:'dac',data:'44202041e004f690069000a0005001e001e32ff4f1'},
         //tigman新规则
         // tigman:{heade:'dae',headm:'dad',headc:'dac',data:'4 42 02 04  1100 D923'},//模拟04线条
-        tigman:{heade:'dae',headm:'dad',headc:'dac',data:'4 42 02 08  1100 D923'},//模拟04线条
+        // tigman:{heade:'dae',headm:'dad',headc:'dac',data:'4 42 02 08  1100 DAE3'},//模拟04线条
+        tigman:{heade:'dae',headm:'dad',headc:'dac',data:'4 42 08 0b 32 00 3209'},//问题
 
         // mma:{heade:'dae',headm:'dad',headc:'dac',data:'5 82 00 01 09 6400 6400 01 09 8768'},
         // mma:{heade:'dae',headm:'dad',headc:'dac',data:'5 02 00 01 09 6400 6400 01 09 6F6F'},

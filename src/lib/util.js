@@ -235,10 +235,10 @@ Array.prototype.in_array = function (element) {
             //焊接指令集合 crc值
             const  weldDirctive={
                     migSyn:'0570',//mig一元化
-                    migMan:'C5B1',//mig非一元化
-                    tigSyn:'C4F1',//Tig一元化
-                    tigMan:'0430',//Tig非一元化
-                    mma:'C671'
+                    migMan:'9571',//mig非一元化
+                    tigSyn:'6571',//Tig一元化
+                    tigMan:'F570',//Tig非一元化
+                    mma:'C572'
             }
             //定义常量map数组  改数据结构没用了
             // const MODE_MAP = new Map([['0', '2T'], ['1', '4T']]);
@@ -782,6 +782,7 @@ Array.prototype.in_array = function (element) {
                     //转成10进制
                     console.log(temp10)
                     rstInfo = newTigmanDataBuild(temp10,weldDirctive.tigMan,pageFrom,_this);
+                    console.log(rstInfo)
                 }
                 return rstInfo;
             }
@@ -861,6 +862,8 @@ Array.prototype.in_array = function (element) {
                         bean.ifhf =secdArr[5]
                     //3|pulse
                         bean.ifpulse =secdArr[4]
+                        console.log(bean.ifpulse)
+                        // bean.ifpulse=1;
                         bean.ifpulseValue =bean.ifpulse==1?'NOPULSE':'PULSE';
                     //4|空
                         bean.empty20 =secdArr[3]
@@ -1182,7 +1185,7 @@ Array.prototype.in_array = function (element) {
             } 
             //公共 ：安卓蓝牙交互出入口
             Vue.prototype.callSendDataToBleUtil = function(pageFrom,sendData,crc) {
-                // alert(sendData)
+                console.log(sendData)
                 this.wtlLog(pageFrom,'sendData='+sendData+',crc='+crc);
                 if(!this.GLOBAL_CONFIG.TESTFLAG){
                     window.android.callSendDataToBle(pageFrom,sendData,crc);

@@ -1,6 +1,7 @@
 <template>
   <!-- <div class="newIndex"  :style="{height:this.screenHeight+'px'}"> -->
     <div class="newIndex">
+       <!-- {{showRespData}} -->
     <div class="header">
         <div class="blue-icon" @click="go('/blueToothManage')"></div>
         <div class="connectedstatus">Bluetooth {{nowConnectStatus}}</div>
@@ -11,15 +12,13 @@
         <div class="left"></div>
         <div class="right"></div>
     </div>
-    <div class="typechoose">
-          <div class="contain" :style="{height:this.conHeight}"  
-           @touchstart='touchStart'
-           @touchmove='touchMove'
-           @touchend='touchEnd'>
+    <div class="typechoose"  ref="newIndexRef">
+          <div class="contain" :style="{height:this.conHeight}" 
+         >
             <div class="c-img  i-3" v-bind:class="classAtr[0].name"> 
               <img src="../assets/images/mig.png" :style="{height:this.imgHeight,width:this.imgWidth}">
-              <div class="tr01" @click.stop="newChangeFuc(1,1)">mig</div>
-              <div class="tr02" @click.stop="newChangeFuc(0,1)">mig</div>
+              <div class="tr01" @click="newChangeFuc(1,1)">mig</div>
+              <div class="tr02" @click="newChangeFuc(0,1)">mig</div>
             </div>
             <div class="c-img  i-2" v-bind:class="classAtr[1].name"> 
               <img src="../assets/images/tig.png" :style="{height:this.imgHeight,width:this.imgWidth}">
@@ -85,6 +84,7 @@ export default {
   },
   data () {
     return {
+      showRespData:'',
       arrChooseBtn:[0,2,4],
       hideFlag: false,
       closeClass: false,
@@ -123,6 +123,7 @@ export default {
   methods: {
     //新的选择器 man和syn 合并
     newChangeFuc(idx,type){
+      // this.$event.preventDefault();
       this.$store.state.havedClickPage =true;
       //不是c位的图不能选中
       // if(this.reClacExit(idx)!=this.nowMainIndex){
@@ -250,6 +251,7 @@ export default {
                 ,200)
     },
     newIndexToAndroid(data,crcCode){
+       console.log(crcCode);
        //测试模式that
        if(this.GLOBAL_CONFIG.TESTFLAG){
         //  alert('this.GLOBAL_CONFIG.TESTFLAG'+this.modelType);
@@ -272,6 +274,7 @@ export default {
                 // this.go('/weld_tig_man');//最复杂
                 break;
             case this.GLOBAL_CONFIG.callWeldTypeData.mma.crcCode://mma
+              
                 this.broastFromAndroid3(this.GLOBAL_CONFIG.testData.mma.heade+this.GLOBAL_CONFIG.testData.mma.data,'newIndex');
                 // this.go('/weld_mma');
                 break;
@@ -299,6 +302,7 @@ export default {
                 }
               }
           }else{
+           
             this.callSendDataToBleUtil('newIndex','DA'+data+crcCode,crcCode);
           }
           
@@ -307,6 +311,7 @@ export default {
     },
     //for android 给安卓用的方法 begin
     broastFromAndroid3(data,pageFrom){
+      console.log(data)
       let that =this;
         // alert('newindex::'+that.modelType+'|||'+that.$store.state.nowModelDirectice);
        if(that.$store.state.nowModelDirectice!='' && that.modelType!=that.$store.state.nowModelDirectice){
@@ -367,48 +372,54 @@ export default {
     },
     //for android 给安卓用的方法 end
     touchStart(e){
+      
       this.touchStartNum =e.changedTouches[0].pageX;
+      // alert(this.touchStartNum )
 
     },
     touchMove(e){
+
     },
     touchEnd(e){
+       let that =this;
       //寻找当前中间位置的值
       var  nowChooseIndex ='';
-      for(var i in this.classAtr){
-        if(this.classAtr[i].value==1){
+      for(var i in that.classAtr){
+        if(that.classAtr[i].value==1){
           nowChooseIndex =i;
           break;
         }
       }
-      let that =this;
+     
+      // alert(that.touchStartNum)
+      // alert(that.touchStartNum-e.changedTouches[0].pageX)
       if(that.touchStartNum-e.changedTouches[0].pageX>30){
-        console.log('左滑'+nowChooseIndex)
+        // alert('左滑'+nowChooseIndex)
         //左滑
         
-        if(this.reClacClass()==0){
+        if(that.reClacClass()==0){
           that.choose(2);
-        }else if(this.reClacClass()==2){
+        }else if(that.reClacClass()==2){
           that.choose(4);
-        }else if(this.reClacClass()==4){
+        }else if(that.reClacClass()==4){
           that.choose(0);
         }
       }else if(  that.touchStartNum-e.changedTouches[0].pageX<-30){
-        console.log('又滑')
+        // alert('又滑')
         //右滑
-        if(this.reClacClass()==0){
+        if(that.reClacClass()==0){
           that.choose(4);
-        }else if(this.reClacClass()==2){
+        }else if(that.reClacClass()==2){
           that.choose(0);
-        }else if(this.reClacClass()==4){
+        }else if(that.reClacClass()==4){
           that.choose(2);
         }
       }
-      this.touchStartNum='';
+      that.touchStartNum='';
     },
         //下面这一排可选的 有点恶心啊
         choose(index){
-          console.log('choose'+index)
+          // alert('choose'+index)
             if(index==0 || index==1){
                 this.nowMainIndex =index;
                 //classAtr 数组每个index代表不同主页的id id=0在主位置
@@ -657,8 +668,26 @@ export default {
       this.unconnectedTime =setTimeout(() => {
         this.$router.push({path:url,query:params});
       }, delayTime);
-    }
+    },
+    initTouch(){
+      let newIndexRef = this.$refs.newIndexRef;
+      newIndexRef.addEventListener('touchstart',(e)=>{//屏幕触摸事件
+        this.touchStartNum =e.changedTouches[0].pageX;
+        
+      },false)
+      newIndexRef.addEventListener('touchmove',(e)=>{//屏幕触摸事件
+                  e.preventDefault();
+      });
+      newIndexRef.addEventListener('touchend',(e)=>{//屏幕触摸结束事件
+        this.touchEnd(e);
 
+      },false)
+      //  this.$refs.migClickRef.onclick = function(e) {
+      //     // e.preventDefault()
+      //     // @click="newChangeFuc(1,1)"
+      //   console.log('level11莫名被点击了');
+      // }
+    }
   },
   mounted: function () {
      let that = this;
@@ -717,7 +746,8 @@ export default {
       } 
        window['broastFromAndroid'] = (data,pageFrom) => {
           //如果和现在选的模式不一致，不进行跳转
-          //  alert(data) aa aa
+          //  alert(data)
+          that.showRespData =data;
           if(that.$store.state.oldBroastData && that.$store.state.oldBroastData===data){
             //重复不做处理
             if(!that.$store.state.havedClickPage){
@@ -758,7 +788,9 @@ export default {
       // window.addEventListener("popstate", function(e) {
       //   window.history.pushState(null, null, "#");
       // })
-
+      this.$nextTick(() => {
+        this.initTouch();
+      })
       if (window.history && window.history.pushState) {
         history.pushState(null, null, document.URL);
         window.addEventListener('popstate', this.goBack, false);

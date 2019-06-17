@@ -353,6 +353,7 @@ export default {
       tigman_min_cur:'',
       tigman_max_cur:'',
       max_ac_fre:'',
+      min_ac_fre:'',
       nowChoosedKeyName:'',
     };
   },
@@ -1601,7 +1602,7 @@ export default {
         block:1995 //区间应该独立否则会影响到其他的max-min
       });
       this.keysRangeMap.set("ac_fre", {//50-250 交流频率
-        min: 25,
+        min:50,
         max: 200,
         nowValue: 190,
         unit: "Hz",
@@ -1636,6 +1637,8 @@ export default {
       this.keysRangeMap.get('post_gas').min=1;
       this.keysRangeMap.get('post_gas').max=10;
       this.keysRangeMap.get('ac_fre').max=this.max_ac_fre;
+      this.keysRangeMap.get('ac_fre').min=this.min_ac_fre;
+      console.log(this.max_ac_fre)
     },
      //根据传过来的值重新赋值
     keysChangelistMap(list){
@@ -1672,6 +1675,7 @@ export default {
     },
     //20190613
     newKeysChangelistMap(paramValue){
+      
       switch (this.nowChooseLineKey) {
         case 'pre_gas':
           this.keysRangeMap.get('pre_gas').nowValue=paramValue/10;
@@ -1712,6 +1716,7 @@ export default {
           this.calcRang(paramValueL/10,this.keysRangeMap.get('post_gas').min,this.keysRangeMap.get('post_gas').max);
           break;
         case 'ac_fre':
+          console.log(paramValue,this.keysRangeMap.get('ac_fre').max)
           this.keysRangeMap.get('ac_fre').nowValue=paramValue>this.keysRangeMap.get('ac_fre').max?this.keysRangeMap.get('ac_fre').max:paramValue;
           break;
         case 'ac_balance':
@@ -1750,6 +1755,10 @@ export default {
       }
     },
     clacTigMax_AC_FRE(base_cur,weld_cur){
+      //20190615 单个上发没有了这两个参数 所以50~200
+      this.max_ac_fre=200;
+      this.min_ac_fre=50;
+      return;
       if(base_cur>170 || weld_cur>170){
           this.max_ac_fre=100;
           return;
@@ -1766,6 +1775,7 @@ export default {
           this.max_ac_fre=250;
           return;
       }
+        
     }
     /*****折线图 end ******/
     , getModelType(elementKey){
@@ -1855,6 +1865,10 @@ export default {
     //   history.pushState(null, null, document.URL);
     //   window.addEventListener('popstate', this.go('/newIndex'), false);
     // } 
+    if(this.$route.query.pageFrom =='/memoryDetail'){
+        //来自记忆的application
+        this.isReadyFlag=1;
+    }
   },
   created() {
     this.witdhParam = window.innerWidth;

@@ -637,14 +637,14 @@ export default {
         //计算 查找 发送请求给ble告知 修改了
         var dirctCode = this.getDirective(this.typeName,type);
         var num ='';
-         if(type=='MMA_CURRENT'){
+        //  if(type=='MMA_CURRENT'){
             // num = (Array(4).join('0') + parseInt(value,10).toString(16)).slice(-4);//两个字节
             // num= num.substring(2,4)+num.substring(0,2);
             //新规则占两个字节的字段需要特殊处理
             num =this.jinzhiChangeFuc(value);
-         }else{
-            num = (Array(4).join('0') + parseInt(value,10).toString(16)).slice(-4);//
-         }
+        //  }else{
+        //     num = (Array(4).join('0') + parseInt(value,10).toString(16)).slice(-4);//
+        //  }
         
         var crc =this.crcModelBusClacQuery(dirctCode+num, true);
         var sendData ="DA"+dirctCode+num+crc;
@@ -736,7 +736,8 @@ export default {
                 //计算 查找 发送请求给ble告知 修改了
                 var dirctCode = this.getDirective(this.typeName,type);
                 // (Array(2).join('0') + parseInt(1,10).toString(16)).slice(-2)
-               var num = (Array(4).join('0') + parseInt(value,10).toString(16)).slice(-4);
+            //    var num = (Array(4).join('0') + parseInt(value,10).toString(16)).slice(-4);
+              let num = this.jinzhiChangeFuc(value);
                var crc =this.crcModelBusClacQuery(dirctCode+num, true);
                var sendData =this.GLOBAL_CONFIG.DirectStart+dirctCode+num+crc;
                this.callSendDataToBleUtil('weld_mma',sendData,crc);
@@ -1066,6 +1067,10 @@ export default {
     //   history.pushState(null, null, document.URL);
     //   window.addEventListener('popstate', this.go('/newIndex'), false);
     // } 
+    if(this.$route.query.pageFrom =='/memoryDetail'){
+        //来自记忆的application
+        this.isReadyFlag=1;
+    }
   },
   created () {
       

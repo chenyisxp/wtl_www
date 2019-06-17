@@ -741,15 +741,12 @@ export default {
       },
        go(url){
            let self =this;
+           console.log(self.pageBackTo)
            if(url=='/saveManage'){
                self.$router.push({path:url,query:{type: self.typeName ,nowModalTypeId:self.nowModalTypeId,pageFrom:'/weld_common'}});
                return;
            }
-           if(self.pageBackTo){
-                //来自memorydetial页 回退
-                self.$router.push({path:self.pageBackTo,query:{}});
-                return;
-            }
+           
             if(url=='/welding'){
                 //执行焊接
                 var data = self.getDirective(self.typeName, 'Getready')+ '0000';
@@ -758,6 +755,10 @@ export default {
                 //生产时打开
                 this.callSendDataToBleUtil('weld_common',sendData,crc);
                 //   self.$router.push({path:'/welding',query:{electricCurrent: self.nowPosionX ,voltage:self.nowPosionX2}});
+            }else if(self.pageBackTo){
+                //来自memorydetial页 回退
+                self.$router.push({path:self.pageBackTo,query:{}});
+                return;
             }else{
                 self.$router.push({path:url,query:{type: self.typeName ,nowModalTypeId:self.nowModalTypeId,pageFrom:'weld_common'}});
             }
@@ -1370,6 +1371,10 @@ export default {
     //   window.addEventListener("popstate", function(e) {
     //     window.history.pushState(null, this.goBack, "#");
     //   })
+    if(this.$route.query.pageFrom =='/memoryDetail'){
+        //来自记忆的application
+        this.isReadyFlag=1;
+    }
   },
   created () {
       

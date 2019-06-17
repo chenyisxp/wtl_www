@@ -149,7 +149,9 @@ export default {
             //         spinnerType: 'fading-circle'
             // });
             var dirctCode = this.getDirective('CALL_LAST_WELD','CALL_LAST_WELD');
-            var num = (Array(4).join('0') + parseInt(type,10).toString(16)).slice(-4);
+            // var num = (Array(4).join('0') + parseInt(type,10).toString(16)).slice(-4);
+             var num =this.jinzhiChangeFuc(type);
+             console.log(num);
             var crc =this.crcModelBusClacQuery(dirctCode+num, true);
             var sendData ="DA"+dirctCode+num+crc;
             //测试开关

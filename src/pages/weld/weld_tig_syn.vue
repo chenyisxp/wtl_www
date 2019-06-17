@@ -1053,6 +1053,10 @@ export default {
     //   history.pushState(null, null, document.URL);
     //   window.addEventListener('popstate', this.go('/newIndex'), false);
     // } 
+    if(this.$route.query.pageFrom =='/memoryDetail'){
+        //来自记忆的application
+        this.isReadyFlag=1;
+    }
   },
   created () {
       

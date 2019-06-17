@@ -123,7 +123,9 @@ export default {
         remarksText:'',
         nowModelTypeName:'',//tigman模式
         nowDCORACFLAG:'',//tigman模式
-        modelKey:''
+        modelKey:'',
+        querSendData:'',
+        queryCrc:''
     };
   },
 
@@ -137,8 +139,11 @@ export default {
         }).then(action => {
             console.log(23);
             if (action == 'confirm') {
-                console.log('点击确认'); 
+                console.log('点击确认'+this.querSendData+'1111'); 
                 this.goEditPage();
+                // if(!this.GLOBAL_CONFIG.TESTFLAG){
+                //     this.callSendDataToBleUtil('saveManage',this.querSendData,this.queryCrc);
+                // }
             }
         }).catch(error =>{
             if(error == 'cancel'){
@@ -393,6 +398,8 @@ export default {
     //存储的mid
     this.modelCrc = this.$route.query.modelCrc;
     this.modelKey= this.$route.query.modelKey;
+    this.querSendData= this.$route.query.querSendData;
+    this.queryCrc= this.$route.query.queryCrc;
     // this.nowModalTypeId=this.$route.query.nowModalTypeId;//主页中的id
     this.nowModalTypeId=this.$store.state.nowModalTypeId;//主页中的id
     this.name = this.$route.query.name;

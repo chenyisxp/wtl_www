@@ -65,7 +65,9 @@ export default {
               },
             ],
             nowChooseId:'',
-            remarksText:''
+            remarksText:'',
+            querSendData:'',
+            queryCrc:''
     };
   },
 
@@ -96,7 +98,8 @@ export default {
         // console.log('this.remarksText'+this.remarksText)
         this.nowChooseId =mid;
         var dirctCode = this.getDirective('CALL_MEMORY','CALL_MEMORY');
-        var num = (Array(4).join('0') + parseInt(mid,10).toString(16)).slice(-4);
+        // var num = (Array(4).join('0') + parseInt(mid,10).toString(16)).slice(-4);
+        let num = this.jinzhiChangeFuc(mid);
         var crc =this.crcModelBusClacQuery(dirctCode+num, true);
         var sendData ="DA"+dirctCode+num+crc;
         console.log('sendData'+sendData);
@@ -104,6 +107,8 @@ export default {
         if(this.GLOBAL_CONFIG.TESTFLAG){
           this.testDataBuildFuc(mid+'');
         }else{
+          this.querSendData=sendData;
+          this.queryCrc=crc;
           this.callSendDataToBleUtil('saveManage',sendData,crc);
         }
     //  this.$router.push({path:'/memoryDetail',query:{mid:mid}});
@@ -116,7 +121,12 @@ export default {
           //去除空格 截取出通道号
           data = data.replace(/\s+/g,"");
           var pupnum =data.substring(4,6);//通道号
-          var newData=data.substring(0,4)+data.substring(6,data.length);
+            //左补零
+          pupnum=parseInt(pupnum,16).toString(2)
+          pupnum =(Array(8).join(0) + pupnum).slice(-8);;
+          pupnum =parseInt(pupnum.substring(1,7),2);
+          // var newData=data.substring(0,4)+data.substring(6,data.length);
+          let newData =data;
          
           //返回的通道数不一致
           // console.log(pupnum+'||||'+index+'');
@@ -156,7 +166,14 @@ export default {
                   window.android.callSendDataToBle('newIndex','DAFF'+invalue+this.crcModelBusClacQuery('FF'+invalue, true),invalue); 
               }
                 // alert(JSON.stringify(this.$store.state.rstInfo))
-              this.$router.push({path:'/saveDetail',query:{modelCrc:tmpRstcrc.crcCode,name:tmpRstcrc.name,pupnum:index,remarksText:this.remarksText}});
+              this.$router.push({path:'/saveDetail',query:{
+                  modelCrc:tmpRstcrc.crcCode,
+                  name:tmpRstcrc.name,
+                  pupnum:index,
+                  remarksText:this.remarksText,
+                  querSendData:this.querSendData,
+                  queryCrc:this.queryCrc
+                }});
           } 
     },
     rstModelType(data){
@@ -185,7 +202,7 @@ export default {
           //存储的byte0字节是个通道 序号
           switch (index) {
             case '1':
-                this.broastFromAndroid('dad1 01 00 00 00 00 02 00 3C00 3D00 b400 c800 02 09 4956','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
+                this.broastFromAndroid('dad1 02 04 01 04 0a a5 4600 4600 f000 f000 020a ae3c','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
                 break;
             case '2':
                 this.broastFromAndroid('dad2 02 00 3D00 c800 00 7503','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
@@ -236,7 +253,7 @@ export default {
     //TODO 读取九个通道在安卓里的备注名
     //1、请求九个通道数据 默认每个通道都有值
     window['broastMemoryFromAndroid'] = (data,pageFrom) => {
-        //  alert(data)
+         alert(data)
         self.wtlLog('saveManage','broastHistoryFromAndroid='+data);
         self.broastFromAndroid(data,pageFrom,self.nowChooseId,self.GLOBAL_CONFIG.TESTFLAG);
     }

@@ -74,7 +74,7 @@
                  
             </ul>
            <div>
-               {{'22222222a2222222222222222222222a2222222222a2222222222222222222'}}
+               {{getReportData}}
            </div>
       </div>
         <div class="goback" @click="goback">

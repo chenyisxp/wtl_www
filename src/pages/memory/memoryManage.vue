@@ -88,10 +88,10 @@ export default {
         // console.log('this.remarksText'+this.remarksText)
         this.nowChooseId =mid;
         var dirctCode = this.getDirective('CALL_MEMORY','CALL_MEMORY');
-        var num = (Array(4).join('0') + parseInt(mid,10).toString(16)).slice(-4);
+        // var num = (Array(4).join('0') + parseInt(mid,10).toString(16)).slice(-4);
+         let  num =this.jinzhiChangeFuc(mid)
         var crc =this.crcModelBusClacQuery(dirctCode+num, true);
         var sendData ="DA"+dirctCode+num+crc;
-        console.log('sendData'+sendData);
         //测试开关
         if(this.GLOBAL_CONFIG.TESTFLAG){
           this.testDataBuildFuc(mid+'');
@@ -107,16 +107,21 @@ export default {
           //去除空格 截取出通道号
           data = data.replace(/\s+/g,"");
           var pupnum =data.substring(4,6);//通道号
+          
           // let temp =parseInt(pupnum,16).toString(2);
           // pupnum =parseInt(parseInt(pupnum,16).toString(2).substring(1,8),2);
           //20190611 新通道规则 byte 876543210 其中 0:是单位 7-1:通道 8位 2t4t
           // 10000010  对应16进制 82
-          pupnum =parseInt(parseInt(pupnum,16).toString(2).substring(1,7),2);
+          //左补零
+          pupnum=parseInt(pupnum,16).toString(2)
+          pupnum =(Array(8).join(0) + pupnum).slice(-8);;
+          pupnum =parseInt(pupnum.substring(1,7),2);
+          
           // var newData=data.substring(0,4)+data.substring(6,data.length);
           let newData =data;
           // alert(data)
           //返回的通道数不一致
-          // console.log(pupnum+'||||'+index+'');
+          console.log(pupnum+'||||'+index+'');
         
           // alert('weld_memory_manage'+"pupnum="+pupnum+',index='+index+',newData'+newData);
           this.wtlLog('weld_memory_manage',"pupnum="+pupnum+',index='+index+',newData'+newData);
@@ -187,7 +192,8 @@ export default {
             case '1':
               console.log(1111)
                 // this.broastFromAndroid('dad1 01 00 00 00 00 02 00 3C00 3D00 b400 c800 02 09 4956','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
-             this.broastFromAndroid('dad1 82 04 01 02 07 55 32 00 4600 e100 da00 05 0a b07e','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
+            //  this.broastFromAndroid('dad1 82 04 01 02 07 55 32 00 4600 e100 da00 05 0a b07e','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
+            this.broastFromAndroid('dad1 02 04 01 04 0a a5 4600 4600 f000 f000 020a ae3c','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
                 break;
             case '2':
                 this.broastFromAndroid('dad2 84 6a00 ac00 03 054e','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
@@ -196,7 +202,7 @@ export default {
                 this.broastFromAndroid('dad3 86 00 03 6400 6400 02 09 50 05  8F81','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
                 break;
             case '4':
-                  this.broastFromAndroid('dad4 88 040103063541004100dc00dc00020895d1','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
+                  this.broastFromAndroid('dad4 08 03 03 2300 634e 0023 0064 0005 3023 00 6432','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
                 break;
             case '5':
                   this.broastFromAndroid('dad5 8a 10 09 09 aa00 aa00 07 09 6f8e','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
