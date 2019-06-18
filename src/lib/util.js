@@ -319,9 +319,9 @@ Array.prototype.in_array = function (element) {
                switch (type) {
                    case weldDirctive.migSyn:
                         //确认指令
-                        rstInfo.nowTypeList=weldParam.migsynTypeList;
+                        rstInfo.nowTypeList=[].concat(weldParam.migsynTypeList);
                         console.log('33333'+arrayList.length);
-                        
+                        console.log(rstInfo.nowTypeList)
                         if((arrayList[1]=='225'||arrayList[1]=='209'||arrayList[1]=='193') &&arrayList.length==14){
                             console.log(4444);
                             //赋值开始  ......
@@ -345,6 +345,7 @@ Array.prototype.in_array = function (element) {
                                         break;
                                     case 'DIAMETER':
                                         // element.chooseKey=setWeldParams('DIAMETER',arrayList[5]);
+                                        // alert(arrayList[5])
                                         element.chooseKey=arrayList[5]?arrayList[5]:0;
                                         break;
                                     case 'THICKNESS':
@@ -596,6 +597,7 @@ Array.prototype.in_array = function (element) {
                     rstInfo.nowChooseIndex =arrayList[4];//
                     rstInfo.nowChoosedKeyName=tigmanLineMap.get(parseInt(arrayList[4]));
                     rstInfo.paramValue =arrayList[5];
+                    
                     rstInfo.initBean=rstBean;//包含很多焊接状态和单位等
                 } 
                 store.state.rstInfo = rstInfo;

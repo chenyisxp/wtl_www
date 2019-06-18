@@ -253,7 +253,7 @@ export default {
     //TODO 读取九个通道在安卓里的备注名
     //1、请求九个通道数据 默认每个通道都有值
     window['broastMemoryFromAndroid'] = (data,pageFrom) => {
-         alert(data)
+         
         self.wtlLog('saveManage','broastHistoryFromAndroid='+data);
         self.broastFromAndroid(data,pageFrom,self.nowChooseId,self.GLOBAL_CONFIG.TESTFLAG);
     }

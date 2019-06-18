@@ -3,7 +3,7 @@
       
        <div class="blockHig">
            <span class="scanning" @click="handleCameraScan"></span>
-           <span class="rBtn" v-if="reBackFlag">ReBack</span>
+           <!-- <span class="rBtn" v-if="reBackFlag">ReBack</span> -->
        </div>
        <div class="t-contain">
             <div v-show="!scaningFlag" class="scan">

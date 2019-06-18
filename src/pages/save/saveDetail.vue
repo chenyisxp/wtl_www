@@ -155,19 +155,19 @@ export default {
     getKeyMap(id){
         switch (id) {
             case '0':
-                return 'EF';
+                return this.GLOBAL_CONFIG.callEditDirect.migsyn.memory;
                 break;
             case '1':
-                return 'AF';
+                return this.GLOBAL_CONFIG.callEditDirect.migman.memory;
                 break;
             case '2':
-                return 'DF';
+                return this.GLOBAL_CONFIG.callEditDirect.tigsyn.memory;
                 break;
             case '3':
-                return 'BF';
+                return this.GLOBAL_CONFIG.callEditDirect.tigman.memory;
                 break;
             case '4':
-                return 'CF';
+                return this.GLOBAL_CONFIG.callEditDirect.mma.memory;
                 break;
             default:
                 break;
@@ -184,18 +184,8 @@ export default {
         //新规则
          var num =this.jinzhiChangeFuc(this.pupnum);
         var crc = this.crcModelBusClacQuery(dirctCode + num, true);
-        var sendData = "DA" + dirctCode + num + crc;
-        if(this.GLOBAL_CONFIG.TESTFLAG){
-            console.log(sendData+"||"+crc)
-            // Toast({
-            //   message: 'simulation sendData success :'+sendData,
-            //   position: 'middle',
-            //   iconClass: 'icon icon-success',
-            //   duration: 1500
-            // });
-        }else{
-            this.callSendDataToBleUtil('save_Detail',sendData,crc);
-        }
+        var sendData = "DA" + dirctCode + num + crc; 
+        this.callSendDataToBleUtil('save_Detail',sendData,crc);
          //2、前往 参数可以修改的页面
           this.goWeldPage(this.nowModalTypeId+'');
         
@@ -402,6 +392,7 @@ export default {
     this.queryCrc= this.$route.query.queryCrc;
     // this.nowModalTypeId=this.$route.query.nowModalTypeId;//主页中的id
     this.nowModalTypeId=this.$store.state.nowModalTypeId;//主页中的id
+    // alert(this.nowModalTypeId)
     this.name = this.$route.query.name;
     this.pupnum = this.$route.query.pupnum;//通道id
     this.initData();

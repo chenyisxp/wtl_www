@@ -135,14 +135,17 @@ export default {
         remarksText:'',
         nowModelTypeName:'',//tigman模式
         nowDCORACFLAG:'',//tigman模式
-        nowConnectMachine:''
+        nowConnectMachine:'',
+        modelType:'',
+        comfromFlag:true,
+        loadingTimer:'',
     };
   },
 
   methods: {
     calcUnit(){
-        if(this.UnitFlag==1){
-            return 'M/Min';
+        if(this.UnitFlag==0){
+            return 'm/min';
         }else{
             return 'inch/min';
         }
@@ -167,21 +170,23 @@ export default {
          
         var crc = this.crcModelBusClacQuery(dirctCode + num, true);
         var sendData = "DA" + dirctCode + num + crc;
-        // console.log('this.pupnum'+this.pupnum+"|||"+sendData);
-        if(this.GLOBAL_CONFIG.TESTFLAG){
-            console.log('this.pupnum'+this.pupnum+"|||"+sendData+'|||'+crc);
-            // Toast({
-            //   message: 'simulation sendData success :'+sendData,
-            //   position: 'middle',
-            //   iconClass: 'icon icon-success',
-            //   duration: 1500
-            // });
-        }else{
-            this.callSendDataToBleUtil('memoryDetail',sendData,crc);
-        }
+       
+        this.callSendDataToBleUtil('memoryDetail',sendData,crc);
+        
          //前往 参数可以修改的页面
-          this.goEditPage(this.modelCrc);
-        // alert(JSON.stringify(this.$store.state.memoryInfo))
+        //   this.goEditPage(this.modelCrc);
+        //20190616 调整等待上发焊接模式数据在跳转 如首页跳转
+       this.isLoading =true;
+       this.loadingTimer =setTimeout(() => {
+            if(this.isLoading){
+            this.isLoading=false;
+            }
+        }, 11000);
+       this.$store.state.nowModelDirectice=this.modelCrc;
+       this.modelType = this.modelCrc;
+        // setTimeout(() => {
+            // this.broastFromAndroid3(this.GLOBAL_CONFIG.testData.migsyn.heade+this.GLOBAL_CONFIG.testData.migsyn.data,'newIndex');
+        // }, 4000);
         
     },
     goEditPage(modelCrc){
@@ -259,10 +264,11 @@ export default {
       this.inducanceValue = list.INDUCTANCE;
       //最新的
       this.MIG_MATERIAL =list.MIG_MATERIAL;
+      
       if(list.initBean.unit==1){
-          this.UnitFlag=1;
+          this.UnitFlag=1;//inch
       }else{
-          this.UnitFlag=0;
+          this.UnitFlag=0;//mm
       }
       console.log('index::::'+this.modelCrc);
       //根据不同模式额外补充参数显示
@@ -411,6 +417,66 @@ export default {
                 }
     },goBack(){
          this.$router.push({path:'/memoryManage',query:{}}); 
+    },
+    //for android 给安卓用的方法 begin
+    broastFromAndroid3(data,pageFrom){
+        this.isLoading =false;
+        clearTimeout(this.loadingTimer);
+      console.log(data)
+      let that =this;
+        // alert('newindex::'+that.modelType+'|||'+that.$store.state.nowModelDirectice);
+       if(that.$store.state.nowModelDirectice!='' && that.modelType!=that.$store.state.nowModelDirectice){
+          // alert(11)
+          return;
+        }else{
+          // alert(22)
+             that.$store.state.nowModelDirectice=that.modelType;
+              // Toast({
+              //       message: 'this.mo222delType'+data,
+              //       position: 'middle',
+              //       iconClass: 'icon icon-success',
+              //       duration: 1500
+              //     });
+            //  var rst =this.buildData('newIndex',this.GLOBAL_CONFIG.callWeldTypeData.migsyn.crcCode,'dae1 00 00 00 00 02 00 003C 003D 00b4 00c8 02 09 5952'.replace(/\s+/g,"").replace(/(.{2})/g,'$1 ').replace(/(^\s*)|(\s*$)/g, ""));
+            that.$store.state.nowModelDirectice =that.modelType
+            that.wtlLog('newIndex_bfa3','this.modelType'+that.modelType+"comfromFlag"+that.comfromFlag);
+            var rst =that.buildData('newIndex',that.modelType,data.replace(/\s+/g,"").replace(/(.{2})/g,'$1 ').replace(/(^\s*)|(\s*$)/g, ""));
+            that.isLoading=false;
+            
+            //  alert(this.comfromFlag)
+            if(!that.comfromFlag){
+              //不是来自按钮点击 是单片机自动上发的话 不做跳转 告诉收到
+                //  alert('来了');
+                  var invalue =data.substring(data.length-4,data.length);
+                  that.callSendDataToBleUtil('newIndex','DAFF'+invalue+that.crcModelBusClacQuery('FF'+invalue, true),invalue);
+                  return;
+            }
+            that.comfromFlag=false;
+            if(JSON.stringify(rst) != "{}"){
+                //发送确认收到的指令给安卓
+                var invalue =data.substring(data.length-4,data.length);
+                //新规则: 指令ff+crc+检验crc   测试模式不发送
+                that.callSendDataToBleUtil('newIndex','DAFF'+invalue+that.crcModelBusClacQuery('FF'+invalue, true),invalue);
+                that.isLoading =false;
+                
+              
+                //焊接中的状态返回参数不需要跳转
+                if(that.$store.state.weldingStatus==1){
+                  return;
+                }
+                
+                if(that.modelType==that.GLOBAL_CONFIG.callWeldTypeData.tigman.crcCode){
+                  that.go('/weld_tig_man');//最复杂
+                }else if(that.modelType==that.GLOBAL_CONFIG.callWeldTypeData.tigsyn.crcCode){
+                  that.go('/weld_tig_syn');
+                }else if(that.modelType==that.GLOBAL_CONFIG.callWeldTypeData.mma.crcCode){
+                  that.go('/weld_mma');
+                }else{
+                  that.go('/weld_common?type='+rst.weldType);
+                }
+            }    
+        }
+         
     }
   },
   mounted: function() {
@@ -427,6 +493,35 @@ export default {
     this.initData();
     this.remarksText = this.$route.query.remarksText;
     this.nowConnectMachine = this.$store.state.nowConnectMachine;
+    let that=this;
+     window['broastFromAndroid'] = (data,pageFrom) => {
+          //如果和现在选的模式不一致，不进行跳转
+          //  alert(data)
+        
+          
+        //   if(that.$store.state.oldBroastData && that.$store.state.oldBroastData===data){
+        //     //重复不做处理
+        //     if(!that.$store.state.havedClickPage){
+        //         return;
+        //     }
+            
+        //   }
+          // alert(data)
+        //   that.$store.state.havedClickPage=false;
+          that.$store.state.oldBroastData =data;
+        
+          that.wtlLog("memoryDetail",'ppp::'+that.$store.state.AdroidNewMsg+'||||'+that.$store.state.AdroidOldMsg);
+          // alert('ppp::'+that.$store.state.AdroidNewMsg+'||||'+that.$store.state.AdroidOldMsg);
+          if(that.$store.state.AdroidOldMsg){
+            that.$store.state.AdroidNewMsg =data;
+          }else{
+            that.$store.state.AdroidNewMsg =data;
+            that.$store.state.AdroidOldMsg=data;
+          }
+          that.wtlLog('newIndex','broastFromAndroid3='+data); 
+          that.broastFromAndroid3(data,pageFrom,that);
+          
+      }
   },
   created() {},
   computed: {},

@@ -32,7 +32,10 @@ let BASE_CONFIG = {
         //tigman新规则
         // tigman:{heade:'dae',headm:'dad',headc:'dac',data:'4 42 02 04  1100 D923'},//模拟04线条
         // tigman:{heade:'dae',headm:'dad',headc:'dac',data:'4 42 02 08  1100 DAE3'},//模拟04线条
-        tigman:{heade:'dae',headm:'dad',headc:'dac',data:'4 42 08 0b 32 00 3209'},//问题
+        // tigman:{heade:'dae',headm:'dad',headc:'dac',data:'4 42 08 0b 32 00 3209'},//问题
+        // tigman:{heade:'dae',headm:'dad',headc:'dac',data:'4 42 0d 04 42 00 3d1c'},//问题
+        // tigman:{heade:'dae',headm:'dad',headc:'dac',data:'4 42 0d 0a 1b 00 ae47'},//post gas问题
+        tigman:{heade:'dae',headm:'dad',headc:'dac',data:'4 42 06 02 5f 00 48f7'},//slow up问题
 
         // mma:{heade:'dae',headm:'dad',headc:'dac',data:'5 82 00 01 09 6400 6400 01 09 8768'},
         // mma:{heade:'dae',headm:'dad',headc:'dac',data:'5 02 00 01 09 6400 6400 01 09 6F6F'},

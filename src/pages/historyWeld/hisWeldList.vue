@@ -108,7 +108,7 @@ export default {
                 // }
                 this.callSendDataToBleUtil('hisWeldList','DAFF'+invalue+this.crcModelBusClacQuery('FF'+invalue, true),invalue);
                
-                this.$router.push({ path: '/hisWeldInfo', query: {name:this.chooseTypeName,type:this.chooseType}});
+                this.$router.push({ path: '/hisWeldInfo', query: {name:this.chooseTypeName,type:this.chooseType,modelCrc:this.chooseTypeCrc}});
             } 
         },
         gohisWeld(type){
@@ -196,7 +196,7 @@ export default {
   mounted: function () {
         window['broastHistoryFromAndroid'] = (data) => {
         this.wtlLog('hisweldlist','broastHistoryFromAndroid='+data);
-        //  alert(data)
+        
           this.broastFromAndroid(data,this.GLOBAL_CONFIG.TESTFLAG);
       }
       this.nowConnectMachine = this.$store.state.nowConnectMachine;

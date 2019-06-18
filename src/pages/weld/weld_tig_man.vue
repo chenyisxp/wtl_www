@@ -57,6 +57,8 @@
           <img v-if="nowChooseLineKey=='ac_fre'" src="../../assets/images/tigman/brokenLine_ac_fre.png">
            <img v-if="nowChooseLineKey=='pulse_duty'" src="../../assets/images/tigman/brokenLine_pulse_duty.png">
            <img v-if="nowChooseLineKey=='pulse_fre'" src="../../assets/images/tigman/brokenLine_pulse_fre.png">
+           <img v-if="nowChooseLineKey=='peak_cur'" src="../../assets/images/tigman/brokenLine_pluse_weld_cur.png">
+          
           <!-- <img src="../../assets/images/memory.png"> -->
           
         </div> 
@@ -1476,12 +1478,14 @@ export default {
     initChooseline(){
       //滑动组件赋值
       var tempInfo = this.keysRangeMap.get(this.nowChooseLineKey);
+       console.log(this.nowChooseLineKey)
       this.max2 = tempInfo.max;
       this.min2 = tempInfo.min;
       this.unit2 = tempInfo.unit;
-      console.log(tempInfo)
+     
       this.block2 = tempInfo.max - tempInfo.min;
       this.nowPosionX2 = tempInfo.nowValue;
+      console.log(tempInfo.nowValue)
       //按钮加减幅度 动态计算 
       this.paramIncreaseDistance2 = tempInfo.increseRang;
       // this.paramIncreaseDistance2 = 1;//按钮加减幅度
@@ -1545,6 +1549,15 @@ export default {
         multi:1,
         increseRang:1,
         block:130 //区间应该独立否则会影响到其他的max-min
+      });
+       this.keysRangeMap.set("peak_cur", {
+        min: 30,
+        max: 200,
+        nowValue: 120,
+        unit: "A",
+        multi:1,
+        increseRang:1,
+        block:170 //区间应该独立否则会影响到其他的max-min
       });
       this.keysRangeMap.set("slop_down", {
         min: 0,
@@ -1614,7 +1627,8 @@ export default {
         min: 15,
         max: 50,
         nowValue: 30,
-        unit: "%",
+        // unit: "%",
+        unit:"percent",//unit比较特殊
         multi:1,
         increseRang:1,
         block:35 //区间应该独立否则会影响到其他的max-min
@@ -1625,6 +1639,8 @@ export default {
     initKeysRangeMap(){
       this.keysRangeMap.get('start_cur_end').min=this.tigman_min_cur;
       this.keysRangeMap.get('start_cur_end').max=this.tigman_max_cur;
+      this.keysRangeMap.get('peak_cur').min=this.tigman_min_cur;
+      this.keysRangeMap.get('peak_cur').max=this.tigman_max_cur;
 
       this.keysRangeMap.get('weld_cur').min=this.tigman_min_cur;
       this.keysRangeMap.get('weld_cur').max=this.tigman_max_cur;
@@ -1675,7 +1691,7 @@ export default {
     },
     //20190613
     newKeysChangelistMap(paramValue){
-      
+      console.log(this.nowChooseLineKey)
       switch (this.nowChooseLineKey) {
         case 'pre_gas':
           this.keysRangeMap.get('pre_gas').nowValue=paramValue/10;
@@ -1685,17 +1701,19 @@ export default {
           this.calcRang(paramValue,this.keysRangeMap.get('start_cur_end').min,this.keysRangeMap.get('start_cur_end').max);
           break;
         case 'slop_up':
-         
+          this.keysRangeMap.get('slop_up').nowValue=
+          this.calcRang(paramValue/this.keysRangeMap.get('slop_up').multi,this.keysRangeMap.get('slop_up').min,this.keysRangeMap.get('slop_up').max);
           break;
         case 'weld_cur':
           this.keysRangeMap.get('weld_cur').nowValue=
           this.calcRang(paramValue,this.keysRangeMap.get('weld_cur').min,this.keysRangeMap.get('weld_cur').max);
           break;
         case 'peak_cur':
-         
+          this.keysRangeMap.get('peak_cur').nowValue=
+          this.calcRang(paramValue,this.keysRangeMap.get('peak_cur').min,this.keysRangeMap.get('peak_cur').max);
           break;
         case 'pulse_duty':
-          this.keysRangeMap.get('pulse_duty').nowValue=paramValue/10;
+          this.keysRangeMap.get('pulse_duty').nowValue=paramValue;
           break;
         case 'pulse_fre':
           this.keysRangeMap.get('pulse_fre').nowValue=paramValue/10;
@@ -1713,7 +1731,7 @@ export default {
           break;
         case 'post_gas':
           this.keysRangeMap.get('post_gas').nowValue=
-          this.calcRang(paramValueL/10,this.keysRangeMap.get('post_gas').min,this.keysRangeMap.get('post_gas').max);
+          this.calcRang(paramValue/10,this.keysRangeMap.get('post_gas').min,this.keysRangeMap.get('post_gas').max);
           break;
         case 'ac_fre':
           console.log(paramValue,this.keysRangeMap.get('ac_fre').max)
@@ -1738,6 +1756,9 @@ export default {
     //计算最小电流最大电流区间
     clacTigManCur(){
       //最大只看 pfc
+      // alert(this.pfc_num)
+      // alert(this.ac_dc_num)
+      // alert(this.hf_lift_num)
       if(this.pfc_num==1){
           this.tigman_max_cur=200;
       }else{
@@ -1827,6 +1848,7 @@ export default {
     //关闭重新赋值??20190526开启之前为什么关闭，导致不能实时更新
     this.nowChooseLineKey =list.nowChoosedKeyName;//新规则计算好当前选的keyname
     this.newKeysChangelistMap(list.paramValue);
+    console.log(list.paramValue)
       
    //00.基本参数设置
     // this.nowDCORACFLAG ='0',//dc
@@ -1856,6 +1878,7 @@ export default {
     }
   },
   mounted: function() {
+     this.$route.query.nowModalTypeId=3;
     // this.typeName =this.$route.query.type;
     // this.nowTypeList =this.tigmanList;
     this.pageBackTo =this.$route.query.pageBackTo;

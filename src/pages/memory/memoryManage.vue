@@ -193,7 +193,10 @@ export default {
               console.log(1111)
                 // this.broastFromAndroid('dad1 01 00 00 00 00 02 00 3C00 3D00 b400 c800 02 09 4956','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
             //  this.broastFromAndroid('dad1 82 04 01 02 07 55 32 00 4600 e100 da00 05 0a b07e','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
-            this.broastFromAndroid('dad1 02 04 01 04 0a a5 4600 4600 f000 f000 020a ae3c','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
+            // this.broastFromAndroid('dad1 02 04 01 04 0a a5 4600 4600 f000 f000 020a ae3c','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
+            // this.broastFromAndroid('dad1 82 04 01 02 07 55 3200 4600 e100 da00 050a f08f','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
+            this.broastFromAndroid('dad1 02 04 01 04 0a a5 4600 4600 f000 f000 020a ae3c1','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
+            
                 break;
             case '2':
                 this.broastFromAndroid('dad2 84 6a00 ac00 03 054e','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
@@ -252,6 +255,7 @@ export default {
     //1、请求九个通道数据 默认每个通道都有值
     window['broastMemoryFromAndroid'] = (data,pageFrom) => {
         //  alert(data)
+        this.$store.state.memoryInfo={};//清楚
         self.wtlLog('memoryManage','broastHistoryFromAndroid='+data);
         self.broastFromAndroid(data,pageFrom,self.nowChooseId,self.GLOBAL_CONFIG.TESTFLAG);
     }

@@ -54,15 +54,17 @@
           <div class="appBtn" type="primary" ghost @click="applyWeld">Application</div>
           <!-- <Button type="info" ghost class="info" @click="go('/memoryManage')">保存焊接参数</Button> -->
     </div>
+    <Loading :is-loading="isLoading"></Loading>
   </div>
 </template>
 
 <script>
 import { Toast ,Indicator } from 'mint-ui'
+import Loading from "@/components/base/Loading";
 export default {
   name: '',
   components: {
-   
+   Loading
   },
   data () {
     return {
@@ -116,6 +118,11 @@ export default {
         remarksText:'',
         nowModelTypeName:'',//tigman模式
         nowDCORACFLAG:'',//tigman模式
+        nowConnectMachine:'',
+        modelType:'',
+        comfromFlag:true,
+        isLoading:false,
+        loadingTimer:'',
      } 
   },
 
@@ -144,24 +151,23 @@ export default {
           // var num = (
           //   Array(4).join("0") + parseInt(self.type, 10).toString(16)
           // ).slice(-4);
-           var num =this.jinzhiChangeFuc(self.type);
+           var num =self.jinzhiChangeFuc(self.type);
           var crc = self.crcModelBusClacQuery(dirctCode + num, true);
           var sendData = "DA" + dirctCode + num + crc;
-          if(self.GLOBAL_CONFIG.TESTFLAG){
-            console.log(sendData+'|||'+crc);
-              // Toast({
-              //   message: 'simulation sendData success :'+sendData,
-              //   position: 'middle',
-              //   iconClass: 'icon icon-success',
-              //   duration: 1500
-              // });
-              
-          }else{
-               self.callSendDataToBleUtil('hisWeldInfo',sendData,crc);
-          }
+         
+           self.callSendDataToBleUtil('hisWeldInfo',sendData,crc);
+           self.isLoading =true;
+           self.loadingTimer =setTimeout(() => {
+              if(self.isLoading){
+                self.isLoading=false;
+              }
+            }, 11000);
+            self.$store.state.nowModelDirectice=self.modelCrc;
+            self.modelType = self.modelCrc;
           //前往 参数可以修改的页面
-          // alert(self.type);
-          self.gohisWeld(self.type);
+        //   alert(self.type);
+        //   this.broastFromAndroid3(this.GLOBAL_CONFIG.testData.migsyn.heade+this.GLOBAL_CONFIG.testData.migsyn.data,'newIndex');
+        //   self.gohisWeld(self.type);
         },
         gohisWeld(type){
             let self =this;
@@ -276,6 +282,66 @@ export default {
                     this.suppllytments.push(t9);
                     this.suppllytments.push(t10);
                 }
+    },
+     //for android 给安卓用的方法 begin
+    broastFromAndroid3(data,pageFrom){
+        this.isLoading =false;
+        clearTimeout(this.loadingTimer);
+      console.log(data)
+      let that =this;
+        // alert('newindex::'+that.modelType+'|||'+that.$store.state.nowModelDirectice);
+       if(that.$store.state.nowModelDirectice!='' && that.modelType!=that.$store.state.nowModelDirectice){
+          // alert(11)
+          return;
+        }else{
+          // alert(22)
+             that.$store.state.nowModelDirectice=that.modelType;
+              // Toast({
+              //       message: 'this.mo222delType'+data,
+              //       position: 'middle',
+              //       iconClass: 'icon icon-success',
+              //       duration: 1500
+              //     });
+            //  var rst =this.buildData('newIndex',this.GLOBAL_CONFIG.callWeldTypeData.migsyn.crcCode,'dae1 00 00 00 00 02 00 003C 003D 00b4 00c8 02 09 5952'.replace(/\s+/g,"").replace(/(.{2})/g,'$1 ').replace(/(^\s*)|(\s*$)/g, ""));
+            that.$store.state.nowModelDirectice =that.modelType
+            that.wtlLog('newIndex_bfa3','this.modelType'+that.modelType+"comfromFlag"+that.comfromFlag);
+            var rst =that.buildData('newIndex',that.modelType,data.replace(/\s+/g,"").replace(/(.{2})/g,'$1 ').replace(/(^\s*)|(\s*$)/g, ""));
+            that.isLoading=false;
+            
+            //  alert(this.comfromFlag)
+            if(!that.comfromFlag){
+              //不是来自按钮点击 是单片机自动上发的话 不做跳转 告诉收到
+                //  alert('来了');
+                  var invalue =data.substring(data.length-4,data.length);
+                  that.callSendDataToBleUtil('newIndex','DAFF'+invalue+that.crcModelBusClacQuery('FF'+invalue, true),invalue);
+                  return;
+            }
+            that.comfromFlag=false;
+            if(JSON.stringify(rst) != "{}"){
+                //发送确认收到的指令给安卓
+                var invalue =data.substring(data.length-4,data.length);
+                //新规则: 指令ff+crc+检验crc   测试模式不发送
+                that.callSendDataToBleUtil('newIndex','DAFF'+invalue+that.crcModelBusClacQuery('FF'+invalue, true),invalue);
+                that.isLoading =false;
+                
+              
+                //焊接中的状态返回参数不需要跳转
+                if(that.$store.state.weldingStatus==1){
+                  return;
+                }
+                
+                if(that.modelType==that.GLOBAL_CONFIG.callWeldTypeData.tigman.crcCode){
+                  that.go('/weld_tig_man');//最复杂
+                }else if(that.modelType==that.GLOBAL_CONFIG.callWeldTypeData.tigsyn.crcCode){
+                  that.go('/weld_tig_syn');
+                }else if(that.modelType==that.GLOBAL_CONFIG.callWeldTypeData.mma.crcCode){
+                  that.go('/weld_mma');
+                }else{
+                  that.go('/weld_common?type='+rst.weldType);
+                }
+            }    
+        }
+         
     }
   },
   mounted: function () {
@@ -285,6 +351,8 @@ export default {
       Indicator.close();
       this.name = this.$route.query.name;
       this.type = this.$route.query.type;
+      this.modelCrc =this.$route.query.modelCrc;
+    //   alert(this.modelCrc)
       var list  =this.$store.state.rstInfo;
       //赋值拆解
       this.nowTypeList =list.nowTypeList;
@@ -330,6 +398,32 @@ export default {
         history.pushState(null, null, document.URL);
         window.addEventListener('popstate', this.goBack, false);
     } 
+    let that =this;
+     window['broastFromAndroid'] = (data,pageFrom) => {
+          //如果和现在选的模式不一致，不进行跳转
+          //  alert(data)
+        //   if(that.$store.state.oldBroastData && that.$store.state.oldBroastData===data){
+        //     //重复不做处理
+        //     if(!that.$store.state.havedClickPage){
+        //         return;
+        //     }
+            
+        //   }
+          // alert(data)
+        //   that.$store.state.havedClickPage=false;
+          that.$store.state.oldBroastData =data;
+          that.wtlLog("hisweldInfo",'ppp::'+that.$store.state.AdroidNewMsg+'||||'+that.$store.state.AdroidOldMsg);
+          // alert('ppp::'+that.$store.state.AdroidNewMsg+'||||'+that.$store.state.AdroidOldMsg);
+          if(that.$store.state.AdroidOldMsg){
+            that.$store.state.AdroidNewMsg =data;
+          }else{
+            that.$store.state.AdroidNewMsg =data;
+            that.$store.state.AdroidOldMsg=data;
+          }
+          that.wtlLog('newIndex','broastFromAndroid3='+data); 
+          that.broastFromAndroid3(data,pageFrom,that);
+          
+      }
   },
   created () {
    
@@ -337,6 +431,7 @@ export default {
   computed:{
        
   },destroyed(){
+     clearTimeout(this.loadingTimer);
      window.removeEventListener('popstate', this.goBack, false);
   }
 }

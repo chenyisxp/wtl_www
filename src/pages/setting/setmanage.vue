@@ -25,8 +25,8 @@
                <div class="m-li">
                   <div  class="tab"   @click="chooseIMG(1)" :class="chooseModel==1?'choosedImg':''">MMA</div>
                   <div class="tab"   @click="chooseIMG(2)" :class="chooseModel==2?'choosedImg':''">TIG</div>
-                  <div class="tab"  @click="chooseIMG(3)" :class="chooseModel==3?'choosedImg':''">MIG MAN</div>
-                  <div class="tab"  @click="chooseIMG(4)" :class="chooseModel==4?'choosedImg':''">MIG SYN</div>
+                  <div class="tab"  @click="chooseIMG(4)" :class="chooseModel==4?'choosedImg':''">MIG</div>
+                  <div class="tab big"  @click="chooseIMG(3)" :class="chooseModel==3?'choosedImg':''">MIG FAWS-G</div>
                </div>
           </div>
           <div class="connect-linesImg" @click="goDevleper">
@@ -233,5 +233,13 @@ export default {
     }
 
   }
+}
+@media screen and (max-width: 320px) {
+    .m-li .tab{
+      width: 24%!important;
+      &.big{
+        width: 28% !important;
+      }
+    }
 }
 </style>

@@ -731,6 +731,7 @@ export default {
       // }
       //默认选中 1
       that.wtlLog('newIndex','mountedParams=bleName:'+that.bleName+'.address='+that.address+',pageFrom='+that.pageFrom+',nowModalTypeId='+that.$route.query.nowModalTypeId);
+      // alert(that.$route.query.nowModalTypeId)
       if(that.$route.query.nowModalTypeId>=0){
         // that.changeFuc(that.$route.query.nowModalTypeId,0);//第二个参数初始化
         that.choose(that.$route.query.nowModalTypeId);
@@ -745,6 +746,8 @@ export default {
         that.nowConnectStatus='connected';
       } 
        window['broastFromAndroid'] = (data,pageFrom) => {
+            this.$store.state.memoryInfo ={};//清空
+            this.$store.state.rstInfo={};
           //如果和现在选的模式不一致，不进行跳转
           //  alert(data)
           that.showRespData =data;

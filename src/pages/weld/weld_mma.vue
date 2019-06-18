@@ -386,11 +386,7 @@ export default {
                             midLine.style.height = self.rulerNumAtr[i].height+'px';
                             cubeBox1.style.height =self.rulerNumAtr[i].height+'px';
                             self.nowTouchIndex =i;
-                            // midLine.style.height = self.rulerNumAtr[i].height+'px';
-                            // cubeBox1.style.height =self.rulerNumAtr[i].height+'px';
-                            // self.nowTouchIndex =i;
-                            // console.log(self.rulerNumAtr);
-                            // console.log(i);
+                            // alert(cubeBox1.style.height+"||"+midLine.style.height+'||'+JSON.stringify(self.rulerNumAtr))
                             break;
                        }
                         
@@ -486,35 +482,48 @@ export default {
         var circlrTY=maxTY-minTY;//范围区间
          
         //计算出每个长度对应的位置
+        //  for (let i = 0; i < self.rulerNumAtr.length; i++) {
+        //      //公式原则：在区间+-1 1算是精确度
+        //     //  console.log(self.rulerNumAtr)
+        //     //  console.log(pagey)
+        //     //  console.log(((self.rulerNumAtr[i].height/130)*circlrTY+minTY)-1)
+        //     //  console.log(((self.rulerNumAtr[i].height/130)*circlrTY+minTY)+1)
+        //     // if(pagey>(((self.rulerNumAtr[i].height/130)*circlrTY+minTY)-1) && pagey<(((self.rulerNumAtr[i].height/130)*circlrTY+minTY)+1) ){
+        //     //     midLine.style.height = self.rulerNumAtr[i].height+'px';
+        //     //     cubeBox1.style.height =self.rulerNumAtr[i].height+'px';
+        //     //     self.actualNum =self.rulerNumAtr[i].num;
+        //     //     self.nowTouchIndex =self.rulerNumAtr[i].id;
+        //     //     console.log(self.nowTouchIndex)
+        //     //     break;
+        //     // }
+
+        //     // if(pagey>(((self.rulerNumAtr[i].height/130)*circlrTY+minTY)-1) && pagey<(((self.rulerNumAtr[i].height/130)*circlrTY+minTY)+1) ){
+        //     //     midLine.style.height = self.rulerNumAtr[i].height+'px';
+        //     //     cubeBox1.style.height =self.rulerNumAtr[i].height+'px';
+        //     //     self.actualNum =self.rulerNumAtr[i].num;
+        //     //     self.nowTouchIndex =self.rulerNumAtr[i].id;//这里应该使用id不能用i i只是循环标记
+        //     //     self.nowThinknessSendIndex =self.rulerNumAtr[i].id
+        //     //     console.log(self.nowTouchIndex)
+        //     //     break;
+        //     // }
+
+        // //    if(self.rulerNumAtr[i].num==self.actualNum){
+        // //         midLine.style.height = self.rulerNumAtr[i].height+'px';
+        // //         cubeBox1.style.height =self.rulerNumAtr[i].height+'px';
+        // //         self.nowTouchIndex =i;
+        // //         break;
+        // //     }
+            
+        // }
          for (let i = 0; i < self.rulerNumAtr.length; i++) {
-             //公式原则：在区间+-1 1算是精确度
-            //  console.log(self.rulerNumAtr)
-            //  console.log(pagey)
-            //  console.log(((self.rulerNumAtr[i].height/130)*circlrTY+minTY)-1)
-            //  console.log(((self.rulerNumAtr[i].height/130)*circlrTY+minTY)+1)
-            // if(pagey>(((self.rulerNumAtr[i].height/130)*circlrTY+minTY)-1) && pagey<(((self.rulerNumAtr[i].height/130)*circlrTY+minTY)+1) ){
-            //     midLine.style.height = self.rulerNumAtr[i].height+'px';
-            //     cubeBox1.style.height =self.rulerNumAtr[i].height+'px';
-            //     self.actualNum =self.rulerNumAtr[i].num;
-            //     self.nowTouchIndex =self.rulerNumAtr[i].id;
-            //     console.log(self.nowTouchIndex)
-            //     break;
-            // }
-            if(pagey>(((self.rulerNumAtr[i].height/130)*circlrTY+minTY)-1) && pagey<(((self.rulerNumAtr[i].height/130)*circlrTY+minTY)+1) ){
+            if(pagey>(((self.rulerNumAtr[i].height/130)*circlrTY+minTY)-6) && pagey<(((self.rulerNumAtr[i].height/130)*circlrTY+minTY)+1) ){
                 midLine.style.height = self.rulerNumAtr[i].height+'px';
                 cubeBox1.style.height =self.rulerNumAtr[i].height+'px';
                 self.actualNum =self.rulerNumAtr[i].num;
-                self.nowTouchIndex =self.rulerNumAtr[i].id;//这里应该使用id不能用i i只是循环标记
+                self.nowTouchIndex =self.rulerNumAtr[i].id;
                 self.nowThinknessSendIndex =self.rulerNumAtr[i].id
-                console.log(self.nowTouchIndex)
                 break;
             }
-        //    if(self.rulerNumAtr[i].num==self.actualNum){
-        //         midLine.style.height = self.rulerNumAtr[i].height+'px';
-        //         cubeBox1.style.height =self.rulerNumAtr[i].height+'px';
-        //         self.nowTouchIndex =i;
-        //         break;
-        //     }
             
         }
        
@@ -752,6 +761,7 @@ export default {
                  var dirctCode = this.getDirective(this.typeName,type);
             //    var num = (Array(4).join('0') + parseInt(this.nowTouchIndex,10).toString(16)).slice(-4);
               //new 新规则
+            //   alert(this.nowThinknessSendIndex)
               var num =this.jinzhiChangeFuc(this.nowThinknessSendIndex);
                var crc =this.crcModelBusClacQuery(dirctCode+num, true);
                var sendData ="DA"+dirctCode+num+crc;
@@ -933,39 +943,40 @@ export default {
       },
           //数组 滑动 数组构造
     buildRulerArrRange(min,max){
-        console.log(max)
-        console.log(min)
+          
         var tempArr =[];
         var tempInchArr =[];
+        this.rulerInchNumAtr=[];
+        this.rulerNumAtr=[];
+
         min =parseInt(min);
         var i =parseInt(min);
         max =parseInt(max);
         if(max>13){
             max=13;
         }
-        // var i =min;
         //根据上传的范围显示出范围 先轴的值不变值限范围就好
         if(max<=min){
             return;
         }else{
-            let temp ='';
-            for( i;i<=max;i++){
-                // console.log(this.rulerNumAtrMap.get(parseInt(i)))
-                temp=i;
-                this.rulerInchNumAtr.push(this.rulerInchNumAtrMap.get(parseInt(i)));
-                this.rulerNumAtr.push(this.rulerNumAtrMap.get(parseInt(i)))
+           
+           while (i<=max)
+            {
+               this.rulerInchNumAtr.push(this.rulerInchNumAtrMap.get(i));
+               this.rulerNumAtr.push(this.rulerNumAtrMap.get(i));
+                i++;
             }
-            //  let vag =Math.round((this.commonContainHeight/130)*100)/100;
-            // this.rulerNumAtr.forEach(element => {
-            //     element.height= Math.round((vag * element.height)*10)/10;
-            //     console.log(element.height)
-            //     // console.log(this.rulerNumAtr)
-            // });
-            
-            
+            // for(i=0;i<=max;i++){
+            //     alert(111)
+            //     this.rulerInchNumAtr.push(this.rulerInchNumAtrMap.get(parseInt(i)));
+            //     this.rulerNumAtr.push(this.rulerNumAtrMap.get(parseInt(i)))
+            // }
         }
-       
-     
+        
+      let vag =Math.round((this.commonContainHeight/130)*100)/100;
+      this.rulerNumAtr.forEach(element => {
+         element.height= Math.round((vag * element.height)*10)/10;
+      });
       
     },
     initFuc(){
@@ -976,6 +987,7 @@ export default {
             list  =this.$store.state.rstInfo;
         }
         if(this.firstInit){
+            // alert(1)
             this.firstInit=false;
             //滑动thinkness赋值
             this.buildRulerArrRange(list.MMA_MIN_THICHNESS,list.MMA_MAX_THICHNESS);
@@ -989,6 +1001,8 @@ export default {
                         return false;
                     }
                 });
+                this.minTRange = this.rulerNumAtr[0].num;
+                this.maxTRange = this.rulerNumAtr[this.rulerNumAtr.length-1].num;
                 // this.actualNum = '24GA'
             }else{
                 this.rulerNumAtr.forEach(element => {
@@ -997,6 +1011,8 @@ export default {
                         return false;
                     }
                 });
+                this.minTRange = this.rulerNumAtr[0].num;
+                this.maxTRange = this.rulerNumAtr[this.rulerNumAtr.length-1].num;
                 this.UnitFlag=0;
             }
         }
@@ -1041,12 +1057,13 @@ export default {
         this.initVotalage();
         //初始化滑动选择器 不在这里初始化
         // this.sliderParentInit();
-        let vag =Math.round((this.commonContainHeight/130)*100)/100;
-        this.rulerNumAtr.forEach(element => {
-            element.height= Math.round((vag * element.height)*10)/10;
-        });
-        this.minTRange = this.rulerNumAtr[0].num;
-        this.maxTRange = this.rulerNumAtr[this.rulerNumAtr.length-1].num;
+        // let vag =Math.round((this.commonContainHeight/130)*100)/100;
+        // this.rulerNumAtr.forEach(element => {
+        //     element.height= Math.round((vag * element.height)*10)/10;
+        // });
+        // this.minTRange = this.rulerNumAtr[0].num;
+        // this.maxTRange = this.rulerNumAtr[this.rulerNumAtr.length-1].num;
+        // alert( this.rulerNumAtr)
         // this.initWeldingAutoRouter();
         },
         //手动选择 刻度值
@@ -1059,7 +1076,7 @@ export default {
         }
   },
   mounted: function () {
-       
+    this.$route.query.nowModalTypeId=4;
     this.typeName ='MMA';
     this.pageBackTo =this.$route.query.pageBackTo;
     this.initFuc();
