@@ -319,9 +319,10 @@ Array.prototype.in_array = function (element) {
                switch (type) {
                    case weldDirctive.migSyn:
                         //确认指令
-                        rstInfo.nowTypeList=[].concat(weldParam.migsynTypeList);
-                        console.log('33333'+arrayList.length);
-                        console.log(rstInfo.nowTypeList)
+                        rstInfo.nowTypeList=JSON.parse(JSON.stringify(weldParam.migsynTypeList))
+                        console.log('33222222222222222222333');
+                        console.log(weldParam.migsynTypeList)
+                        
                         if((arrayList[1]=='225'||arrayList[1]=='209'||arrayList[1]=='193') &&arrayList.length==14){
                             console.log(4444);
                             //赋值开始  ......
@@ -345,8 +346,8 @@ Array.prototype.in_array = function (element) {
                                         break;
                                     case 'DIAMETER':
                                         // element.chooseKey=setWeldParams('DIAMETER',arrayList[5]);
-                                        // alert(arrayList[5])
                                         element.chooseKey=arrayList[5]?arrayList[5]:0;
+                                        // alert(element.chooseKey);
                                         break;
                                     case 'THICKNESS':
                                         element.chooseKey=arrayList[6]?arrayList[6]:0;
@@ -356,6 +357,7 @@ Array.prototype.in_array = function (element) {
                                         break;
                                 }
                             });
+                            console.log(rstInfo.nowTypeList)
                             var parr7 =((Array(8).join(0) + parseInt(arrayList[7],10).toString(2)).slice(-8));
                              //bit4-7
                              rstInfo.INDUCTANCE =parseInt(parr7.substring(0,4),2).toString(10);//机器上发不能改 不知道干嘛的
@@ -554,6 +556,7 @@ Array.prototype.in_array = function (element) {
                    default:
                        break;
                }
+               
                //全局存储
                if(pageFrom=='memory'){
                 store.state.memoryInfo = rstInfo;
@@ -644,7 +647,7 @@ Array.prototype.in_array = function (element) {
             //参数：页面，指令(这指令不是传输的指令用户自定义！！！)，数据
             Vue.prototype.buildData = function(pageFrom,dirctiveType,data) {
                 // data =data.replace(' ', '');
-                // alert(data);
+                console.log(weldParam.migsynTypeList);
                 // alert(dirctiveType+'||'+store.state.nowModelDirectice+'||'+pageFrom)
                 if(store.state.nowModelDirectice!='' &&dirctiveType!=store.state.nowModelDirectice){
                     return;

@@ -47,8 +47,9 @@
           <img v-if="nowChooseLineKey=='pre_gas'"  src="../../assets/images/tigman/brokenLine_pre_gas.png">
           <img v-if="nowChooseLineKey=='start_cur_end'" src="../../assets/images/tigman/brokenLine_start_cur_end.png">
           <img v-if="nowChooseLineKey=='slop_up'" src="../../assets/images/tigman/brokenLine_slop_up.png">
-          <img v-if="nowChooseLineKey=='weld_cur' && nowModelTypeName !='4T_PULSE_DC' && nowModelTypeName !='2T_PULSE_DC' " src="../../assets/images/tigman/brokenLine_weld_cur.png">
-          <img v-if="nowChooseLineKey=='weld_cur' && (nowModelTypeName =='4T_PULSE_DC' ||nowModelTypeName =='2T_PULSE_DC' )" src="../../assets/images/tigman/brokenLine_pluse_weld_cur.png">
+          <!-- <img v-if="nowChooseLineKey=='weld_cur' && nowModelTypeName !='4T_PULSE_DC' && nowModelTypeName !='2T_PULSE_DC' " src="../../assets/images/tigman/brokenLine_weld_cur.png"> -->
+          <!-- <img v-if="nowChooseLineKey=='weld_cur' && (nowModelTypeName =='4T_PULSE_DC' ||nowModelTypeName =='2T_PULSE_DC' )" src="../../assets/images/tigman/brokenLine_pluse_weld_cur.png"> -->
+          <img v-if="nowChooseLineKey=='weld_cur'" src="../../assets/images/tigman/brokenLine_weld_cur.png">
            <img v-if="nowChooseLineKey=='base_cur'" src="../../assets/images/tigman/brokenLine_base_cur.png">
           <img v-if="nowChooseLineKey=='slop_down'" src="../../assets/images/tigman/brokenLine_slop_down.png">
           <img v-if="nowChooseLineKey=='crater_cur'" src="../../assets/images/tigman/brokenLine_crater_cur.png">
@@ -1760,7 +1761,11 @@ export default {
       // alert(this.ac_dc_num)
       // alert(this.hf_lift_num)
       if(this.pfc_num==1){
+        if(this.ac_dc_num==1){//DC
+          this.tigman_max_cur=220;
+        }else{
           this.tigman_max_cur=200;
+        } 
       }else{
           this.tigman_max_cur=140;
       }
@@ -1769,10 +1774,14 @@ export default {
           if(this.hf_lift_num==1){
             this.tigman_min_cur=10;
           }else{
-            this.tigman_min_cur=30;
+            this.tigman_min_cur=10;
           }
       }else{
+          if(this.hf_lift_num==1){
+            this.tigman_min_cur=15;
+          }else{
             this.tigman_min_cur=30;
+          }
       }
     },
     clacTigMax_AC_FRE(base_cur,weld_cur){

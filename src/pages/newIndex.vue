@@ -751,13 +751,13 @@ export default {
           //如果和现在选的模式不一致，不进行跳转
           //  alert(data)
           that.showRespData =data;
-          if(that.$store.state.oldBroastData && that.$store.state.oldBroastData===data){
-            //重复不做处理
-            if(!that.$store.state.havedClickPage){
-                return;
-            }
+          // if(that.$store.state.oldBroastData && that.$store.state.oldBroastData===data){
+          //   //重复不做处理
+          //   if(!that.$store.state.havedClickPage){
+          //       return;
+          //   }
             
-          }
+          // }
           // alert(data)
           that.$store.state.havedClickPage=false;
           that.$store.state.oldBroastData =data;

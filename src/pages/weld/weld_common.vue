@@ -779,11 +779,11 @@ export default {
             //    var num = (Array(4).join('0') + parseInt(value,10).toString(16)).slice(-4);
                 //new 新规则
                 var num =this.jinzhiChangeFuc(value);
-               var crc =this.crcModelBusClacQuery(dirctCode+num, true);
-               var sendData =this.GLOBAL_CONFIG.DirectStart+dirctCode+num+crc;
-                if(!this.GLOBAL_CONFIG.TESTFLAG){
+                var crc =this.crcModelBusClacQuery(dirctCode+num, true);
+                var sendData =this.GLOBAL_CONFIG.DirectStart+dirctCode+num+crc;
+                // if(!this.GLOBAL_CONFIG.TESTFLAG){
                     this.callSendDataToBleUtil('weld_common',sendData,crc);
-                }
+                // }
                 // if(!this.GLOBAL_CONFIG.TESTFLAG){
                 //     window.android.callSendDataToBle('weld_common',sendData,crc);
                 // }
@@ -949,20 +949,21 @@ export default {
         }
     },
     specialDiaChoosed(keyArr){
-        console.log(1111111111)
+       
         let comList =[];
         let inchComList=[];
         keyArr.forEach(element => {
             comList.push(this.changeComList[element])
             inchComList.push(this.changeInchComList[element])
         });
-        console.log(comList)
-        console.log(inchComList)
+        
+    
         this.nowTypeList.forEach(element => {
             if(element.typeName=='DIAMETER'){
+                //  console.log(keyArr.indexOf(parseInt(element.chooseKey)))
                 element.comList=comList;
                 element.inchComList=inchComList;
-                if(keyArr.indexOf(element.chooseKey)<0){
+                if(keyArr.indexOf(parseInt(element.chooseKey))<0){
                     //不在数组里默认选中0
                     element.chooseKey=comList[0].id;
                 }

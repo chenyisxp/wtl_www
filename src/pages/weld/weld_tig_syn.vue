@@ -1049,6 +1049,7 @@ export default {
        
        this.pageBackTo =this.$route.query.pageBackTo;
        this.initFuc();
+    // console.log(this.$store.state.rstInfo)
     // if (window.history && window.history.pushState) {
     //   history.pushState(null, null, document.URL);
     //   window.addEventListener('popstate', this.go('/newIndex'), false);
@@ -1085,7 +1086,7 @@ export default {
                     //新规则: 指令ff+crc+检验crc   测试模式不发送
                     this.callSendDataToBleUtil('newIndex','DAFF'+invalue+this.crcModelBusClacQuery('FF'+invalue, true),invalue);
                     //重新初始化
-                    // alert(11)
+                    alert(11)
                     this.initFuc();
                 }
                 
