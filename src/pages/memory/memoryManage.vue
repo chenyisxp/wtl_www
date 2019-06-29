@@ -6,7 +6,7 @@
       </div>
      MEMORY</div>
    <ul class="mListContain">
-        <li v-for="(item,index) in mList" class="m-li">
+        <li v-for="(item,index) in mList" class="m-li" :key="index">
            <div class="m-b" :class="'b-'+index" @click="goDetail(item.mid,item.remarksTtile)">{{item.remarksTtile}}</div>
         </li>
    </ul>
@@ -119,11 +119,8 @@ export default {
           
           // var newData=data.substring(0,4)+data.substring(6,data.length);
           let newData =data;
-          // alert(data)
           //返回的通道数不一致
           console.log(pupnum+'||||'+index+'');
-        
-          // alert('weld_memory_manage'+"pupnum="+pupnum+',index='+index+',newData'+newData);
           this.wtlLog('weld_memory_manage',"pupnum="+pupnum+',index='+index+',newData'+newData);
           if(parseInt(pupnum)!=index){
             Toast({
@@ -147,7 +144,6 @@ export default {
           }
           //清空否则有缓存
           this.$store.state.memoryInfo={};
-          console.log('newData:::::'+newData);
           var rst =this.buildData('memory',tmpRstcrc.crcCode,newData.replace(/(.{2})/g,'$1 ').replace(/(^\s*)|(\s*$)/g, ""));
           console.log("mammama:"+rst)
           this.$store.state.weldingStatus=0;//记忆模式 清楚正在焊接中
@@ -160,7 +156,7 @@ export default {
               if(!openTestFlag){
                   window.android.callSendDataToBle('newIndex','DAFF'+invalue+this.crcModelBusClacQuery('FF'+invalue, true),invalue); 
               }
-                // alert(JSON.stringify(this.$store.state.rstInfo))
+              
               this.$router.push({path:'/memoryDetail',query:{modelCrc:tmpRstcrc.crcCode,name:tmpRstcrc.name,pupnum:index,remarksText:this.remarksText}});
           } 
     },
@@ -254,7 +250,6 @@ export default {
     //TODO 读取九个通道在安卓里的备注名
     //1、请求九个通道数据 默认每个通道都有值
     window['broastMemoryFromAndroid'] = (data,pageFrom) => {
-        //  alert(data)
         this.$store.state.memoryInfo={};//清楚
         self.wtlLog('memoryManage','broastHistoryFromAndroid='+data);
         self.broastFromAndroid(data,pageFrom,self.nowChooseId,self.GLOBAL_CONFIG.TESTFLAG);

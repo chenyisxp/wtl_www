@@ -24,6 +24,7 @@ const state = {
     weldingCur:'',//焊接中的电流
     weldingVoltage:'',//焊接中的电压
     weldingInfo:{},//焊接中这个对象
+    weldingDelay:false,//8秒没上传 跳走
     nowConnectMachine:'',
     nowConnectAddress:'',
     rstInfo:{},//存储不同模式里解析后的值

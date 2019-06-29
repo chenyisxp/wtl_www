@@ -139,13 +139,13 @@ Array.prototype.in_array = function (element) {
                             {id:0,key:'2T',value:'2T'},{id:1,key:'4T',value:'4T'}
                         ]
                     },{
-                        typeName:'POLATRITY',
+                        typeName:'POLARITY',
                         chooseKey:0,//默认选中
                         comList:[
                             {id:0,key:'AC',value:'AC'},{id:1,key:'DC',value:'DC'}
                         ]
                     },{
-                        typeName:'Pluse',
+                        typeName:'Pulse',
                         chooseKey:0,//默认选中
                         comList:[
                             {id:0,key:'NOPULSE',value:'Off'},{id:1,key:'PULSE',value:'On'}
@@ -324,12 +324,12 @@ Array.prototype.in_array = function (element) {
                         console.log(weldParam.migsynTypeList)
                         
                         if((arrayList[1]=='225'||arrayList[1]=='209'||arrayList[1]=='193') &&arrayList.length==14){
-                            console.log(4444);
+                            
                             //赋值开始  ......
                             rstInfo.weldType='MIGSYN';
                             rstInfo.weldTypeNum=_this.GLOBAL_CONFIG.callWeldTypeData.migsyn.newIndex;//这个和首页里的配对
                             //对第一个元素进行解析 拆成数组
-                            var byte1Bean = num16To2Arr(arrayList[2],'');
+                            var byte1Bean = num16To2Arr(arrayList[2],'',pageFrom);
                             rstInfo.nowTypeList.forEach(element => {
                                 switch (element.typeName) {
                                     case 'MODE':
@@ -392,7 +392,7 @@ Array.prototype.in_array = function (element) {
                         if((arrayList[1]=='226'||arrayList[1]=='210'||arrayList[1]=='194') && arrayList.length==6){
                             //赋值开始  ......
                             //对第一个元素进行解析 拆成数组
-                            var byte1Bean = num16To2Arr(arrayList[2],'');
+                            var byte1Bean = num16To2Arr(arrayList[2],'',pageFrom);
                             rstInfo.nowTypeList.forEach(element => {
                                 if(element.typeName=='MODE'){
                                     element.chooseKey=byte1Bean.mode?byte1Bean.mode:0;
@@ -424,7 +424,7 @@ Array.prototype.in_array = function (element) {
                        console.log('arrayList.length'+arrayList.length)
                        if((arrayList[1]=='227'||arrayList[1]=='211'||arrayList[1]=='195') &&arrayList.length==11){
                            //赋值开始  ......
-                           var byte1Bean = num16To2Arr(arrayList[2],'');
+                           var byte1Bean = num16To2Arr(arrayList[2],'',pageFrom);
                            //拆解成
                            var  arrtwo= num16To2ArrSpecial02(arrayList[3]);
                            rstInfo.nowTypeList.forEach(element => {
@@ -472,7 +472,7 @@ Array.prototype.in_array = function (element) {
                        //确认指令
                        console.log(arrayList.length+'aa')
                        if((arrayList[1]=='228'||arrayList[1]=='212'||arrayList[1]=='196') &&arrayList.length==16){
-                           var  rstBean = tigmanSpecilBuildHeader(arrayList[2],arrayList[3]);
+                           var  rstBean = tigmanSpecilBuildHeader(arrayList[2],arrayList[3],pageFrom);
                            console.log(rstBean);
                            rstInfo.nowTypeList.forEach(element => {
                                 switch (element.typeName) {
@@ -516,7 +516,7 @@ Array.prototype.in_array = function (element) {
                        //确认指令
                        if((arrayList[1]=='229'||arrayList[1]=='213'||arrayList[1]=='197') &&arrayList.length==10){
                            //赋值开始  ......
-                           var byte1Bean = num16To2Arr(arrayList[2],'MMA');
+                           var byte1Bean = num16To2Arr(arrayList[2],'MMA',pageFrom);
                            //拆解成
                            var  arrthree= num16To2ArrSpecial03(arrayList[3]);
                            rstInfo.nowTypeList.forEach(element => {
@@ -559,6 +559,7 @@ Array.prototype.in_array = function (element) {
                
                //全局存储
                if(pageFrom=='memory'){
+                //    alert(JSON.stringify(rstInfo))
                 store.state.memoryInfo = rstInfo;
                }else{
                 store.state.rstInfo = rstInfo;
@@ -576,7 +577,7 @@ Array.prototype.in_array = function (element) {
                 //确认指令
                 console.log(arrayList.length+'aa')
                 if((arrayList[1]=='228'||arrayList[1]=='212'||arrayList[1]=='196') &&arrayList.length==6){
-                    var  rstBean = tigmanSpecilBuildHeader(arrayList[2],arrayList[3]);
+                    var  rstBean = tigmanSpecilBuildHeader(arrayList[2],arrayList[3],pageFrom);
                     console.log(rstBean);
                     rstInfo.nowTypeList.forEach(element => {
                             switch (element.typeName) {
@@ -649,9 +650,7 @@ Array.prototype.in_array = function (element) {
                 // data =data.replace(' ', '');
                 console.log(weldParam.migsynTypeList);
                 // alert(dirctiveType+'||'+store.state.nowModelDirectice+'||'+pageFrom)
-                if(store.state.nowModelDirectice!='' &&dirctiveType!=store.state.nowModelDirectice){
-                    return;
-                }
+               
                 
                 var rstInfo ={};
                 if(!pageFrom){
@@ -661,12 +660,18 @@ Array.prototype.in_array = function (element) {
                 //1、来自那个页面有自己独立的数据处理方式
                 switch (pageFrom) {
                     case 'newIndex':
+                        //首页去除 放外面会导致memory也去除
+                        if(store.state.nowModelDirectice!='' &&dirctiveType!=store.state.nowModelDirectice){
+                            return;
+                        }
+                    
                         rstInfo =buidDataByPagefrom(pageFrom,dirctiveType,data,this);
                         break;
                     case 'memory':
                         console.log(dirctiveType+':ll22ll');
+                        
                         // let temp =data.substring(0,5)+data.substring(8,data.length)
-                        // alert(temp)
+                        
                         rstInfo =buidDataByPagefrom(pageFrom,dirctiveType,data,this);
                         //  alert(JSON.stringify(rstInfo))
                         break;
@@ -675,6 +680,10 @@ Array.prototype.in_array = function (element) {
                 }
                 return rstInfo;
             }
+            //焊接中 处理类
+            // Vue.prototype.weldBuildData = function(pageFrom,dirctiveType,data){
+                
+            // }
             //抽取的公共部分
             function buidDataByPagefrom(pageFrom,dirctiveType,data,_this){
                 console.log(data)
@@ -829,7 +838,7 @@ Array.prototype.in_array = function (element) {
                 }
             }
             
-            function tigmanSpecilBuildHeader(arr1,arr2){
+            function tigmanSpecilBuildHeader(arr1,arr2,pageFrom){
                  var buildArr = ((Array(8).join(0) + parseInt(arr1,10).toString(2)).slice(-8)).replace(/(.{1})/g,'$1 ').replace(/(^\s*)|(\s*$)/g, "").split(' ');
                  var secdArr = ((Array(8).join(0) + parseInt(arr2,10).toString(2)).slice(-8)).replace(/(.{1})/g,'$1 ').replace(/(^\s*)|(\s*$)/g, "").split(' ');
                  var bean ={};
@@ -841,7 +850,9 @@ Array.prototype.in_array = function (element) {
                      bean.weldStatus =buildArr[5]
                      //焊接中状态赋值
                      if(bean.weldStatus==1){
-                        store.state.weldingStatus=1
+                       if(pageFrom=='newIndex'){
+                         store.state.weldingStatus=1
+                       }
                      }else{
                         store.state.weldingStatus=0;
                         store.state.getWeldingInfoTimes=0;//重置
@@ -920,7 +931,7 @@ Array.prototype.in_array = function (element) {
                 return bean;
             }
             //转成16进制转2进制 之后不足的位数补零
-            function num16To2Arr(num,type){
+            function num16To2Arr(num,type,pageFrom){
                 console.log(num)
                 // return (Array(len).join('0') + parseInt(num,16).toString(2)).slice(-len);
                 //直接返回切割后的数组
@@ -936,9 +947,11 @@ Array.prototype.in_array = function (element) {
                 //2|焊接
                     bean.weldStatus =buildArr[5]
                     //焊接中状态赋值
-                    // alert('焊接状态'+bean.weldStatus);
+                    // alert('焊接状态'+bean.weldStatus+'pageFrom:'+pageFrom);
                     if(bean.weldStatus==1){
-                       store.state.weldingStatus=1
+                        if(pageFrom=='newIndex'){
+                            store.state.weldingStatus=1
+                        }
                     }else{
                         store.state.weldingStatus=0;
                         store.state.getWeldingInfoTimes=0;//重置

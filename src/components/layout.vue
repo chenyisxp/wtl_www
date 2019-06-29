@@ -38,6 +38,7 @@ export default {
       isShowFooter:true,
       transitionName:'',
       autoTimeoutFlag:{},
+      weldingTimer:{}
       // globalGetConnectStatus:{}
     }
   },
@@ -51,7 +52,7 @@ export default {
             self.autoTimeoutFlag =setTimeout(() => {
                      //是不是焊接中....
               if(self.$store.state.weldingStatus==1){
-               
+             
                     //没有做任何操作就跳转
                     if(self.$store.state.nowRouter!='/blueToothManage'){
                       self.$router.push('/welding');
@@ -90,7 +91,7 @@ export default {
      buildWeldingData(data){
       //  alert(data);
         data=data.replace(/\s+/g,"").toUpperCase();
-        //校验数据格式是否正确 发送信号给安卓 DAB1 0000 0000 E721
+        //校验数据格式是否正确 发送信号给安卓 DAB1 0100 0200 8658 双字节
         var oldCrc =data.substring(data.length-4,data.length+1);
         //  alert(this.crcModelBusClacQuery(data.substring(2,data.length-4, true)))
         if(data.length!=16){
@@ -114,33 +115,34 @@ export default {
         switch (data.substring(2,4)) {
           case 'B1':
             this.$store.state.weldingInfo =this.GLOBAL_CONFIG.callWeldTypeData.migsyn;
-            this.$store.state.weldingCur =parseInt(data.substring(4,8),16);
-            this.$store.state.weldingVoltage=parseInt(data.substring(8,12),16);
+            this.$store.state.weldingCur =parseInt(("0x"+data.substring(6,8)+data.substring(4,6)),16).toString(10)
+            this.$store.state.weldingVoltage=parseInt(("0x"+data.substring(10,12)+data.substring(8,10)),16).toString(10)
             break;
           case 'B2':
             this.$store.state.weldingInfo =this.GLOBAL_CONFIG.callWeldTypeData.migman;
-            this.$store.state.weldingCur =parseInt(data.substring(4,8),16);
-            this.$store.state.weldingVoltage=parseInt(data.substring(8,12),16);
+            this.$store.state.weldingCur =parseInt(("0x"+data.substring(6,8)+data.substring(4,6)),16).toString(10)
+            this.$store.state.weldingVoltage=parseInt(("0x"+data.substring(10,12)+data.substring(8,10)),16).toString(10)
             break;
           case 'B3':
             this.$store.state.weldingInfo =this.GLOBAL_CONFIG.callWeldTypeData.tigsyn;
-            this.$store.state.weldingCur =parseInt(data.substring(4,8),16);
-            this.$store.state.weldingVoltage=parseInt(data.substring(8,12),16);
+            this.$store.state.weldingCur =parseInt(("0x"+data.substring(6,8)+data.substring(4,6)),16).toString(10)
+            this.$store.state.weldingVoltage=parseInt(("0x"+data.substring(10,12)+data.substring(8,10)),16).toString(10)
             break;
           case 'B4':
             this.$store.state.weldingInfo =this.GLOBAL_CONFIG.callWeldTypeData.tigman;
-            this.$store.state.weldingCur =parseInt(data.substring(4,8),16);
-            this.$store.state.weldingVoltage=parseInt(data.substring(8,12),16);
+           this.$store.state.weldingCur =parseInt(("0x"+data.substring(6,8)+data.substring(4,6)),16).toString(10)
+            this.$store.state.weldingVoltage=parseInt(("0x"+data.substring(10,12)+data.substring(8,10)),16).toString(10)
             break;
           case 'B5':
             this.$store.state.weldingInfo =this.GLOBAL_CONFIG.callWeldTypeData.mma;
-            this.$store.state.weldingCur =parseInt(data.substring(4,8),16);
-            this.$store.state.weldingVoltage=parseInt(data.substring(8,12),16);
+            this.$store.state.weldingCur =parseInt(("0x"+data.substring(6,8)+data.substring(4,6)),16).toString(10)
+            this.$store.state.weldingVoltage=parseInt(("0x"+data.substring(10,12)+data.substring(8,10)),16).toString(10)
             break;
           default:
             break;
         }
         //00、是否前往焊接中的页面 第一次返回数据前往
+        // alert(this.$store.state.getWeldingInfoTimes)
         // console.log('this.$store.state.getWeldingInfoTime'+this.$store.state.getWeldingInfoTime)
         if(this.$store.state.getWeldingInfoTimes==1){
           //11、且当前模式也自动返回了相关数据
@@ -236,6 +238,7 @@ export default {
   },
   destroyed: function () {
      clearTimeout(this.autoTimeoutFlag);
+     clearTimeout(this.weldingTimer);
      clearInterval(this.$store.state.globalGetConnectStatus);
   },
   computed: {
@@ -303,12 +306,20 @@ export default {
      
     }
   },beforeCreate(){
+    
      //全局挂载监听函数
     window['tellVueWelding'] = (data) => {
         //处理返回的焊接中的数据...DAB1 0000 0000 E721
+        //真实数据 DAB3F901DF00B618
         // alert("main2"+data); 
         // alert(this.$store.state.getWeldingInfoTimes);
       this.wtlLog('layout','tellVueWelding='+data);
+      this.$store.state.weldingDelay=false;
+      clearTimeout(this.weldingTimer);
+      this.weldingTimer=setTimeout(() => {
+        this.$store.state.weldingDelay=true;
+      }, 8000);
+      // this.$store.state.AdroidOldMsg=data;
       this.buildWeldingData(data);
     }
      //全局挂载监听函数 安卓捕获后退键进行判断后 返回去哪里  目前就去主页 废弃

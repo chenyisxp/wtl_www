@@ -42,24 +42,25 @@ export default {
             var  data ='';
             //焊接中....migsyn
            if(typeName=='migsyn'){
-                data ='DAB1 0001 0002 1B88';
-                this.buildData('newIndex',this.GLOBAL_CONFIG.callWeldTypeData.migsyn.crcCode,this.GLOBAL_CONFIG.testWeldingData.migsyn.data.replace(/\s+/g,"").replace(/(.{2})/g,'$1 ').replace(/(^\s*)|(\s*$)/g, ""));
+                data ='DAB1 0100 0200 8658';
+                this.weldBuildData('newIndex',this.GLOBAL_CONFIG.callWeldTypeData.migsyn.crcCode,this.GLOBAL_CONFIG.testWeldingData.migsyn.data.replace(/\s+/g,"").replace(/(.{2})/g,'$1 ').replace(/(^\s*)|(\s*$)/g, ""));
            }else if(typeName=='migman'){
                //焊接中....migman
                 data ='DAB2 0000 0000 1A1C';
-                this.buildData('newIndex',this.GLOBAL_CONFIG.callWeldTypeData.migman.crcCode,this.GLOBAL_CONFIG.testWeldingData.migman.data.replace(/\s+/g,"").replace(/(.{2})/g,'$1 ').replace(/(^\s*)|(\s*$)/g, "")); 
+                this.weldBuildData('newIndex',this.GLOBAL_CONFIG.callWeldTypeData.migman.crcCode,this.GLOBAL_CONFIG.testWeldingData.migman.data.replace(/\s+/g,"").replace(/(.{2})/g,'$1 ').replace(/(^\s*)|(\s*$)/g, "")); 
            }else if(typeName=='tigsyn'){
                  //焊接中....tigsyn
-                data ='DAB3 0000 0000 DA21';
-                this.buildData('newIndex',this.GLOBAL_CONFIG.callWeldTypeData.tigsyn.crcCode,this.GLOBAL_CONFIG.testWeldingData.tigsyn.data.replace(/\s+/g,"").replace(/(.{2})/g,'$1 ').replace(/(^\s*)|(\s*$)/g, ""));
+                // data ='DAB3 0000 0000 DA21';
+                data ='DAB3F901DF00B618';
+                this.weldBuildData('newIndex',this.GLOBAL_CONFIG.callWeldTypeData.tigsyn.crcCode,this.GLOBAL_CONFIG.testWeldingData.tigsyn.data.replace(/\s+/g,"").replace(/(.{2})/g,'$1 ').replace(/(^\s*)|(\s*$)/g, ""));
            }else if(typeName=='tigman'){
                 //焊接中....tigman
                 var  data ='DAB4 0000 0000 1A94';
-                this.buildData('newIndex',this.GLOBAL_CONFIG.callWeldTypeData.tigman.crcCode,this.GLOBAL_CONFIG.testWeldingData.tigman.data.replace(/\s+/g,"").replace(/(.{2})/g,'$1 ').replace(/(^\s*)|(\s*$)/g, ""));
+                this.weldBuildData('newIndex',this.GLOBAL_CONFIG.callWeldTypeData.tigman.crcCode,this.GLOBAL_CONFIG.testWeldingData.tigman.data.replace(/\s+/g,"").replace(/(.{2})/g,'$1 ').replace(/(^\s*)|(\s*$)/g, ""));
            }else{
                 //焊接中....mma
                 var  data ='DAB5 0000 0000 DAA9';
-                this.buildData('newIndex',this.GLOBAL_CONFIG.callWeldTypeData.mma.crcCode,this.GLOBAL_CONFIG.testWeldingData.mma.data.replace(/\s+/g,"").replace(/(.{2})/g,'$1 ').replace(/(^\s*)|(\s*$)/g, ""));
+                this.weldBuildData('newIndex',this.GLOBAL_CONFIG.callWeldTypeData.mma.crcCode,this.GLOBAL_CONFIG.testWeldingData.mma.data.replace(/\s+/g,"").replace(/(.{2})/g,'$1 ').replace(/(^\s*)|(\s*$)/g, ""));
            }
            
             // setTimeout(() => {
@@ -99,28 +100,28 @@ export default {
         switch (data.substring(2,4)) {
           case 'B1':
             this.$store.state.weldingInfo =this.GLOBAL_CONFIG.callWeldTypeData.migsyn;
-            this.$store.state.weldingCur =parseInt(data.substring(4,8),16);
-            this.$store.state.weldingVoltage=parseInt(data.substring(8,12),16);
+            this.$store.state.weldingCur =parseInt(("0x"+data.substring(7,9)+data.substring(4,6)),16).toString(10)
+            this.$store.state.weldingVoltage=parseInt(("0x"+data.substring(10,12)+data.substring(8,10)),16).toString(10)
             break;
           case 'B2':
             this.$store.state.weldingInfo =this.GLOBAL_CONFIG.callWeldTypeData.migman;
-            this.$store.state.weldingCur =parseInt(data.substring(4,8),16);
-            this.$store.state.weldingVoltage=parseInt(data.substring(8,12),16);
+            this.$store.state.weldingCur =parseInt(("0x"+data.substring(7,9)+data.substring(4,6)),16).toString(10)
+            this.$store.state.weldingVoltage=parseInt(("0x"+data.substring(10,12)+data.substring(8,10)),16).toString(10)
             break;
           case 'B3':
             this.$store.state.weldingInfo =this.GLOBAL_CONFIG.callWeldTypeData.tigsyn;
-            this.$store.state.weldingCur =parseInt(data.substring(4,8),16);
-            this.$store.state.weldingVoltage=parseInt(data.substring(8,12),16);
+            this.$store.state.weldingCur =parseInt(("0x"+data.substring(7,9)+data.substring(4,6)),16).toString(10)
+            this.$store.state.weldingVoltage=parseInt(("0x"+data.substring(10,12)+data.substring(8,10)),16).toString(10)
             break;
           case 'B4':
             this.$store.state.weldingInfo =this.GLOBAL_CONFIG.callWeldTypeData.tigman;
-            this.$store.state.weldingCur =parseInt(data.substring(4,8),16);
-            this.$store.state.weldingVoltage=parseInt(data.substring(8,12),16);
+           this.$store.state.weldingCur =parseInt(("0x"+data.substring(7,9)+data.substring(4,6)),16).toString(10)
+            this.$store.state.weldingVoltage=parseInt(("0x"+data.substring(10,12)+data.substring(8,10)),16).toString(10)
             break;
           case 'B5':
             this.$store.state.weldingInfo =this.GLOBAL_CONFIG.callWeldTypeData.mma;
-            this.$store.state.weldingCur =parseInt(data.substring(4,8),16);
-            this.$store.state.weldingVoltage=parseInt(data.substring(8,12),16);
+            this.$store.state.weldingCur =parseInt(("0x"+data.substring(7,9)+data.substring(4,6)),16).toString(10)
+            this.$store.state.weldingVoltage=parseInt(("0x"+data.substring(10,12)+data.substring(8,10)),16).toString(10)
             break;
           default:
             break;

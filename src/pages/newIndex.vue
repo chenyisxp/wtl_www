@@ -746,8 +746,9 @@ export default {
         that.nowConnectStatus='connected';
       } 
        window['broastFromAndroid'] = (data,pageFrom) => {
-            this.$store.state.memoryInfo ={};//清空
-            this.$store.state.rstInfo={};
+            // 20190623 比较大的改动主调这两个不知道会不会有影响
+            // this.$store.state.memoryInfo ={};//清空
+            // this.$store.state.rstInfo={};
           //如果和现在选的模式不一致，不进行跳转
           //  alert(data)
           that.showRespData =data;

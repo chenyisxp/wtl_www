@@ -792,6 +792,7 @@ export default {
        this.specialGasRule(type,this.MIG_MATERIAL);
     },
     specialGasRule(type,chooseTempKey){
+        console.log(type,chooseTempKey)
          //特殊处理 不同材料对应气体显示不同
         if(type=='MATERIAL'){
             // Fe的时候是CO2和MIX
@@ -823,25 +824,24 @@ export default {
                     }
                 });
             }else if(chooseTempKey==1){//Ss co2
-            console.log('ss')
                   this.nowTypeList.forEach(element => {
                       console.log(element.typeName);
                     if(element.typeName=='GAS'){
                         console.log(element.chooseKey)
-                       if(element.chooseKey==0){
+                       if(element.chooseKey==1){
                             element.comList=[
-                               {id:0,key:'CO2',value:'CO2'}
+                               {id:1,key:'MIX',value:'MIX'}
                             ];
                             element.inchComList=[
-                               {id:0,key:'CO2',value:'CO2'}
+                               {id:1,key:'MIX',value:'MIX'}
                             ]
                        }else{
-                            element.chooseKey=0//默认选中
+                            element.chooseKey=1//默认选中
                             element.comList=[
-                                {id:0,key:'CO2',value:'CO2'}
+                                {id:1,key:'MIX',value:'MIX'}
                             ];
                             element.inchComList=[
-                              {id:0,key:'CO2',value:'CO2'}
+                              {id:1,key:'MIX',value:'MIX'}
                             ]
                        }
                     }
@@ -883,20 +883,20 @@ export default {
             else if(chooseTempKey==4){//Ss|fcaw-g = mix
                   this.nowTypeList.forEach(element => {
                     if(element.typeName=='GAS'){
-                       if(element.chooseKey==1){
+                       if(element.chooseKey==0){
                             element.comList=[
-                               {id:1,key:'MIX',value:'MIX'}
+                               {id:0,key:'CO2',value:'CO2'}
                             ],
                             element.inchComList=[
-                               {id:1,key:'MIX',value:'MIX'}
+                               {id:0,key:'CO2',value:'CO2'}
                             ]
                        }else{
-                            element.chooseKey=1//默认选中
+                            element.chooseKey=0//默认选中
                             element.comList=[
-                                 {id:1,key:'MIX',value:'MIX'}
+                                {id:0,key:'CO2',value:'CO2'}
                             ],
                             element.inchComList=[
-                               {id:1,key:'MIX',value:'MIX'}
+                                {id:0,key:'CO2',value:'CO2'}
                             ]
                        }
                     }
@@ -1148,11 +1148,44 @@ export default {
         if(max<=min){
             return;
         }else{
-           
+             let tempRulerNumAtrMap =  new Map([
+                [0,{num:'0.6mm',height:6,id:0}],
+                [1,{num:'0.7mm',height:7,id:1}],
+                [2,{num:'0.9mm',height:9,id:2}],
+                [3,{num:'1.2mm',height:12,id:3}],
+                [4,{num:'1.6mm',height:16,id:4}],
+                [5,{num:'2.1mm',height:21,id:5}],
+                [6,{num:'2.8mm',height:28,id:6}],
+                [7,{num:'3.4mm',height:34,id:7}],
+                [8,{num:'4.8mm',height:48,id:8}],
+                [9,{num:'6.4mm',height:64,id:9}],
+                [10,{num:'8.0mm',height:88,id:10}],
+                [11,{num:'9.5mm',height:95,id:11}],
+                [12,{num:'11.0mm',height:110,id:12}],
+                [13,{num:'12.7mm',height:127,id:13}]
+            ]);
+            let   tempRulerInchNumAtrMap=new Map([
+                [0,{num:'24GA',height:6,id:0}],
+                [1,{num:'22GA',height:7,id:1}],
+                [2,{num:'20GA',height:9,id:2}],
+                [3,{num:'18GA',height:12,id:3}],
+                [4,{num:'16GA',height:16,id:4}],
+                [5,{num:'14GA',height:21,id:5}],
+                [6,{num:'12GA',height:28,id:6}],
+                [7,{num:'1/8"',height:34,id:7}],
+                [8,{num:'3/16"',height:48,id:8}],
+                [9,{num:'1/4"',height:64,id:9}],
+                [10,{num:'5/16"',height:88,id:10}],
+                [11,{num:'3/8"',height:95,id:11}],
+                [12,{num:'7/16"',height:110,id:12}],
+                [13,{num:'1/2"',height:127,id:13}]
+            ]);
            while (i<=max)
             {
-               this.rulerInchNumAtr.push(this.rulerInchNumAtrMap.get(i));
-               this.rulerNumAtr.push(this.rulerNumAtrMap.get(i));
+                let aa= tempRulerInchNumAtrMap.get(i);
+               this.rulerInchNumAtr.push(aa);
+               let bb= tempRulerNumAtrMap.get(i);
+               this.rulerNumAtr.push(bb);
                 i++;
             }
             // for(i=0;i<=max;i++){
@@ -1251,7 +1284,7 @@ export default {
         if(list.RECOMMEND_INDUCTANCE<=this.inducanceValue){
             this.overInducanceFlag=true;
         }
-        if(this.firstInit){
+        if(true){
             this.firstInit=false;
             //滑动thinkness赋值
             this.buildRulerArrRange(list.MIG_MIN_THICHNESS,list.MIG_MAX_THICHNESS);
@@ -1350,8 +1383,7 @@ export default {
        }
      },
      goBack(){
-        //  alert(1111)
-         this.go('/newIndex');
+         this.$router.push({path:'/newIndex',query:{}});
      },
       //手动选择 刻度值
     handleTouchstart(e){
@@ -1374,6 +1406,10 @@ export default {
     //   window.addEventListener("popstate", function(e) {
     //     window.history.pushState(null, this.goBack, "#");
     //   })
+    if (window.history && window.history.pushState) {
+            history.pushState(null, null, document.URL);
+            window.addEventListener('popstate', this.goBack, false);
+    } 
     if(this.$route.query.pageFrom =='/memoryDetail'){
         //来自记忆的application
         this.isReadyFlag=1;
@@ -1393,6 +1429,7 @@ export default {
       self.firstInit=true;
       clearTimeout(self.autoTimeoutFlag);
     //   window.removeEventListener(null, self.goBack, "#");
+    window.removeEventListener('popstate', this.goBack, false);
   },
   watch: {
         getAndriodNewMsg(val, oldVal){

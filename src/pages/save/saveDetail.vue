@@ -262,12 +262,14 @@ export default {
     },
     initData(){
       var list  =this.$store.state.memoryInfo;//去拿memeory对象里的值
+    //   alert(JSON.stringify(list))
       //赋值拆解
       this.nowTypeList =list.nowTypeList;
       //电感量
       this.inducanceValue = list.INDUCTANCE;
       //最新的
       this.MIG_MATERIAL =list.MIG_MATERIAL;
+     
       if(list.initBean.unit==1){
           this.UnitFlag=1;
       }else{
@@ -392,7 +394,7 @@ export default {
     this.queryCrc= this.$route.query.queryCrc;
     // this.nowModalTypeId=this.$route.query.nowModalTypeId;//主页中的id
     this.nowModalTypeId=this.$store.state.nowModalTypeId;//主页中的id
-    // alert(this.nowModalTypeId)
+    
     this.name = this.$route.query.name;
     this.pupnum = this.$route.query.pupnum;//通道id
     this.initData();

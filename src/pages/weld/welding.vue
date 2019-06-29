@@ -24,7 +24,7 @@
         <div class="midLine"></div>
         <!-- 滑动块1 -->
           
-        <div class="electricCurrent">
+        <div class="electricCurrent" v-if="false" >
             <div class="up">
                 <div class="u-left" v-if="bleParamKey1=='FORCE'"><img  src="../../assets/images/weld_icon_newForce.png"></div>
                 <div class="u-left" v-if="bleParamKey1=='SPEED'"><img  src="../../assets/images/speed.png"></div>
@@ -50,7 +50,7 @@
             </div>
         </div>
         <!-- 滑块2 -->
-        <div class="electricCurrent Voltage" v-if="hidSlide2">
+        <div class="electricCurrent Voltage" v-if="false  && hidSlide2">
             <div class="up">
                 <div class="u-left"><img  src="../../assets/images/voltage.png"></div>
                
@@ -146,7 +146,8 @@ export default {
         max_ac_fre:'',
         weldingCur:'',
         weldingVoltage:'',
-        experialTimer:{}
+        experialTimer:{},
+        operateTimer:{}
 
     }
       
@@ -309,12 +310,13 @@ export default {
                         this.bleParamKey2 ='V_WELDING';//参照util里
                       console.log('整的爱的'+this.diffMin);
                     }
+                    //20190620 关闭不显示
                    //初始化 第一个滑动控制器
-                    this.initElecticCurrent();
+                    // this.initElecticCurrent();
                     //初始化 第二个滑动控制器
-                    if(this.hidSlide2 ){
-                        this.initVotalage();
-                    }
+                    // if(this.hidSlide2 ){
+                        // this.initVotalage();
+                    // }
                    
             }
         
@@ -590,7 +592,7 @@ export default {
         this.callSendDataToBleUtil('welding','DAFF'+oldCrc+this.crcModelBusClacQuery('FF'+oldCrc, true),oldCrc);
 
         this.$store.state.getWeldingInfoTimes = this.$store.state.getWeldingInfoTimes+1;
-        alert(this.$store.state.getWeldingInfoTimes)
+        // alert(this.$store.state.getWeldingInfoTimes)
         switch (data.substring(2,4)) {
           case 'B1':
             this.$store.state.weldingInfo =this.GLOBAL_CONFIG.callWeldTypeData.migsyn;
@@ -628,7 +630,7 @@ export default {
           if(JSON.stringify(this.$store.state.rstInfo) != "{}"){
             //22、是不是焊接中的数据
             console.log('this.$store.state.rstInfo.initBean.weldStatus'+this.$store.state.rstInfo.initBean.weldStatus);
-            alert("aa:"+this.$store.state.weldingStatus)
+            // alert("aa:"+this.$store.state.weldingStatus)
              if(this.$store.state.weldingStatus==1){
                 this.$router.push('/welding');
              }
@@ -704,6 +706,9 @@ export default {
    
   },
   computed: {
+       getWeldingDelayFlag(){
+            return this.$store.state.weldingDelay;
+       },
         getNowWeldStatus(){
              return this.$store.state.weldingStatus;　　//需要监听的数据
         },
@@ -724,10 +729,15 @@ export default {
 
   },
   watch:{
+      getWeldingDelayFlag(val,oldval){
+         
+          if(val){
+              this.goback();
+          }
+      },
       getNowWeldStatus(val, oldVal){
           if(val==0){//非焊接中 离开本页面 
              this.$router.push('/newIndex');
-
           }
       },
         getAndriodNewMsg(val, oldVal){
@@ -740,7 +750,7 @@ export default {
                 this.wtlLog('weld_tigman_bfa3','this.modelType'+this.modelType);
                   
                 var rst =this.buildData('newIndex',this.modelType,val.replace(/\s+/g,"").replace(/(.{2})/g,'$1 ').replace(/(^\s*)|(\s*$)/g, ""));
-                 
+                 alert(rst)
                  if(JSON.stringify(rst) != "{}"){
                     //发送确认收到的指令给安卓
                     var invalue =val.substring(val.length-4,val.length);
@@ -778,6 +788,7 @@ export default {
   },
   destroyed(){
       clearInterval(this.experialTimer);
+      clearTimeout(this.operateTimer);
       console.log('welding destroyed')
   }
 };

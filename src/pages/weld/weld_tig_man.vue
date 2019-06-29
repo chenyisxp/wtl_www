@@ -124,7 +124,7 @@
             <!-- <img src="../../assets/images/histroy.png"> -->
              <img v-if="nowtypename=='POLATRITY'" src="../../assets/images/blue_acdc.png"> 
              <img v-if="nowtypename=='MODE'" src="../../assets/images/blue_weld_icon_new_mode.png"> 
-             <img v-if="nowtypename=='Pluse'" src="../../assets/images/blue_weld_icon_new_pluse.png"> 
+             <img v-if="nowtypename=='Pulse'" src="../../assets/images/blue_weld_icon_new_pluse.png"> 
               <img v-if="nowtypename=='HF'" src="../../assets/images/blue_weld_icon_new_hf.png"> 
           </div>
           <div class="ri">{{changeStrShowName(nowtypename)}}</div>
@@ -152,7 +152,7 @@
 import { MessageBox, Popup, Toast, Indicator } from "mint-ui";
 import Loading from "@/components/base/Loading";
 import weld_commonVue from './weld_common.vue';
- const TIGMAN_DIRECTIVE_MAP =new Map([['MODE','D0'],['POLATRITY','D1'],['HF','D2'],['Pluse','D3'],['BTNS','D4'],['PARAMVALUE','D5']]);
+ const TIGMAN_DIRECTIVE_MAP =new Map([['MODE','D0'],['POLATRITY','D1'],['HF','D2'],['Pulse','D3'],['BTNS','D4'],['PARAMVALUE','D5']]);
 export default {
   name: "",
   components: {
@@ -259,7 +259,7 @@ export default {
           ]
         },
         {
-          typeName: "Pluse",
+          typeName: "Pulse",
           chooseKey: 0, //默认选中
           comList: [
             { id: 0, key: "NOPULSE", value: "NO PULSE" },
@@ -570,13 +570,13 @@ export default {
           this.nowDCORACFLAG=0;
         }
         if(this.nowChooseKeysMap.get('MODE')==1){//4T
-          if(this.nowChooseKeysMap.get('Pluse')==0){//脉冲 no pluse
+          if(this.nowChooseKeysMap.get('Pulse')==0){//脉冲 no pluse
             this.nowModelTypeName ='4T_NOPULSE_DC';
           }else{
             this.nowModelTypeName ='4T_PULSE_DC';
           }
         }else{//2T
-          if(this.nowChooseKeysMap.get('Pluse')==0){//脉冲 pluse
+          if(this.nowChooseKeysMap.get('Pulse')==0){//脉冲 pluse
             this.nowModelTypeName ='2T_NOPULSE_DC';
           }else{
             this.nowModelTypeName ='2T_PULSE_DC';
@@ -1884,7 +1884,9 @@ export default {
     //4、初始化 图片设置
     // this.initWeldingAutoRouter();
  
-    }
+    },goBack(){
+            this.$router.push({path:'/newIndex',query:{}});
+        }
   },
   mounted: function() {
      this.$route.query.nowModalTypeId=3;
@@ -1897,6 +1899,10 @@ export default {
     //   history.pushState(null, null, document.URL);
     //   window.addEventListener('popstate', this.go('/newIndex'), false);
     // } 
+    if (window.history && window.history.pushState) {
+            history.pushState(null, null, document.URL);
+            window.addEventListener('popstate', this.goBack, false);
+    } 
     if(this.$route.query.pageFrom =='/memoryDetail'){
         //来自记忆的application
         this.isReadyFlag=1;
@@ -1959,6 +1965,7 @@ export default {
       }
   },
   destroyed(){
+        window.removeEventListener('popstate', this.goBack, false);
        clearTimeout(this.autoTimeoutFlag);
       //  window.removeEventListener('popstate', this.go('/newIndex'), false);
       //记录最后一次修改的字段
@@ -2022,7 +2029,7 @@ export default {
         background-size: 40px;
         background-position: left center;
       }
-      .typename.POLATRITY{
+      .typename.POLARITY{
         background: url(../../assets/images/weld_icon_new_acdc.png) no-repeat;
         background-size: 40px;
         background-position: left center;
@@ -2052,7 +2059,7 @@ export default {
         background-size: 40px;
         background-position: left center;
       } 
-      .typename.Pluse{
+      .typename.Pulse{
         background: url(../../assets/images/weld_icon_new_pluse.png) no-repeat;
         background-size: 40px;
         background-position: left center;

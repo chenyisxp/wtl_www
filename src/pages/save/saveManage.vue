@@ -6,7 +6,7 @@
       </div>
      BACK</div>
    <ul class="mListContain">
-        <li v-for="(item,index) in mList" class="m-li">
+        <li v-for="(item,index) in mList" class="m-li" :key="index">
            <div class="m-b" :class="'b-'+index" @click="goDetail(item.mid,item.remarksTtile)">{{item.remarksTtile}}</div>
         </li>
    </ul>
@@ -202,13 +202,16 @@ export default {
           //存储的byte0字节是个通道 序号
           switch (index) {
             case '1':
-                this.broastFromAndroid('dad1 02 04 01 04 0a a5 4600 4600 f000 f000 020a ae3c','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
+                // this.broastFromAndroid('dad1 02 04 01 04 0a a5 4600 4600 f000 f000 020a ae3c','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
+                this.broastFromAndroid('dad1 82 04 01 03 07 35 4600 4900 e100 a600 0208 95d0','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);//save不能显示
                 break;
             case '2':
                 this.broastFromAndroid('dad2 02 00 3D00 c800 00 7503','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
                 break;
             case '3':
-                this.broastFromAndroid('dad3 03 00 00 03 6400 6400 02 09  1EB4','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
+                                        //dae3 82 00 05 41 0041 0002 082c 00 8529
+                  this.broastFromAndroid('dad3 06 00 05 00 0041 0000 0000 e1  4c39','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
+                // this.broastFromAndroid('dad3 03 00 00 03 6400 6400 0209  1EB4','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
                 break;
             case '4':
                   this.broastFromAndroid('dad4 04 00 c0 32 3200 32 3200 3200 e800 32 32 3200 32 50 23 5FAD','hisweldlist',index,this.GLOBAL_CONFIG.TESTFLAG);
@@ -253,7 +256,7 @@ export default {
     //TODO 读取九个通道在安卓里的备注名
     //1、请求九个通道数据 默认每个通道都有值
     window['broastMemoryFromAndroid'] = (data,pageFrom) => {
-         
+        //  alert(data)
         self.wtlLog('saveManage','broastHistoryFromAndroid='+data);
         self.broastFromAndroid(data,pageFrom,self.nowChooseId,self.GLOBAL_CONFIG.TESTFLAG);
     }

@@ -591,10 +591,15 @@ export default {
     newCloseModal(modalType){
          let self =this;
          self.ifFixedFlag=false;
+         console.log(self.nowtypename)
          //1、对于选中的值赋值到主页中
          if(modalType=='thinkness'){
             //厚度的特殊处理
             self.changeThinckChecked(self.nowtypename, self.actualNum,0);
+         }else if(self.nowtypename=='POLATRITY'){//ac时只有60xx
+            //1、是否有必要更新
+            //2、同时修改electrode
+            self.buildMmaEletrode(self.nowtypename, self.nowChoose,0);
          }else{
             self.changeChecked(self.nowtypename, self.nowChoose,0);
          }
@@ -736,6 +741,53 @@ export default {
             self.$router.push({path:url,query:{type: self.typeName ,nowModalTypeId:self.nowModalTypeId,pageFrom:'/weld_mma'}});
         }
         
+    },
+    buildMmaEletrode(type,value,index){
+        this.nowTypeList.forEach(element => {
+            if(element.typeName==type){
+                element.chooseKey=value;
+                //计算 查找 发送请求给ble告知 修改了
+                var dirctCode = this.getDirective(this.typeName,type);
+                // (Array(2).join('0') + parseInt(1,10).toString(16)).slice(-2)
+                //var num = (Array(4).join('0') + parseInt(value,10).toString(16)).slice(-4);
+              //new 新规则
+                var num =this.jinzhiChangeFuc(value);
+                var crc =this.crcModelBusClacQuery(dirctCode+num, true);
+                var sendData =this.GLOBAL_CONFIG.DirectStart+dirctCode+num+crc;
+                this.callSendDataToBleUtil('weld_tig_syn',sendData,crc);
+
+                this.childBuildMmaEletrode('ELECTRODE',value,index);
+            }
+        });
+        // comList:[
+        //     {id:0,key:'60xx',value:'60xx'},{id:1,key:'70xx',value:'70xx'}
+        // ],
+        // inchComList:[
+        //     {id:0,key:'60xx',value:'60xx'},{id:1,key:'70xx',value:'70xx'}
+        // ]
+    },
+    childBuildMmaEletrode(type,value,index){
+         this.nowTypeList.forEach(element => {
+            if(element.typeName==type){
+                if(value==0){//ac 本来就是ac则
+                    element.comList= [{id:0,key:'60xx',value:'60xx'}]
+                    element.inchComList=[{id:0,key:'60xx',value:'60xx'}]
+                }else{
+                   element.comList= [{id:0,key:'60xx',value:'60xx'},{id:1,key:'70xx',value:'70xx'}]
+                   element.inchComList=[{id:0,key:'60xx',value:'60xx'},{id:1,key:'70xx',value:'70xx'}]
+                }
+                if(element.chooseKey==1 && element.comList.length==1){
+                    element.chooseKey=element.comList[0].id;//第一个元素的
+                    //计算 查找 发送请求给ble告知 修改了
+                    var dirctCode = this.getDirective(this.typeName,type);
+                    //new 新规则
+                    var num =this.jinzhiChangeFuc(element.chooseKey);
+                    var crc =this.crcModelBusClacQuery(dirctCode+num, true);
+                    var sendData =this.GLOBAL_CONFIG.DirectStart+dirctCode+num+crc;
+                    this.callSendDataToBleUtil('weld_tig_syn',sendData,crc);
+                }
+            }
+        });
     },
     changeChecked(type,value,index){
         this.nowTypeList.forEach(element => {
@@ -943,7 +995,7 @@ export default {
       },
           //数组 滑动 数组构造
     buildRulerArrRange(min,max){
-          
+        
         var tempArr =[];
         var tempInchArr =[];
         this.rulerInchNumAtr=[];
@@ -959,19 +1011,58 @@ export default {
         if(max<=min){
             return;
         }else{
+          
            
+             let tempRulerNumAtrMap =  new Map([
+                [0,{num:'0.6mm',height:6,id:0}],
+                [1,{num:'0.7mm',height:7,id:1}],
+                [2,{num:'0.9mm',height:9,id:2}],
+                [3,{num:'1.2mm',height:12,id:3}],
+                [4,{num:'1.6mm',height:16,id:4}],
+                [5,{num:'2.1mm',height:21,id:5}],
+                [6,{num:'2.8mm',height:28,id:6}],
+                [7,{num:'3.4mm',height:34,id:7}],
+                [8,{num:'4.8mm',height:48,id:8}],
+                [9,{num:'6.4mm',height:64,id:9}],
+                [10,{num:'8.0mm',height:88,id:10}],
+                [11,{num:'9.5mm',height:95,id:11}],
+                [12,{num:'11.0mm',height:110,id:12}],
+                [13,{num:'12.7mm',height:127,id:13}]
+            ]);
+            let   tempRulerInchNumAtrMap=new Map([
+                [0,{num:'24GA',height:6,id:0}],
+                [1,{num:'22GA',height:7,id:1}],
+                [2,{num:'20GA',height:9,id:2}],
+                [3,{num:'18GA',height:12,id:3}],
+                [4,{num:'16GA',height:16,id:4}],
+                [5,{num:'14GA',height:21,id:5}],
+                [6,{num:'12GA',height:28,id:6}],
+                [7,{num:'1/8"',height:34,id:7}],
+                [8,{num:'3/16"',height:48,id:8}],
+                [9,{num:'1/4"',height:64,id:9}],
+                [10,{num:'5/16"',height:88,id:10}],
+                [11,{num:'3/8"',height:95,id:11}],
+                [12,{num:'7/16"',height:110,id:12}],
+                [13,{num:'1/2"',height:127,id:13}]
+            ]);
            while (i<=max)
             {
-               this.rulerInchNumAtr.push(this.rulerInchNumAtrMap.get(i));
-               this.rulerNumAtr.push(this.rulerNumAtrMap.get(i));
+                let aa= tempRulerInchNumAtrMap.get(i);
+               this.rulerInchNumAtr.push(aa);
+               let bb= tempRulerNumAtrMap.get(i);
+               this.rulerNumAtr.push(bb);
+                
+               
                 i++;
             }
+           
             // for(i=0;i<=max;i++){
             //     alert(111)
             //     this.rulerInchNumAtr.push(this.rulerInchNumAtrMap.get(parseInt(i)));
             //     this.rulerNumAtr.push(this.rulerNumAtrMap.get(parseInt(i)))
             // }
         }
+        
         
       let vag =Math.round((this.commonContainHeight/130)*100)/100;
       this.rulerNumAtr.forEach(element => {
@@ -986,7 +1077,8 @@ export default {
         }else{
             list  =this.$store.state.rstInfo;
         }
-        if(this.firstInit){
+        //this.firstInit
+        if(true){
             // alert(1)
             this.firstInit=false;
             //滑动thinkness赋值
@@ -1016,6 +1108,10 @@ export default {
                 this.UnitFlag=0;
             }
         }
+        // else{
+        //     //区间需要重新赋值
+        //     this.buildRulerArrRange(list.MMA_MIN_THICHNESS,list.MMA_MAX_THICHNESS);
+        // }
         // if(list.initBean.unit==1){
         //         this.UnitFlag=1;
         //         this.rulerNumAtr =this.rulerInchNumAtr;
@@ -1073,6 +1169,9 @@ export default {
         },
         stringUtilUp(value){
             return '222';
+        },
+        goBack(){
+            this.$router.push({path:'/newIndex',query:{}});
         }
   },
   mounted: function () {
@@ -1084,6 +1183,10 @@ export default {
     //   history.pushState(null, null, document.URL);
     //   window.addEventListener('popstate', this.go('/newIndex'), false);
     // } 
+    if (window.history && window.history.pushState) {
+            history.pushState(null, null, document.URL);
+            window.addEventListener('popstate', this.goBack, false);
+    } 
     if(this.$route.query.pageFrom =='/memoryDetail'){
         //来自记忆的application
         this.isReadyFlag=1;
@@ -1152,6 +1255,7 @@ export default {
      self.firstInit =true;
     clearTimeout(self.autoTimeoutFlag);
     // window.removeEventListener('popstate', this.go('/newIndex'), false);
+        window.removeEventListener('popstate', this.goBack, false);
   }
 
 }
