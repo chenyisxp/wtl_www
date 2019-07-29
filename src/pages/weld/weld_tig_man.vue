@@ -1,33 +1,35 @@
 <template>
-  <div class="weldMMA" :class="ifFixedFlag?'weldFixed':''" ref="allPage">
+  <div class="weldMMA" :class="ifFixedFlag?'weldFixed':''" :style="{height:newContainHeight+100+'px'}" id="allPage" ref="allPage">
+    <div class="header">
+      <Icon type="ios-arrow-back" @click="go('/newIndex')"/>
+      {{changeStrEmptyName(typeName)}}
+      <span class="setupyi">SET UP</span>
+    </div>
     <div class="mmp" ref="mmpId" id="idid">
-      <div class="header">
-        <Icon type="ios-arrow-back" @click="go('/newIndex')"/>
-        {{changeStrEmptyName(typeName)}}
-        <span class="setupyi">SET UP</span>
-      </div>
-      <div class="containList" v-for="(item,index) in nowTypeList" :key="index">
-        <div class="common">
-          <div class="typename" v-if="UnitFlag==1" :class="item.typeName" @click="openModal(item.typeName,item.inchComList,item.chooseKey)">{{changeStrShowName(item.typeName)}}</div>
-          <div class="typename" v-if="UnitFlag!=1" :class="item.typeName" @click="openModal(item.typeName,item.comList,item.chooseKey)">{{changeStrShowName(item.typeName)}}</div>
-          <!-- <div class="typename" :class="item.typeName">{{changeStrShowName(item.typeName)}}</div> -->
-          <div class="btn">
-            <div
-              class="btRight"
-              v-for="(bean,index1) in item.comList"
-              :key="index1"
-              type="primary"
-              v-if="item.chooseKey==bean.id"
-              :class="item.chooseKey==bean.id?'':'unchoose'"
-              @click="openModal(item.typeName,item.comList,item.chooseKey)"
-            >
-              <span style="padding-right:11px">{{bean.value}}</span>
-              <span style="padding-right:10px;">
-                <img src="../../assets/images/edit.png">
-              </span>
+      <div class="con-box">
+           <div class="containList" v-for="(item,index) in nowTypeList" :key="index">
+            <div class="common">
+              <div class="typename" v-if="UnitFlag==1" :class="item.typeName" @click="openModal(item.typeName,item.inchComList,item.chooseKey)">{{changeStrShowName(item.typeName)}}</div>
+              <div class="typename" v-if="UnitFlag!=1" :class="item.typeName" @click="openModal(item.typeName,item.comList,item.chooseKey)">{{changeStrShowName(item.typeName)}}</div>
+              <!-- <div class="typename" :class="item.typeName">{{changeStrShowName(item.typeName)}}</div> -->
+              <div class="btn">
+                <div
+                  class="btRight"
+                  v-for="(bean,index1) in item.comList"
+                  :key="index1"
+                  type="primary"
+                  v-if="item.chooseKey==bean.id"
+                  :class="item.chooseKey==bean.id?'':'unchoose'"
+                  @click="openModal(item.typeName,item.comList,item.chooseKey)"
+                >
+                  <span style="padding-right:11px">{{bean.value}}</span>
+                  <span style="padding-right:10px;">
+                    <img src="../../assets/images/edit.png">
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
       </div>
       <div class="midLine1">
         <div class="left"></div>
@@ -67,6 +69,7 @@
           <span class="l" @click="chooseParam(0)"></span>
           <span class="keyname">{{nowChooseLineKeyFuc(nowChooseLineKey)}}</span>
           <span class="r" @click="chooseParam(1)"></span>
+
         </div>
         <div class="up">
           <!-- <div class="u-left">
@@ -150,6 +153,7 @@
 
 <script>
 import { MessageBox, Popup, Toast, Indicator } from "mint-ui";
+import $ from 'jquery'
 import Loading from "@/components/base/Loading";
 import weld_commonVue from './weld_common.vue';
  const TIGMAN_DIRECTIVE_MAP =new Map([['MODE','D0'],['POLATRITY','D1'],['HF','D2'],['Pulse','D3'],['BTNS','D4'],['PARAMVALUE','D5']]);
@@ -160,6 +164,7 @@ export default {
   },
   data() {
     return {
+      newContainHeight:200,
       isReadyFlag:0,//是否焊接准备完毕
       haveInitTimes:0,//滑动组件初始化 次数 太多次会重复监听
       autoTimeoutFlag:{},//自动跳转定时器
@@ -406,7 +411,7 @@ export default {
       self.showBtnList = comList;
       self.nowChoose = chooseKey;
       self.nowtypename = typename;
-
+      self.ifFixedFlag=true;//固定 弹层出现底部不能滑动了
       self.hideFlag = true;
       self.downshowFlag = true;
       setTimeout(
@@ -1451,14 +1456,45 @@ export default {
        if(this.$store.state.weldingStatus==1){
          return;
        }
-      this.newChangeRule(type);
-      //记录选中的 避免每次刷新后重置选项
-      // window.android.saveKeyStorage('tig_man_nowChooseLineKey',this.nowChooseLineKey);
-      //11、改造为 图片替换成当前模式的图片即可 不画图了
-      //2、选中的参数的初始化变量值
-      // this.initChooseline();
+       //体验模式和正常模式会有点区分
+       if(this.GLOBAL_CONFIG.TESTFLAG){
+         this.testModalLine(type);
+       }else{
+        //11、改造为 图片替换成当前模式的图片即可 不画图了
+        this.newChangeRule(type);
+       }
+    },
+    testModalLine(type){
+      for (var i = 0; i < this.keyArr.length; i++) {
+        console.log(111222333444555666777);
+        console.log(this.keyArr[i]);
+        console.log(this.nowChooseLineKey);
+        if (this.keyArr[i] == this.nowChooseLineKey) {
+          if (type == 0) {
+            //减往左
+            if (i == 0) {
+              this.nowChooseLineKey = this.keyArr[this.keyArr.length - 1];
+            } else {
+              this.nowChooseLineKey = this.keyArr[i - 1];
+            }
+            break;
+          } else if (type == 1) {
+            //减往右
+            if (i == this.keyArr.length - 1) {
+              this.nowChooseLineKey = this.keyArr[0];
+            } else {
+              this.nowChooseLineKey = this.keyArr[i + 1];
+            }
+            break;
+          }
+        }
+      }
+      //1、画选中的那条线
+      this.drawCharMainContrl(this.nowModelTypeName);
+      //2、选中的参数的初始化变量设置
+      this.initChooseline();
       //重新初始化滑动组件
-      // this.initSliderLineFuc();
+      this.initSliderLineFuc();
     },
     newChangeRule(type){
       //20190613
@@ -1762,12 +1798,14 @@ export default {
       // alert(this.hf_lift_num)
       if(this.pfc_num==1){
         if(this.ac_dc_num==1){//DC
-          this.tigman_max_cur=220;
+          // this.tigman_max_cur=220;
+          this.tigman_max_cur=200;//2019-07-29
         }else{
           this.tigman_max_cur=200;
         } 
       }else{
-          this.tigman_max_cur=140;
+          // this.tigman_max_cur=140;
+          this.tigman_max_cur=200;//2019-07-29
       }
       //最小 ac和hf
       if(this.ac_dc_num==1){
@@ -1778,7 +1816,8 @@ export default {
           }
       }else{
           if(this.hf_lift_num==1){
-            this.tigman_min_cur=15;
+            // this.tigman_min_cur=15;
+            this.tigman_min_cur=30;//2019-07-29
           }else{
             this.tigman_min_cur=30;
           }
@@ -1907,6 +1946,12 @@ export default {
         //来自记忆的application
         this.isReadyFlag=1;
     }
+    //高度设置
+    this.$nextTick(()=>{
+        this.newContainHeight =$('#allPage').outerHeight();
+        console.log($('#allPage').outerHeight())
+        // console.log(this.$refs.allPage.outerHeight())
+    })
   },
   created() {
     this.witdhParam = window.innerWidth;
@@ -1981,26 +2026,32 @@ export default {
   background: #01303e;
   width: 100%;
   min-height: 100vh;
-  flex-flow: row wrap;
+  // flex-flow: row wrap;
   // display: flex;
   position: relative;
   .mmp {
-    position: relative;
+    position: absolute;
+    left: 0;
+    top: 0;
+    // position: relative;
     height: auto;
     width: 100%;
     margin-bottom: 40px;
   }
   // opacity: 0.1;
   .header {
-    
-    position: relative;
+    z-index: 1111111;
+    position: fixed;
     height: 50px;
     line-height: 50px;
     font-size: 14px;
     text-align: left;
+    width: 100%;
     color: #fff;
     background: #010101;
     padding-left: 60px;
+    top: 0;
+    left: 0;
     .ivu-icon {
       font-size: 20px;
       position: absolute;
@@ -2012,103 +2063,106 @@ export default {
       padding-left: 10px;
     }
   }
-  .containList {
-    
-    //   padding: 0 20px;
-    .typename {
-      width: 40%;
-      float: left;
-      font-size: 14px;
-      color: #fff;
-      // opacity: 0.6;
-      padding-left: 60px;
-      //   margin-top: 15px;
-    }
-    .typename.ELECTRODE{
-        background: url(../../assets/images/weld_icon_new_elecode.png) no-repeat;
-        background-size: 40px;
-        background-position: left center;
-      }
-      .typename.POLARITY{
-        background: url(../../assets/images/weld_icon_new_acdc.png) no-repeat;
-        background-size: 40px;
-        background-position: left center;
-      }
-      .typename.MODE{
-        background: url(../../assets/images/weld_icon_new_mode.png) no-repeat;
-        background-size: 40px;
-        background-position: left center;
-      }
-      .typename.MATERIAL{
-        background: url(../../assets/images/weld_icon_new_meterial.png) no-repeat;
-        background-size: 40px;
-        background-position: left center;
-      }
-       .typename.GAS{
-        background: url(../../assets/images/weld_icon_new_gas.png) no-repeat;
-        background-size: 40px;
-        background-position: left center;
-      }
-       .typename.DIAMETER{
-        background: url(../../assets/images/weld_icon_new_diameter.png) no-repeat;
-        background-size: 40px;
-        background-position: left center;
-      }
-       .typename.THICKNESS{
-        background: url(../../assets/images/weld_icon_new_thinkness.png) no-repeat;
-        background-size: 40px;
-        background-position: left center;
-      } 
-      .typename.Pulse{
-        background: url(../../assets/images/weld_icon_new_pluse.png) no-repeat;
-        background-size: 40px;
-        background-position: left center;
-      }
-        .typename.HF{
-        background: url(../../assets/images/weld_icon_new_hf.png) no-repeat;
-        background-size: 40px;
-        background-position: left center;
-      }
-    .btn {
-      width: 60%;
-      float: right;
-      .btRight {
-        text-align: right;
-        color: #fff;
-        // opacity: 0.8;
-        img {
-          width: 13px;
-          height: 17px;
-          vertical-align: middle;
+  .con-box{
+      margin-top: 50px;
+      padding-top: 2px;
+     .containList {
+        .typename {
+          width: 40%;
+          float: left;
+          font-size: 14px;
+          color: #fff;
+          // opacity: 0.6;
+          padding-left: 60px;
+          //   margin-top: 15px;
+        }
+        .typename.ELECTRODE{
+            background: url(../../assets/images/weld_icon_new_elecode.png) no-repeat;
+            background-size: 40px;
+            background-position: left center;
+          }
+          .typename.POLARITY{
+            background: url(../../assets/images/weld_icon_new_acdc.png) no-repeat;
+            background-size: 40px;
+            background-position: left center;
+          }
+          .typename.MODE{
+            background: url(../../assets/images/weld_icon_new_mode.png) no-repeat;
+            background-size: 40px;
+            background-position: left center;
+          }
+          .typename.MATERIAL{
+            background: url(../../assets/images/weld_icon_new_meterial.png) no-repeat;
+            background-size: 40px;
+            background-position: left center;
+          }
+          .typename.GAS{
+            background: url(../../assets/images/weld_icon_new_gas.png) no-repeat;
+            background-size: 40px;
+            background-position: left center;
+          }
+          .typename.DIAMETER{
+            background: url(../../assets/images/weld_icon_new_diameter.png) no-repeat;
+            background-size: 40px;
+            background-position: left center;
+          }
+          .typename.THICKNESS{
+            background: url(../../assets/images/weld_icon_new_thinkness.png) no-repeat;
+            background-size: 40px;
+            background-position: left center;
+          } 
+          .typename.Pulse{
+            background: url(../../assets/images/weld_icon_new_pluse.png) no-repeat;
+            background-size: 40px;
+            background-position: left center;
+          }
+            .typename.HF{
+            background: url(../../assets/images/weld_icon_new_hf.png) no-repeat;
+            background-size: 40px;
+            background-position: left center;
+          }
+        .btn {
+          width: 60%;
+          float: right;
+          .btRight {
+            text-align: right;
+            color: #fff;
+            // opacity: 0.8;
+            img {
+              width: 13px;
+              height: 17px;
+              vertical-align: middle;
+            }
+          }
+        }
+        .btn .ivu-btn {
+          width: 90px;
+          margin-right: 20px;
+          margin-top: 10px;
+        }
+        .common {
+          height: 40px;
+          line-height: 40px;
+          background: red;
+          margin: 10px 20px;
+          border-radius: 2px;
+          background: linear-gradient(
+            to top,
+            rgba(10, 59, 70, 1) 0%,
+            rgba(2, 46, 56, 1) 50%,
+            rgba(10, 59, 70, 1) 100%
+          );
+          -moz-box-shadow: 0px 0px 2px 1px #103f4b;
+          -webkit-box-shadow: 0px 0px 2px 1px #103f4b;
+          box-shadow: 0px 0px 2px 1px #103f4b;
+          .rid {
+            padding: 0 25px;
+            margin-right: 20px;
+          }
         }
       }
-    }
-    .btn .ivu-btn {
-      width: 90px;
-      margin-right: 20px;
-      margin-top: 10px;
-    }
-    .common {
-      height: 40px;
-      line-height: 40px;
-      background: red;
-      margin: 10px 20px;
-      border-radius: 2px;
-      background: linear-gradient(
-        to top,
-        rgba(10, 59, 70, 1) 0%,
-        rgba(2, 46, 56, 1) 50%,
-        rgba(10, 59, 70, 1) 100%
-      );
-      -moz-box-shadow: 0px 0px 2px 1px #103f4b;
-      -webkit-box-shadow: 0px 0px 2px 1px #103f4b;
-      box-shadow: 0px 0px 2px 1px #103f4b;
-      .rid {
-        padding: 0 25px;
-        margin-right: 20px;
-      }
-    }
   }
+ 
   .midLine1 {
     opacity: 0.5;
     width: 100%;

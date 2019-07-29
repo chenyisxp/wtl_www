@@ -1,30 +1,32 @@
 <template>
-  <div class="weldMMA" :class="ifFixedFlag?'weldFixed':''" ref="allPage">
+  <div class="weldMMA" :class="ifFixedFlag?'weldFixed':''"  :style="{height:newContainHeight+20+'px'}" id="allPage" ref="allPage">
+        <div class="header"><Icon type="ios-arrow-back" @click="go('/newIndex')"/>{{typeName}}<span class="setupyi">SET UP</span></div>
         <div class="mmp" ref="mmpId" id="idid">
-                 <div class="header"><Icon type="ios-arrow-back" @click="go('/newIndex')"/>{{typeName}}<span class="setupyi">SET UP</span></div>
-                <div class="containList" v-for="(item,index) in nowTypeList" :key="index">
-                    <div class="common">
-                        <div class="typename" v-if="UnitFlag==1" :class="item.typeName" @click="openModal(item.typeName,item.inchComList,item.chooseKey)">{{changeStrShowName(item.typeName)}}</div>
-                        <div class="typename" v-if="UnitFlag!=1" :class="item.typeName" @click="openModal(item.typeName,item.comList,item.chooseKey)">{{changeStrShowName(item.typeName)}}</div>
-                        <div class="btn" v-if="UnitFlag==0">
-                               <div  class="btRight"  v-for="(bean,index1) in item.comList" :key="index1" type="primary"
-                            v-if="item.chooseKey==bean.id"
-                            :class="item.chooseKey==bean.id?'':'unchoose'"
-                             @click="openModal(item.typeName,item.comList,item.chooseKey)"
-                            >
-                                <span style="padding-right:11px">{{bean.value}}</span>
-                                <span style="padding-right:10px;"><img src="../../assets/images/edit.png" ></span>
+                <div class="con-box">
+                        <div class="containList" v-for="(item,index) in nowTypeList" :key="index">
+                        <div class="common">
+                            <div class="typename" v-if="UnitFlag==1" :class="item.typeName" @click="openModal(item.typeName,item.inchComList,item.chooseKey)">{{changeStrShowName(item.typeName)}}</div>
+                            <div class="typename" v-if="UnitFlag!=1" :class="item.typeName" @click="openModal(item.typeName,item.comList,item.chooseKey)">{{changeStrShowName(item.typeName)}}</div>
+                            <div class="btn" v-if="UnitFlag==0">
+                                <div  class="btRight"  v-for="(bean,index1) in item.comList" :key="index1" type="primary"
+                                v-if="item.chooseKey==bean.id"
+                                :class="item.chooseKey==bean.id?'':'unchoose'"
+                                @click="openModal(item.typeName,item.comList,item.chooseKey)"
+                                >
+                                    <span style="padding-right:11px">{{bean.value}}</span>
+                                    <span style="padding-right:10px;"><img src="../../assets/images/edit.png" ></span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="btn" v-if="UnitFlag==1">
-                            <!-- 只是加了个判断区分处理 thinkness数据  根据id判断选中-->
-                              <div  class="btRight"  v-for="(bean,index1) in item.inchComList" :key="index1" type="primary"
-                            v-if="item.chooseKey==bean.id"
-                            :class="item.chooseKey==bean.id?'':'unchoose'"
-                            @click="openModal(item.typeName,item.inchComList,item.chooseKey)"
-                            >
-                                <span style="padding-right:11px">{{bean.value}}</span>
-                                <span style="padding-right:10px;"><img src="../../assets/images/edit.png" ></span>
+                            <div class="btn" v-if="UnitFlag==1">
+                                <!-- 只是加了个判断区分处理 thinkness数据  根据id判断选中-->
+                                <div  class="btRight"  v-for="(bean,index1) in item.inchComList" :key="index1" type="primary"
+                                v-if="item.chooseKey==bean.id"
+                                :class="item.chooseKey==bean.id?'':'unchoose'"
+                                @click="openModal(item.typeName,item.inchComList,item.chooseKey)"
+                                >
+                                    <span style="padding-right:11px">{{bean.value}}</span>
+                                    <span style="padding-right:10px;"><img src="../../assets/images/edit.png" ></span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -188,6 +190,7 @@
 
 <script>
 import { MessageBox ,Popup,Toast ,Indicator } from 'mint-ui'
+import $ from 'jquery'
 import Loading from "@/components/base/Loading";
 export default {
   name: '',
@@ -196,6 +199,7 @@ export default {
   },
   data () {
     return {
+        newContainHeight:200,
         firstInit:true,
         isReadyFlag:0,//是否焊接准备完毕
         minTRange:'',
@@ -551,6 +555,7 @@ export default {
       self.wtlLog('weld_mma','comList='+comList+',chooseKey='+chooseKey+',typename='+typename);
       self.hideFlag=true;
       self.downshowFlag=true;
+      self.ifFixedFlag=true;//固定 弹层出现底部不能滑动了
        setTimeout(
           function fuc(params) {
             self.upshowFlag=true;//延迟显示底色
@@ -1191,6 +1196,12 @@ export default {
         //来自记忆的application
         this.isReadyFlag=1;
     }
+    //高度设置
+    this.$nextTick(()=>{
+        this.newContainHeight =$('#allPage').outerHeight();
+        console.log($('#allPage').outerHeight())
+        // console.log(this.$refs.allPage.outerHeight())
+    })
   },
   created () {
       
@@ -1265,26 +1276,33 @@ export default {
     background: #01303e;
     width: 100%;
     min-height: 100vh;
-    flex-flow: row wrap;
+    // flex-flow: row wrap;
     // display: flex;
     position: relative;
     .mmp{
-        margin-bottom: 40px;
-        position: relative;
+        position: absolute;
+        left: 0;
+        top: 0;
+        margin-bottom: 20px;
+        // position: relative;
         height: auto;
         width: 100%;
         // align-self: flex-start;
     }
     // opacity: 0.1;
   .header{
-    position: relative;
+    z-index: 111111;
+    position: fixed;
     height: 50px;
     line-height: 50px;
     font-size: 14px;
     text-align: left;
+    width: 100%;
     color: #fff;
     background: #010101;
     padding-left: 60px;
+    top: 0;
+    left: 0;
     .ivu-icon{
       font-size: 20px;
       position: absolute;
@@ -1296,88 +1314,91 @@ export default {
         padding-left: 10px;
     }
   }
-  .containList{
-    //   padding: 0 20px;
-      .typename{
-          width: 40%;
-          float: left;
-          font-size: 14px;
-          color: #fff;
-        //   opacity: .6;
-          padding-left: 60px;
-        //   margin-top: 15px;
-      }
-      .typename.ELECTRODE{
-        background: url(../../assets/images/weld_icon_new_elecode.png) no-repeat;
-        background-size: 40px;
-        background-position: left center;
-      }
-      .typename.POLATRITY{
-        background: url(../../assets/images/weld_icon_new_acdc.png) no-repeat;
-        background-size: 40px;
-        background-position: left center;
-      }
-      .typename.MODE{
-        background: url(../../assets/images/weld_icon_new_mode.png) no-repeat;
-        background-size: 40px;
-        background-position: left center;
-      }
-      .typename.MATERIAL{
-        background: url(../../assets/images/weld_icon_new_meterial.png) no-repeat;
-        background-size: 40px;
-        background-position: left center;
-      }
-       .typename.GAS{
-        background: url(../../assets/images/weld_icon_new_gas.png) no-repeat;
-        background-size: 40px;
-        background-position: left center;
-      }
-       .typename.DIAMETER{
-        background: url(../../assets/images/mma_diameter.png) no-repeat;
-        background-size: 40px;
-        background-position: left center;
-      }
-       .typename.THICKNESS{
-        background: url(../../assets/images/weld_icon_new_thinkness.png) no-repeat;
-        background-size: 40px;
-        background-position: left center;
-      }
-      .btn{
-          width: 60%;
-          float: right;
-          .btRight{
-              text-align: right;
-              color: #fff;
-            //   opacity: .8;
-              img{
-                  width: 13px;
-                  height: 17px;
-                  vertical-align: middle;
-              }
-          }
-      }
-      .btn .ivu-btn{
-          width: 90px;
-          margin-right: 20px;
-          margin-top: 10px;
-      }
-    .common{
-        height: 40px;
-        line-height: 40px;
-        background: red;
-        margin: 10px 20px;
-        border-radius: 2px;
-        background: linear-gradient( 
-            to top,
-            rgba(10,59,70,1) 0%,  
-            rgba(2,46,56,1) 50%,
-            rgba(10,59,70,1)  100%);
-           -moz-box-shadow:0px 0px 2px 1px #103f4b;
-          -webkit-box-shadow:0px 0px 2px 1px #103f4b;
-          box-shadow:0px 0px 2px 1px #103f4b;
-        .rid{
-            padding:0 25px;
+  .con-box{
+        margin-top: 50px;
+        padding-top: 2px;
+      .containList{
+        .typename{
+            width: 40%;
+            float: left;
+            font-size: 14px;
+            color: #fff;
+            //   opacity: .6;
+            padding-left: 60px;
+            //   margin-top: 15px;
+        }
+        .typename.ELECTRODE{
+            background: url(../../assets/images/weld_icon_new_elecode.png) no-repeat;
+            background-size: 40px;
+            background-position: left center;
+        }
+        .typename.POLATRITY{
+            background: url(../../assets/images/weld_icon_new_acdc.png) no-repeat;
+            background-size: 40px;
+            background-position: left center;
+        }
+        .typename.MODE{
+            background: url(../../assets/images/weld_icon_new_mode.png) no-repeat;
+            background-size: 40px;
+            background-position: left center;
+        }
+        .typename.MATERIAL{
+            background: url(../../assets/images/weld_icon_new_meterial.png) no-repeat;
+            background-size: 40px;
+            background-position: left center;
+        }
+        .typename.GAS{
+            background: url(../../assets/images/weld_icon_new_gas.png) no-repeat;
+            background-size: 40px;
+            background-position: left center;
+        }
+        .typename.DIAMETER{
+            background: url(../../assets/images/mma_diameter.png) no-repeat;
+            background-size: 40px;
+            background-position: left center;
+        }
+        .typename.THICKNESS{
+            background: url(../../assets/images/weld_icon_new_thinkness.png) no-repeat;
+            background-size: 40px;
+            background-position: left center;
+        }
+        .btn{
+            width: 60%;
+            float: right;
+            .btRight{
+                text-align: right;
+                color: #fff;
+                //   opacity: .8;
+                img{
+                    width: 13px;
+                    height: 17px;
+                    vertical-align: middle;
+                }
+            }
+        }
+        .btn .ivu-btn{
+            width: 90px;
             margin-right: 20px;
+            margin-top: 10px;
+        }
+        .common{
+            height: 40px;
+            line-height: 40px;
+            background: red;
+            margin: 10px 20px;
+            border-radius: 2px;
+            background: linear-gradient( 
+                to top,
+                rgba(10,59,70,1) 0%,  
+                rgba(2,46,56,1) 50%,
+                rgba(10,59,70,1)  100%);
+            -moz-box-shadow:0px 0px 2px 1px #103f4b;
+            -webkit-box-shadow:0px 0px 2px 1px #103f4b;
+            box-shadow:0px 0px 2px 1px #103f4b;
+            .rid{
+                padding:0 25px;
+                margin-right: 20px;
+            }
         }
     }
   }
@@ -2101,7 +2122,7 @@ export default {
     position: fixed;
 }
 .weldMMA .footers.unEnough{
-    position: unset;
+    // position: unset;
 }
 .eleUnShow{
     display: none;

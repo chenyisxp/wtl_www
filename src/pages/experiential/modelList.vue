@@ -43,24 +43,24 @@ export default {
             //焊接中....migsyn
            if(typeName=='migsyn'){
                 data ='DAB1 0100 0200 8658';
-                this.weldBuildData('newIndex',this.GLOBAL_CONFIG.callWeldTypeData.migsyn.crcCode,this.GLOBAL_CONFIG.testWeldingData.migsyn.data.replace(/\s+/g,"").replace(/(.{2})/g,'$1 ').replace(/(^\s*)|(\s*$)/g, ""));
+                // this.weldBuildData('newIndex',this.GLOBAL_CONFIG.callWeldTypeData.migsyn.crcCode,this.GLOBAL_CONFIG.testWeldingData.migsyn.data.replace(/\s+/g,"").replace(/(.{2})/g,'$1 ').replace(/(^\s*)|(\s*$)/g, ""));
            }else if(typeName=='migman'){
                //焊接中....migman
                 data ='DAB2 0000 0000 1A1C';
-                this.weldBuildData('newIndex',this.GLOBAL_CONFIG.callWeldTypeData.migman.crcCode,this.GLOBAL_CONFIG.testWeldingData.migman.data.replace(/\s+/g,"").replace(/(.{2})/g,'$1 ').replace(/(^\s*)|(\s*$)/g, "")); 
+                // this.weldBuildData('newIndex',this.GLOBAL_CONFIG.callWeldTypeData.migman.crcCode,this.GLOBAL_CONFIG.testWeldingData.migman.data.replace(/\s+/g,"").replace(/(.{2})/g,'$1 ').replace(/(^\s*)|(\s*$)/g, "")); 
            }else if(typeName=='tigsyn'){
                  //焊接中....tigsyn
                 // data ='DAB3 0000 0000 DA21';
                 data ='DAB3F901DF00B618';
-                this.weldBuildData('newIndex',this.GLOBAL_CONFIG.callWeldTypeData.tigsyn.crcCode,this.GLOBAL_CONFIG.testWeldingData.tigsyn.data.replace(/\s+/g,"").replace(/(.{2})/g,'$1 ').replace(/(^\s*)|(\s*$)/g, ""));
+                // this.weldBuildData('newIndex',this.GLOBAL_CONFIG.callWeldTypeData.tigsyn.crcCode,this.GLOBAL_CONFIG.testWeldingData.tigsyn.data.replace(/\s+/g,"").replace(/(.{2})/g,'$1 ').replace(/(^\s*)|(\s*$)/g, ""));
            }else if(typeName=='tigman'){
                 //焊接中....tigman
-                var  data ='DAB4 0000 0000 1A94';
-                this.weldBuildData('newIndex',this.GLOBAL_CONFIG.callWeldTypeData.tigman.crcCode,this.GLOBAL_CONFIG.testWeldingData.tigman.data.replace(/\s+/g,"").replace(/(.{2})/g,'$1 ').replace(/(^\s*)|(\s*$)/g, ""));
+                  data ='DAB4 0000 0000 1A94';
+                // this.weldBuildData('newIndex',this.GLOBAL_CONFIG.callWeldTypeData.tigman.crcCode,this.GLOBAL_CONFIG.testWeldingData.tigman.data.replace(/\s+/g,"").replace(/(.{2})/g,'$1 ').replace(/(^\s*)|(\s*$)/g, ""));
            }else{
                 //焊接中....mma
-                var  data ='DAB5 0000 0000 DAA9';
-                this.weldBuildData('newIndex',this.GLOBAL_CONFIG.callWeldTypeData.mma.crcCode,this.GLOBAL_CONFIG.testWeldingData.mma.data.replace(/\s+/g,"").replace(/(.{2})/g,'$1 ').replace(/(^\s*)|(\s*$)/g, ""));
+                  data ='DAB5 0000 0000 DAA9';
+                // this.weldBuildData('newIndex',this.GLOBAL_CONFIG.callWeldTypeData.mma.crcCode,this.GLOBAL_CONFIG.testWeldingData.mma.data.replace(/\s+/g,"").replace(/(.{2})/g,'$1 ').replace(/(^\s*)|(\s*$)/g, ""));
            }
            
             // setTimeout(() => {
@@ -71,86 +71,78 @@ export default {
     go(url) {
       this.$store.state.routerOprete=10;
       this.$router.push(url);
-    },buildWeldingData(data){
+    },
+    buildWeldingData(data){
+      //  alert(data);
         data=data.replace(/\s+/g,"").toUpperCase();
-        //校验数据格式是否正确 发送信号给安卓 DAB1 0000 0000 E721
+        //校验数据格式是否正确 发送信号给安卓 DAB1 0100 0200 8658 双字节
         var oldCrc =data.substring(data.length-4,data.length+1);
         //  alert(this.crcModelBusClacQuery(data.substring(2,data.length-4, true)))
-        
         if(data.length!=16){
           return;
         }else if(oldCrc!=this.crcModelBusClacQuery(data.substring(2,data.length-4), true)){//crc校验
-             console.log('crc校验失败!!'+oldCrc+'||'+this.crcModelBusClacQuery(data.substring(2,data.length-4), true));
-             // console.log('data.substring(data.length-4,data.length+1)::'+this.crcModelBusClacQuery(data.substring(2,data.length-4), true))
-          if(!this.GLOBAL_CONFIG.TESTFLAG){
-              window.android.callSendDataToBle('newIndex','DA00'+oldCrc+this.crcModelBusClacQuery('00'+oldCrc, true),oldCrc);
-          }
+              // console.log('data.substring(data.length-4,data.length+1)::'+this.crcModelBusClacQuery(data.substring(2,data.length-4), true))
+          window.android.callSendDataToBle('newIndex','DA00'+oldCrc+this.crcModelBusClacQuery('00'+oldCrc, true),oldCrc);
           return;
         }
         //发送确认秦请求
         
         if(!this.GLOBAL_CONFIG.TESTFLAG){
+          //  alert(111)
             window.android.callSendDataToBle('newIndex','DAFF'+oldCrc+this.crcModelBusClacQuery('FF'+oldCrc, true),oldCrc);
         } 
         //有空的情况
         // this.$store.state.getWeldingInfoTimes = this.$store.state.getWeldingInfoTimes?this.$store.state.getWeldingInfoTimes:0+1;
         this.wtlLog('layout','getWeldingInfoTimes='+this.$store.state.getWeldingInfoTimes);
         this.$store.state.getWeldingInfoTimes = this.$store.state.getWeldingInfoTimes+1;
-        // console.log(data.substring(2,4))
+        // alert(this.$store.state.getWeldingInfoTimes)
         switch (data.substring(2,4)) {
           case 'B1':
             this.$store.state.weldingInfo =this.GLOBAL_CONFIG.callWeldTypeData.migsyn;
-            this.$store.state.weldingCur =parseInt(("0x"+data.substring(7,9)+data.substring(4,6)),16).toString(10)
+            this.$store.state.weldingCur =parseInt(("0x"+data.substring(6,8)+data.substring(4,6)),16).toString(10)
             this.$store.state.weldingVoltage=parseInt(("0x"+data.substring(10,12)+data.substring(8,10)),16).toString(10)
             break;
           case 'B2':
             this.$store.state.weldingInfo =this.GLOBAL_CONFIG.callWeldTypeData.migman;
-            this.$store.state.weldingCur =parseInt(("0x"+data.substring(7,9)+data.substring(4,6)),16).toString(10)
+            this.$store.state.weldingCur =parseInt(("0x"+data.substring(6,8)+data.substring(4,6)),16).toString(10)
             this.$store.state.weldingVoltage=parseInt(("0x"+data.substring(10,12)+data.substring(8,10)),16).toString(10)
             break;
           case 'B3':
             this.$store.state.weldingInfo =this.GLOBAL_CONFIG.callWeldTypeData.tigsyn;
-            this.$store.state.weldingCur =parseInt(("0x"+data.substring(7,9)+data.substring(4,6)),16).toString(10)
+            this.$store.state.weldingCur =parseInt(("0x"+data.substring(6,8)+data.substring(4,6)),16).toString(10)
             this.$store.state.weldingVoltage=parseInt(("0x"+data.substring(10,12)+data.substring(8,10)),16).toString(10)
             break;
           case 'B4':
             this.$store.state.weldingInfo =this.GLOBAL_CONFIG.callWeldTypeData.tigman;
-           this.$store.state.weldingCur =parseInt(("0x"+data.substring(7,9)+data.substring(4,6)),16).toString(10)
+           this.$store.state.weldingCur =parseInt(("0x"+data.substring(6,8)+data.substring(4,6)),16).toString(10)
             this.$store.state.weldingVoltage=parseInt(("0x"+data.substring(10,12)+data.substring(8,10)),16).toString(10)
             break;
           case 'B5':
             this.$store.state.weldingInfo =this.GLOBAL_CONFIG.callWeldTypeData.mma;
-            this.$store.state.weldingCur =parseInt(("0x"+data.substring(7,9)+data.substring(4,6)),16).toString(10)
+            this.$store.state.weldingCur =parseInt(("0x"+data.substring(6,8)+data.substring(4,6)),16).toString(10)
             this.$store.state.weldingVoltage=parseInt(("0x"+data.substring(10,12)+data.substring(8,10)),16).toString(10)
             break;
           default:
             break;
         }
         //00、是否前往焊接中的页面 第一次返回数据前往
-        // console.log('this.$store.state.getWeldingInfoTime'+this.$store.state.getWeldingInfoTimes)
-        if(this.$store.state.getWeldingInfoTimes==1){
+        // alert(this.$store.state.getWeldingInfoTimes)
+        console.log('this.$store.state.getWeldingInfoTime'+this.$store.state.getWeldingInfoTime)
+  
           //11、且当前模式也自动返回了相关数据
+          // alert(JSON.stringify(this.$store.state.rstInfo))
           if(JSON.stringify(this.$store.state.rstInfo) != "{}"){
             //22、是不是焊接中的数据
             this.wtlLog('layout','weldStatus='+this.$store.state.rstInfo.initBean.weldStatus);
-            // console.log('this.$store.state.rstInfo.initBean.weldStatus'+this.$store.state.rstInfo.initBean.weldStatus);
+            console.log('this.$store.state.rstInfo.initBean.weldStatus'+this.$store.state.rstInfo.initBean.weldStatus);
             // alert("aa:"+this.$store.state.weldingStatus)
              if(this.$store.state.weldingStatus==1){
                 this.$router.push('/welding');
-             }
-          }
-        }
-        //模拟模式可以不再乎次数
-        if(this.GLOBAL_CONFIG.TESTFLAG){
-            if(JSON.stringify(this.$store.state.rstInfo) != "{}"){
-            //22、是不是焊接中的数据
-            this.wtlLog('layout','weldStatus='+this.$store.state.rstInfo.initBean.weldStatus);
-             if(this.$store.state.weldingStatus==1){
+             }else{
                 this.$router.push('/welding');
              }
           }
-        }
-      }
+      },
   },
   mounted: function () {
     //模拟模式 welding的状态应该重置

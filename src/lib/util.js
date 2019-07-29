@@ -185,11 +185,17 @@ Array.prototype.in_array = function (element) {
                     },{
                         typeName:'MATERIAL',
                         chooseKey:'FE',//默认选中
+                        // comList:[
+                        //     {id:0,key:'Fe',value:'Fe'},{id:1,key:'Ss',value:'Ss'},{id:2,key:'AI',value:'AI'},{id:3,key:'FCAW-S',value:'FCAW-S'},{id:4,key:'FCAW-G',value:'FCAW-G'}
+                        // ],
+                        // inchComList:[
+                        //     {id:0,key:'Fe',value:'Fe'},{id:1,key:'Ss',value:'Ss'},{id:2,key:'AI',value:'AI'},{id:3,key:'FCAW-S',value:'FCAW-S'},{id:4,key:'FCAW-G',value:'FCAW-G'}
+                        // ]
                         comList:[
-                            {id:0,key:'Fe',value:'Fe'},{id:1,key:'Ss',value:'Ss'},{id:2,key:'AI',value:'AI'},{id:3,key:'FCAW-S',value:'FCAW-S'},{id:4,key:'FCAW-G',value:'FCAW-G'}
+                            {id:0,key:'Fe',value:'Fe'},{id:1,key:'Ss',value:'Ss'},{id:2,key:'AI',value:'AI'},{id:4,key:'FCAW-G',value:'FCAW-G'}
                         ],
                         inchComList:[
-                            {id:0,key:'Fe',value:'Fe'},{id:1,key:'Ss',value:'Ss'},{id:2,key:'AI',value:'AI'},{id:3,key:'FCAW-S',value:'FCAW-S'},{id:4,key:'FCAW-G',value:'FCAW-G'}
+                            {id:0,key:'Fe',value:'Fe'},{id:1,key:'Ss',value:'Ss'},{id:2,key:'AI',value:'AI'},{id:4,key:'FCAW-G',value:'FCAW-G'}
                         ]
                     },{
                         // typeName:'GAS',
@@ -455,6 +461,7 @@ Array.prototype.in_array = function (element) {
                             rstInfo.TIG_MAX_THICHNESS = arrayList[8];//最大厚度值
                             rstInfo.TIGSYN_MIN_CUR=10;
                             rstInfo.TIGSYN_MAX_CUR=byte1Bean.pfc==1?200:140;
+                           
                             rstInfo.initBean=byte1Bean;//包含很多焊接状态和单位等
                             //新增
                             console.log(arrayList)
@@ -547,7 +554,8 @@ Array.prototype.in_array = function (element) {
                            rstInfo.MMA_MIN_CUR=10;
                         //    rstInfo.MMA_MAX_CUR=byte1Bean.pfc==1?200:110;
                         //    rstInfo.MMA_MAX_CUR=byte1Bean.pfc==1?220:200;//2019.01.25修改之前错了？？？
-                           rstInfo.MMA_MAX_CUR=byte1Bean.pfc==1?220:110;//2019.05.25修改之前错了？？？
+                        //    rstInfo.MMA_MAX_CUR=byte1Bean.pfc==1?220:110;//2019.05.25修改之前错了？？？
+                           rstInfo.MMA_MAX_CUR=byte1Bean.pfc==1?200:110;//2019.07.29
                            rstInfo.MMA_MIN_THICHNESS= arrayList[8] ||0;//板厚最小值
                            rstInfo.MMA_MAX_THICHNESS= arrayList[9] ||13;//板厚最大值
                            rstInfo.initBean=byte1Bean;//包含很多焊接状态和单位等

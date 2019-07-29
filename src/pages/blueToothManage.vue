@@ -52,7 +52,7 @@
                 </li>
             </ul>
         </div>
-      <div class="morescan" v-if="orderList2.length>0 && (showOrder==1||showOrder==2) && moreFlag" @click="moreScan">More >></div>
+      <!-- <div class="morescan" v-if="orderList2.length>0 && (showOrder==1||showOrder==2) && moreFlag" @click="moreScan">More >></div> -->
        <div class="btList" v-if="orderList2.length>0 && showOrder==2 && !moreFlag">
             <div class="ceq">othter equipment</div>
             <ul>
