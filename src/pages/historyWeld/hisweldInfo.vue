@@ -354,6 +354,7 @@ export default {
       this.modelCrc =this.$route.query.modelCrc;
     //   alert(this.modelCrc)
       var list  =this.$store.state.rstInfo;
+      console.log(list)
       //赋值拆解
       this.nowTypeList =list.nowTypeList;
       //电感量
@@ -522,7 +523,7 @@ export default {
     }
   }
   .mainPanel{
-            margin: 50px 20px 0px 20px;
+            margin: 50px 20px 50px 20px;
             background: #092b37;
             box-shadow:
                 // 0px -10px 0px 0px #ff0000,   /*上边阴影  红色*/

@@ -52,6 +52,7 @@
                 </li>
             </ul>
         </div>
+        <!-- 如果自己要用本地hc-8查看模拟报文发送接受 需打开，否则看不到这个蓝牙 -->
       <!-- <div class="morescan" v-if="orderList2.length>0 && (showOrder==1||showOrder==2) && moreFlag" @click="moreScan">More >></div> -->
        <div class="btList" v-if="orderList2.length>0 && showOrder==2 && !moreFlag">
             <div class="ceq">othter equipment</div>
@@ -374,6 +375,7 @@ export default {
                                    }
                                 }
                             });
+                           
                             self.wtlLog('blueToothManage','rstString='+rstString);
                            
                    } catch (error) {

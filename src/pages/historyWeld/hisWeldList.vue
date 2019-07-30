@@ -97,7 +97,7 @@ export default {
         broastFromAndroid(data,openTestFlag){
            this.isLoading=false;
            clearTimeout(this.loadingTimer);
-            var rst =this.buildData('newIndex',this.chooseTypeCrc,data.replace(/\s+/g,"").replace(/(.{2})/g,'$1 ').replace(/(^\s*)|(\s*$)/g, ""));
+            var rst =this.buildData('hisweldlist',this.chooseTypeCrc,data.replace(/\s+/g,"").replace(/(.{2})/g,'$1 ').replace(/(^\s*)|(\s*$)/g, ""));
             this.$store.state.weldingStatus=0;//历史模式 清楚正在焊接中
             if(JSON.stringify(rst) != "{}"){
                 //发送确认收到的指令给安卓

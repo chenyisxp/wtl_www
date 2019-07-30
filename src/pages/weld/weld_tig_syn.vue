@@ -1020,14 +1020,14 @@ export default {
         //单位文本赋值
         this.nowModalTypeId =list.weldTypeNum;//后退回去时用
         this.nowTypeList =list.nowTypeList;
-        //特殊处理过滤gas 显示
-        this.nowTypeList.forEach(element => {
+        //特殊处理过滤gas 显示 不需要硬件端子机处理
+        // this.nowTypeList.forEach(element => {
           
-            if(element.typeName=='MATERIAL'){
-                  console.log(element)
-               this.changeMetirialChecked('MATERIAL' ,element.chooseKey, 0);
-            }
-        });
+        //     if(element.typeName=='MATERIAL'){
+        //           console.log(element)
+        //        this.changeMetirialChecked('MATERIAL' ,element.chooseKey, 0);
+        //     }
+        // });
         //weld_cur赋值----电流
         this.min = list.TIGSYN_MIN_CUR;
         this.max = list.TIGSYN_MAX_CUR;//要根据单位区分

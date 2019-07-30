@@ -656,7 +656,7 @@ Array.prototype.in_array = function (element) {
             //参数：页面，指令(这指令不是传输的指令用户自定义！！！)，数据
             Vue.prototype.buildData = function(pageFrom,dirctiveType,data) {
                 // data =data.replace(' ', '');
-                console.log(weldParam.migsynTypeList);
+                console.log(weldParam.migsynTypeList,pageFrom,dirctiveType,data);
                 // alert(dirctiveType+'||'+store.state.nowModelDirectice+'||'+pageFrom)
                
                 
@@ -682,6 +682,9 @@ Array.prototype.in_array = function (element) {
                         
                         rstInfo =buidDataByPagefrom(pageFrom,dirctiveType,data,this);
                         //  alert(JSON.stringify(rstInfo))
+                        break;
+                    case 'hisweldlist':
+                        rstInfo =buidDataByPagefrom('newIndex',dirctiveType,data,this);
                         break;
                     default:
                         break;
