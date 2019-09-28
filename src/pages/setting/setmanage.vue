@@ -13,8 +13,8 @@
             </RadioGroup> -->
             <div class="company">Official website</div>
             <div class="company-link">
-              <!-- <a href="http://www.wtl.com.cn/">http://www.wtl.com.cn/</a> -->
-              <a @click="openWeb">http://www.wtl.com.cn/</a>
+              <!-- <a @click="openWeb">http://www.wtl.com.cn/</a> -->
+              <a @click="openWeb">http://www.grovers.ru/</a>
             </div>
           <div class="help">Help Message</div>
           <div class="helpDetail">
