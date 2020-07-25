@@ -950,6 +950,7 @@ Array.prototype.in_array = function (element) {
                 var buildArr = ((Array(8).join(0) + parseInt(num,10).toString(2)).slice(-8)).replace(/(.{1})/g,'$1 ').replace(/(^\s*)|(\s*$)/g, "").split(' ');
                 // var buildArr = parseInt(num,10).toString(2);
                 // alert(num)
+                console.log(buildArr)
                 var bean ={};
                 //0|单位
                     bean.unit=buildArr[7];

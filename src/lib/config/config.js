@@ -25,6 +25,7 @@ let BASE_CONFIG = {
         // migsyn:{heade:'dae',headm:'dad',headc:'dac',data:'1 00 00 00 00 02 00 3C00 3D00 b400 c800 02 09 2E77'},
         // migsyn:{heade:'dae',headm:'dad',headc:'dac',data:'1 02 04 01 04 0a a5 4600 4600 f000 f000 020a ae3c1'},//板厚异常
         migsyn:{heade:'dae',headm:'dad',headc:'dac',data:'1 82 04 01 04 05 35 2800 2800 c800 c800 020a 204c'},//diameter异常
+        migsyn:{heade:'dae',headm:'dad',headc:'dac',data:'1 4A 00 01 03 03 A3 2700 3A00 A000 A000 020C 1FDB'},//安卓5.1.1 抖动
         // migman:{heade:'dae',headm:'dad',headc:'dac',data:'2 00 3D00 c800 00 3535'},
         // tigsyn:{heade:'dae',headm:'dad',headc:'dac',data:'3 00 00 03 6400 6400 02 09  2C61'},
         // tigman:{heade:'dae',headm:'dad',headc:'dac',data:'4 00 c0 32 3200 32 3200 3200 e800 32 32 3200 32 50 23 3082'},
