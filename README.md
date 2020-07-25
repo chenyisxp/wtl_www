@@ -1,5 +1,4 @@
 #此项目使用说明
-trunk的svn地址：http://10.105.112.62/svn/ETradeSrc/F2E/trunk/www_etrade
 
 1. 确保安装了nodejs，以及版本"node": ">= 4.0.0", "npm": ">= 3.0.0"
 2. 在终端里运行如下步骤
@@ -45,45 +44,8 @@ trunk的svn地址：http://10.105.112.62/svn/ETradeSrc/F2E/trunk/www_etrade
 ```
     npm install weixin-js-sdk --save-dev
 ```
-###################
-#上线确认：
-1、前端：各个环境config.*.js配置是否正确
-	a、CRYPTO_KEY_OPEN 密钥开关
-	b、SERVICE_ADDRESS 主服务地址
-	c、ROOT_URL 主地址
-	d、调用weixin-js-sdk里使用到wx.config的地方debug模式是否关闭
-	e、router/index.js中路由第一个转向是否默认为：redirect:Main
-	f、router/index.js中路由权限是否做了限制：(router.beforeEach((to, from, next)中)
-2、小程序端：
-    a、project.config.json 文件中：appid各环境是否配置正确
-    b、app.js中globalData.url配置是否切换到对应环境的url
-3、微信公众号绑定
-	a、是否关联微信公众号
-	b、合法域名及js合法请求域名是否配置
-	c、注意：weixin-js-sdk开发是基于公众号的appid
-	d、wx.config配置校验在不使用jsApiList里的api接口的话，可不做这一步(优化页面加载速度)。
-4、确认
-	a、小程序版本和前端版本是否配套及一致(注意：生产小程序需要审核时间！！！！)。
 
-####### 关于本地模拟 操作流程 按如下顺序修改 begin ############
-1、main.js 中，注释如下代码
-		
-		//  Indicator.open({
-        //    text: '',
-        //    spinnerType: 'fading-circle'
-        //  });
-2、register.vue中  搜索:InterfaceService.doCustRegister
-下面有一个备注  /***本地测试打开注释***/ 的代码，打开即可
-  //data ={"respCode":"0000","respData":{"respCode":"0000","respMsg":"","userCode":"user002","userName":"chenyi","userMobile":"13127898730","wxUuid":"o3tu35ZAb635AfcoTImNjibW4RLE","headImage":"https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLjzrU9E0QibibzFcNRPvbWZgjyADrmbcB1tPwibf1GmicuPhkCUhmj1lO1kDHCoQgD6XF8L22bahqLuQ/132","deptCode":null,"identityType":"0","corName":"绿地金服","corNames":null,"providers":[],"deptName":"技术部","warnMsgID":null,"warnMsg":null,"cityNotification":null,"versionNotification":"0","points":0},"respMsg":"成功","systemTime":"2018-11-01 11:10:44","txCode":null,"respType":"6","ip":null};
-3、流程：注册页==》输入库中存在的手机号（如：13127898730）==》获取验证码（浏览器debug查看返回的validateCode）==》注册成功前往首页
-4、说明
-	a、按钮点击没反映又不报错说明是前往小程序原生页面。
-	b、对2中的data关键字段说明
-		identityType：用户的身份类别，不同用户页面显示的值会不一样
-		其他字段调试人员可以让后端同事协助，查找自己对应的帐号信息，并对相应值进行替换
-####### 关于本地模拟 操作流程 按如下顺序修改 end ############
-
-######## 威特力焊机项目 begin ########
+######## 物联网项目 begin ########
 1|引用了ivew的手机端样式控件
 	npm install iview --save
 2|前往 焊接中....页面的时机  welding
@@ -134,7 +96,7 @@ trunk的svn地址：http://10.105.112.62/svn/ETradeSrc/F2E/trunk/www_etrade
 9、蓝牙细致控制
     a、点击选择的话，关闭蓝牙连接，重新连接
 	b、否则回到首页不发起，连接操作，可以获取连接状态
-######## 威特力焊机项目 end   #######
+######## 物联网项目 end   #######
 打包注意：
 	1、各种开关
 	2、router.index.js:默认的路由路径
@@ -164,4 +126,4 @@ trunk的svn地址：http://10.105.112.62/svn/ETradeSrc/F2E/trunk/www_etrade
 20190325
    a、首页修改 man和syn合并成一个页面上
 
-######## 威特力焊机项目 end   #######
+######## 物联网项目 end   #######
